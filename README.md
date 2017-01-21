@@ -20,7 +20,7 @@ devtools::install_github("egpivo/SpatMCA")
 ### Package description
 ***SpatMCA*** provides regularized maximum covariance analysis
 
-* seeking the dominant ***couple*** patterns for bivariate data
+* identifying smooth and localized ***couple*** patterns to understand how one spatial process is affected by another
 * suitable for either regularly or irregularly spaced data
 * by the alternating direction method of multipliers (ADMM) algorithm
 
