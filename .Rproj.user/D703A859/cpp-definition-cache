@@ -1,0 +1,266 @@
+[
+    {
+        "definitions" : [
+            {
+                "column" : 11,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 14,
+                "name" : "cubicmatrix(const vec)",
+                "parent_name" : "",
+                "usr" : "c:@F@cubicmatrix#1$@N@arma@C@Col>#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 41,
+                "name" : "tpm",
+                "parent_name" : "",
+                "usr" : "c:@S@tpm"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 47,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "tpm",
+                "usr" : "c:@S@tpm@F@operator()#l#l#"
+            },
+            {
+                "column" : 11,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 70,
+                "name" : "tpmatrix(const arma::mat)",
+                "parent_name" : "",
+                "usr" : "c:@F@tpmatrix#1$@N@arma@C@Mat>#d#"
+            },
+            {
+                "column" : 11,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 88,
+                "name" : "tpm2(const arma::mat, const arma::mat, const arma::mat)",
+                "parent_name" : "",
+                "usr" : "c:@F@tpm2#1$@N@arma@C@Mat>#d#1S0_#1S0_#"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 131,
+                "name" : "spatmca_tau1(mat &, mat &, mat &, const mat, const int, const int, const double, const int, const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@spatmca_tau1#&$@N@arma@C@Mat>#d#S0_#S0_#1S1_#1I#1I#1d#1I#1d#"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 160,
+                "name" : "spatmca_tau2(mat &, mat &, mat &, mat &, mat &, const mat, double, double, const int, const int, const double, const int, const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@spatmca_tau2#&$@N@arma@C@Mat>#d#S0_#S0_#S0_#S0_#1S1_#d#d#1I#1I#1d#1I#1d#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 201,
+                "name" : "spatmcacv_p",
+                "parent_name" : "",
+                "usr" : "c:@S@spatmcacv_p"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 230,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "spatmcacv_p",
+                "usr" : "c:@S@spatmcacv_p@F@operator()#l#l#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 292,
+                "name" : "spatmcacv_pp",
+                "parent_name" : "",
+                "usr" : "c:@S@spatmcacv_pp"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 321,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "spatmcacv_pp",
+                "usr" : "c:@S@spatmcacv_pp@F@operator()#l#l#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 357,
+                "name" : "spatmcacv_p2",
+                "parent_name" : "",
+                "usr" : "c:@S@spatmcacv_p2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 387,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "spatmcacv_p2",
+                "usr" : "c:@S@spatmcacv_p2@F@operator()#l#l#"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 463,
+                "name" : "spatmcacv_rcpp(NumericMatrix, NumericMatrix, NumericMatrix, NumericMatrix, int, int, NumericVector, NumericVector, NumericVector, NumericVector, NumericVector, int, double, NumericVector, NumericVector)",
+                "parent_name" : "",
+                "usr" : "c:@F@spatmcacv_rcpp#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S0_#S0_#S0_#I#I#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S1_#S1_#S1_#S1_#I#d#S1_#S1_#"
+            }
+        ],
+        "file" : "/Users/wen-tingwang/Downloads/SpatMCA_upload/src/spatmca.cpp",
+        "file_last_write" : 1462476954
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 11,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 14,
+                "name" : "cubicmatrix(const vec)",
+                "parent_name" : "",
+                "usr" : "c:@F@cubicmatrix#1$@N@arma@C@Col>#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 40,
+                "name" : "tpm",
+                "parent_name" : "",
+                "usr" : "c:@S@tpm"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 46,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "tpm",
+                "usr" : "c:@S@tpm@F@operator()#l#l#"
+            },
+            {
+                "column" : 11,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 69,
+                "name" : "tpmatrix(const arma::mat)",
+                "parent_name" : "",
+                "usr" : "c:@F@tpmatrix#1$@N@arma@C@Mat>#d#"
+            },
+            {
+                "column" : 11,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 87,
+                "name" : "tpm2(const arma::mat, const arma::mat, const arma::mat)",
+                "parent_name" : "",
+                "usr" : "c:@F@tpm2#1$@N@arma@C@Mat>#d#1S0_#1S0_#"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 130,
+                "name" : "spatmca_tau1(mat &, mat &, mat &, const mat, const int, const int, const double, const int, const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@spatmca_tau1#&$@N@arma@C@Mat>#d#S0_#S0_#1S1_#1I#1I#1d#1I#1d#"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 159,
+                "name" : "spatmca_tau2(mat &, mat &, mat &, mat &, mat &, const mat, double, double, const int, const int, const double, const int, const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@spatmca_tau2#&$@N@arma@C@Mat>#d#S0_#S0_#S0_#S0_#1S1_#d#d#1I#1I#1d#1I#1d#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 200,
+                "name" : "spatmcacv_p",
+                "parent_name" : "",
+                "usr" : "c:@S@spatmcacv_p"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 229,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "spatmcacv_p",
+                "usr" : "c:@S@spatmcacv_p@F@operator()#l#l#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 291,
+                "name" : "spatmcacv_pp",
+                "parent_name" : "",
+                "usr" : "c:@S@spatmcacv_pp"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 320,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "spatmcacv_pp",
+                "usr" : "c:@S@spatmcacv_pp@F@operator()#l#l#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 3,
+                "line" : 356,
+                "name" : "spatmcacv_p2",
+                "parent_name" : "",
+                "usr" : "c:@S@spatmcacv_p2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 7,
+                "line" : 386,
+                "name" : "operator(std::size_t, std::size_t)",
+                "parent_name" : "spatmcacv_p2",
+                "usr" : "c:@S@spatmcacv_p2@F@operator()#l#l#"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+                "kind" : 6,
+                "line" : 462,
+                "name" : "spatmcacv_rcpp(NumericMatrix, NumericMatrix, NumericMatrix, NumericMatrix, int, int, NumericVector, NumericVector, NumericVector, NumericVector, NumericVector, int, double, NumericVector, NumericVector)",
+                "parent_name" : "",
+                "usr" : "c:@F@spatmcacv_rcpp#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S0_#S0_#S0_#I#I#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S1_#S1_#S1_#S1_#I#d#S1_#S1_#"
+            }
+        ],
+        "file" : "/Users/wen-tingwang/SpatMCA/src/spatmca.cpp",
+        "file_last_write" : 1485002982
+    }
+]
