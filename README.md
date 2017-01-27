@@ -6,7 +6,14 @@
 
 # SpatMCA
 
-### Installing
+### Description
+***SpatMCA*** provides regularized maximum covariance analysis with
+
+* identifying smooth and localized ***couple*** patterns to understand how one spatial process is affected by another
+* suitable for either regularly or irregularly spaced data
+* by the alternating direction method of multipliers (ADMM) algorithm
+
+### Installation
 To get the current released version from CRAN:
 
 ```r
@@ -18,13 +25,6 @@ To get the current development version from GitHub:
 ```r
 devtools::install_github("egpivo/SpatMCA")
 ```
-
-### Package description
-***SpatMCA*** provides regularized maximum covariance analysis with
-
-* identifying smooth and localized ***couple*** patterns to understand how one spatial process is affected by another
-* suitable for either regularly or irregularly spaced data
-* by the alternating direction method of multipliers (ADMM) algorithm
 
 ### Author
  [Wen-Ting Wang] (https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang") and [Hsin-Cheng Huang] (http://www.stat.sinica.edu.tw/hchuang/blog/ "Hsin-Cheng Huang")
