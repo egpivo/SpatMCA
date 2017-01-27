@@ -49,6 +49,8 @@ center = TRUE, plot.cv = FALSE, maxit = 100, thr = 1e-04)
 
 \item{Vestfn}{Estimated patterns for Y2 at the new locations, x2_new.}
 
+\item{Dest}{Estimated singular values.}
+
 \item{crosscov}{Estimated cross-covariance matrix between Y1 and Y2.}
 
 \item{stau1u}{Selected tau1u.}
