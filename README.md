@@ -1,6 +1,7 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/SpatMCA)](https://cran.r-project.org/package=SpatMCA)
 [![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/SpatMCA)](https://cran.r-project.org/package=SpatMCA)
 [![Travis-CI Build Status](https://travis-ci.org/egpivo/SpatMCA.svg?branch=master)](https://travis-ci.org/egpivo/SpatMCA)
+[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 
 
 # SpatMCA
@@ -19,7 +20,7 @@ devtools::install_github("egpivo/SpatMCA")
 ```
 
 ### Package description
-***SpatMCA*** provides regularized maximum covariance analysis
+***SpatMCA*** provides regularized maximum covariance analysis with
 
 * identifying smooth and localized ***couple*** patterns to understand how one spatial process is affected by another
 * suitable for either regularly or irregularly spaced data
