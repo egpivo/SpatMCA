@@ -83,7 +83,6 @@ The optimization problem is
 }
 \examples{
 ############### 1D: regular locations ################################
-library(mvtnorm)
 p <- q <- 20
 n <- 100
 x1 <- matrix(seq(-7, 7, length = p), nrow = p, ncol = 1)
@@ -95,8 +94,8 @@ Sigma[1:p, 1:p] <- diag(p)
 Sigma[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
 Sigma[1:p, (p + 1):(p + q)] <- u\%*\%t(v)
 Sigma[(p + 1):(p + q), 1:p] <- t(Sigma[1:p, (p + 1):(p + q)])
-noise <- rmvnorm(n, mean = rep(0, p + q), sigma= 0.001*diag(p + q))
-Y <- rmvnorm(n, mean = rep(0, p + q), sigma=Sigma) + noise
+noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma= 0.001*diag(p + q))
+Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma=Sigma) + noise
 Y1 <- Y[,1:p]
 Y2 <- Y[,-(1:p)]
 cv1 <- spatmca(x1, x2, Y1, Y2)
