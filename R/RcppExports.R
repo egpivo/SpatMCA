@@ -9,3 +9,7 @@ spatmcacv_rcpp <- function(sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2v
     .Call('SpatMCA_spatmcacv_rcpp', PACKAGE = 'SpatMCA', sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr)
 }
 
+spatmcacvall_rcpp <- function(sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr) {
+    .Call('SpatMCA_spatmcacvall_rcpp', PACKAGE = 'SpatMCA', sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr)
+}
+

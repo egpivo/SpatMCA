@@ -518,7 +518,7 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
   Thetaest.submat(p,0,p+q-1,p-1) = S12estt/2;
   mat S1221est = S12est*S12estt, S2112est = S12estt*S12est;
   arma::cube S12train(p,q,M), S12traint(q,p,M), S12valid(p,q,M), S1221(p,p,M), S2112(q,q,M), Ucv(p,K,M), Vcv(q,K,M), Lmbd12cv(p,K,M), Lmbd22cv(q,K,M);
-  double cvtau1u, cvtau1v, cvtau2u, cvtau2v, tempout;
+  double cvtau1u, cvtau1v, cvtau2u, cvtau2v;
   arma::mat Ip;
   vec zetatemp(M);
   Ip.eye(p+q,p+q);
@@ -645,4 +645,220 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
   return List::create(Named("cv1") = out, Named("cv2") = out2, Named("Uest") = Gest.rows(0,p-1), Named("Vest") = Gest.rows(p,p+q-1), Named("Dest")= D, Named("cvtau1u") = cvtau1u,Named("cvtau2u") = cvtau2u, Named("cvtau1v") = cvtau1v, Named("cvtau2v") = cvtau2v);
 }
 
+using namespace arma; 
+using namespace Rcpp;
+struct spatmcacv_pall: public RcppParallel::Worker {
+  const mat& X;
+  const mat& Y;
+  const int K;
+  const mat& Omega1;
+  const mat& Omega2;
+  const vec& tau1u;
+  const vec& tau1v;
+  const vec& tau2u;
+  const vec& tau2v;
+  const vec& nk;
+  const int p1;
+  const int p2;
+  const int maxit;
+  const double tol;
+  cube& output;
+  vec& zetatemp;
+  spatmcacv_pall(const mat& X, const mat& Y, const int K, const mat& Omega1, const mat& Omega2,const vec& tau1u, 
+                 const vec &tau1v,const vec& tau2u, const vec &tau2v, const vec& nk, const int p1,const int p2,const int maxit, 
+                 const double tol, cube& output, vec& zetatemp) : X(X), Y(Y), K(K), Omega1(Omega1), Omega2(Omega2), tau1u(tau1u), tau1v(tau1v),
+                 tau2u(tau2u), tau2v(tau2v), nk(nk), p1(p1), p2(p2), maxit(maxit),tol(tol), output(output),zetatemp(zetatemp){}
+  void operator()(std::size_t begin, std::size_t end) {
+    arma::mat Ip;
+    Ip.eye(Y.n_cols,Y.n_cols);
+    for(std::size_t k = begin; k < end; k++){
+      arma::mat Uoldtemp, Voldtemp, Goldtemp, G(p1+p2,K), R(p1+p2,K),C(p1+p2,K), Gamma1(p1+p2,K),
+      Gamma2(p1+p2,K), Gold(p1+p2,K), Rold(p1+p2,K), Cold(p1+p2,K), Gamma1old(p1+p2,K), Gamma2old(p1+p2,K),
+      Gold2(p1+p2,K), Rold2(p1+p2,K), Cold2(p1+p2,K), Gamma1old2(p1+p2,K), Gamma2old2(p1+p2,K),
+      Gold3(p1+p2,K), Rold3(p1+p2,K), Cold3(p1+p2,K), Gamma1old3(p1+p2,K), Gamma2old3(p1+p2,K),
+      S12train(p1, p2), S12traint(p2, p1), S12valid(p1, p2), matrixinv(p1+p2, p1+p2), Ip;
+      
+      vec svdtemp, D;
+      arma::mat Ytrain = Y.rows(arma::find(nk!=(k+1)));
+      arma::mat Yvalid = Y.rows(arma::find(nk==(k+1)));
+      arma::mat Xtrain = X.rows(arma::find(nk!=(k+1)));
+      arma::mat Xvalid = X.rows(arma::find(nk==(k+1)));
+      arma::mat Theta(p1+p2,p1+p2);
+      S12train = (Xtrain.t())*Ytrain/Xtrain.n_rows;
+      S12valid = Xvalid.t()*Yvalid/Xvalid.n_rows;
+      svd_econ(Uoldtemp, svdtemp,Voldtemp, S12train);
+      zetatemp[k] = 10*max(svdtemp);
+      Gold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
+      Rold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
+      Cold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
+      Gold.rows(p1,p1+p2-1) = Voldtemp.cols(0,K-1);
+      Rold.rows(p1,p1+p2-1) = Voldtemp.cols(0,K-1);
+      Cold.rows(p1,p1+p2-1) = Voldtemp.cols(0,K-1);
+      Gamma2old.rows(0,p1-1)= S12train*Gold.rows(p1,p1+p2-1);
+      S12traint = S12train.t();
+      Gamma2old.rows(p1,p1+p2-1) = S12traint*Gold.rows(0,p1-1);
+      
+      Gold2 = Gold3 = Gold;
+      Rold2 = Rold3 = Rold;
+      Cold2 = Cold3 = Cold;
+      Gamma2old2 = Gamma2old3 = Gamma2old;
+      
+      Ip.eye(p1+p2,p1+p2);
+      Gamma1old.zeros(p1+p2, K);
+      Gamma1old2 = Gamma1old3 = Gamma1old;
+      Theta.submat(0,p1,p1-1,p1+p2-1) = S12train/2;
+      Theta.submat(p1,0,p1+p2-1,p1-1) = S12traint/2;
+      vec zero;
+      zero.zeros(K);
+      for(uword  i = 0; i < tau1u.n_elem; i++){
+        G = Gold;
+        R = Rold;
+        C = Cold;
+        Gamma1 = Gamma1old;
+        Gamma2 = Gamma2old;
+        Theta.submat(0,0,p1-1,p1-1) = -tau1u[i]*Omega1;
+        for(uword  j = 0; j < tau1v.n_elem; j++){    
+          Theta.submat(p1,p1,p1+p2-1,p1+p2-1) = -tau1v[j]*Omega2;
+          if(j == 0 && i ==0){
+            output(0, 0, k) = norm((S12valid-G.rows(0,p1-1)*diagmat(max(zero,svdtemp.subvec(0,K-1)))*G.rows(p1,p1+p2-1).t()),"fro");
+          }
+          else{
+            matrixinv =  0.5*arma::inv_sympd(zetatemp[k]*Ip-Theta);
+            vec zero;
+            zero.zeros(K);
+            for(uword  l = 0; l < tau2u.n_elem; l++){
+              G = Gold3;
+              R = Rold3;
+              C = Cold3;
+              Gamma1 = Gamma1old3;
+              Gamma2 = Gamma2old3;
+              for(uword  m = 0; m < tau2v.n_elem; m++){
+                spatmca_tau2(G, R, C, Gamma1, Gamma2, matrixinv, tau2u[l], tau2v[m], p1, p2, zetatemp[k], maxit,tol);
+                D = max(zero, diagvec(G.rows(0,p1-1).t()*S12train*G.rows(p1,p1+p2-1)));
+                output(tau2u.n_elem*i + l, tau2v.n_elem*j + m,k) = 
+                  norm((S12valid-G.rows(0,p1-1)*diagmat(D)*G.rows(p1,p1+p2-1).t()),"fro");
+                if(l == 0 && m == 0){
+                  Gold2 = G;
+                  Rold2 = R;
+                  Cold2 = C;
+                  Gamma1old2 = Gamma1;
+                  Gamma2old2 = Gamma2;
+                }
+                if(l == 0){
+                  Gold3 = G;
+                  Rold3 = R;
+                  Cold3 = C;
+                  Gamma1old3 = Gamma1;
+                  Gamma2old3 = Gamma2;
+                }
+              }
+            }
+          }
+          if(j==0){ 
+            Gold = Gold2;
+            Rold = Rold2;
+            Cold = Cold2;
+            Gamma1old = Gamma1old2;
+            Gamma2old = Gamma2old2;
+          }
+        }
+      }
+    }
+  }
+};
+
+
+
+
+
+using namespace Rcpp;
+using namespace arma;
+using namespace std;
+// [[Rcpp::export]]
+List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, NumericMatrix Yr, int M, int K, 
+                       NumericVector  tau1ur, NumericVector  tau2ur, NumericVector  tau1vr, NumericVector  tau2vr,  NumericVector  nkr, int maxit, double tol, NumericVector  l2ur,NumericVector  l2vr) {
+  int n = Yr.nrow(), p = Xr.ncol(), q = Yr.ncol(), d = sxr.ncol();
+  arma::mat X(Xr.begin(), n, p, false);
+  arma::mat Y(Yr.begin(), n, q, false);
+  arma::mat sx(sxr.begin(), p, d, false);
+  arma::mat sy(syr.begin(), q, d, false);
+  colvec tau1u(tau1ur.begin(), tau1ur.size(), false);
+  colvec tau2u(tau2ur.begin(), tau2ur.size(), false);
+  colvec tau1v(tau1vr.begin(), tau1vr.size(), false);
+  colvec tau2v(tau2vr.begin(), tau2vr.size(), false);
+  colvec nk(nkr.begin(), nkr.size(), false);
+  colvec l2u(l2ur.begin(), l2ur.size(), false);
+  colvec l2v(l2vr.begin(), l2vr.size(), false);
+  arma::cube cv(tau1u.n_elem*tau2u.n_elem, tau1v.n_elem*tau2v.n_elem,M);
+  arma::mat Omega1, Omega2, out, out2;
+  out.zeros(tau1u.n_elem, tau1v.n_elem);
+  
+  
+  if(d == 2){
+    Omega1 = tpmatrix(sx);
+    Omega2 = tpmatrix(sy);
+  }
+  else{
+    Omega1 = cubicmatrix(sx);
+    Omega2 = cubicmatrix(sy);
+  }
+  
+  arma::mat S12est = X.t()*Y/n;
+  arma::mat S12estt = S12est.t();
+  arma::mat Utempest, Vtempest;
+  vec SPhiest;
+  arma::svd_econ(Utempest, SPhiest, Vtempest, S12est);
+  double zeta = 10*max(SPhiest);
+  arma::mat Gest(p+q,K), Cest(p+q,K), Gamma2est(p+q,K), Thetaest(p+q,p+q), matrixinv(p+q,p+q);
+  Gest.rows(0,p-1) = Utempest.cols(0,K-1);
+  Cest.rows(0,p-1) = Utempest.cols(0,K-1);
+  Gest.rows(p,p+q-1) = Vtempest.cols(0,K-1);
+  Cest.rows(p,p+q-1)  = Vtempest.cols(0,K-1);
+  Gamma2est.rows(0,p-1) = S12est*Vtempest.cols(0,K-1);
+  Gamma2est.rows(p,p+q-1) = S12estt*Utempest.cols(0,K-1);
+  Thetaest.submat(0,p,p-1,p+q-1) = S12est/2;
+  Thetaest.submat(p,0,p+q-1,p-1) = S12estt/2;
+  mat S1221est = S12est*S12estt, S2112est = S12estt*S12est;
+  double cvtau1u, cvtau1v, cvtau2u, cvtau2v, tempout;
+  arma::mat Ip;
+  vec zetatemp(M);
+  Ip.eye(p+q,p+q);
+  
+  
+  out.zeros(tau1u.n_elem*tau2u.n_elem, tau1v.n_elem*tau2v.n_elem);  
+  spatmcacv_pall spatmcacv_pall(X, Y, K, Omega1, Omega2, tau1u, 
+                                tau1v, tau2u, tau2v, nk, p, q, maxit, 
+                                tol,cv, zetatemp);
+  RcppParallel::parallelFor(0, M, spatmcacv_pall);
+  
+  uword row, col;
+  for(uword m = 0; m < M; m++)
+    out += cv.slice(m)/M;
+  out2.min(row, col);
+  
+  cvtau1u = tau1u[floor(row/tau2u.n_elem)];
+  cvtau2u = tau2u[row % tau2u.n_elem];
+  cvtau1v = tau1v[floor(col/tau2v.n_elem)];
+  cvtau2v = tau2v[col % tau2v.n_elem];
+  
+  
+  Thetaest.submat(0,0,p-1,p-1) = -cvtau1u*Omega1; 
+  Thetaest.submat(p,p,p+q-1,p+q-1) = -cvtau1v*Omega2;
+  
+  matrixinv =  arma::inv_sympd(2*zeta*Ip-2*Thetaest);
+  spatmca_tau1(Gest, Cest, Gamma2est, matrixinv, p, q, zeta, maxit, tol);
+  
+  arma::mat Rest= Gest;
+  arma::mat Gamma1est = 0*Gamma2est;
+  
+  for(uword  i = 0; i <= row % tau2u.n_elem; i++)
+    spatmca_tau2(Gest, Rest, Cest, Gamma1est, Gamma2est, matrixinv, tau2u[i], 0, p, q, zeta, maxit,tol);
+  for(uword  i = 0; i <= col % tau2v.n_elem; i++)
+    spatmca_tau2(Gest, Rest, Cest, Gamma1est, Gamma2est, matrixinv, cvtau2u, tau2v[i], p, q, zeta, maxit,tol);    
+  
+  arma::vec zeros;
+  zeros.zeros(K);
+  arma::vec D = max(zeros,diagvec(Gest.rows(0,p-1).t()*S12est*Gest.rows(p,p+q-1)));
+  return List::create(Named("cvall") = out, Named("Uest") = Gest.rows(0,p-1), Named("Vest") = Gest.rows(p,p+q-1), Named("Dest")= D, Named("cvtau1u") = cvtau1u,Named("cvtau2u") = cvtau2u, Named("cvtau1v") = cvtau1v, Named("cvtau2v") = cvtau2v);
+}
 

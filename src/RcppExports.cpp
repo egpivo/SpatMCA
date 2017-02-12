@@ -44,3 +44,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// spatmcacvall_rcpp
+List spatmcacvall_rcpp(NumericMatrix sxr, NumericMatrix syr, NumericMatrix Xr, NumericMatrix Yr, int M, int K, NumericVector tau1ur, NumericVector tau2ur, NumericVector tau1vr, NumericVector tau2vr, NumericVector nkr, int maxit, double tol, NumericVector l2ur, NumericVector l2vr);
+RcppExport SEXP SpatMCA_spatmcacvall_rcpp(SEXP sxrSEXP, SEXP syrSEXP, SEXP XrSEXP, SEXP YrSEXP, SEXP MSEXP, SEXP KSEXP, SEXP tau1urSEXP, SEXP tau2urSEXP, SEXP tau1vrSEXP, SEXP tau2vrSEXP, SEXP nkrSEXP, SEXP maxitSEXP, SEXP tolSEXP, SEXP l2urSEXP, SEXP l2vrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type sxr(sxrSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type syr(syrSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Xr(XrSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Yr(YrSEXP);
+    Rcpp::traits::input_parameter< int >::type M(MSEXP);
+    Rcpp::traits::input_parameter< int >::type K(KSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tau1ur(tau1urSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tau2ur(tau2urSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tau1vr(tau1vrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tau2vr(tau2vrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type nkr(nkrSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type l2ur(l2urSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type l2vr(l2vrSEXP);
+    rcpp_result_gen = Rcpp::wrap(spatmcacvall_rcpp(sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr));
+    return rcpp_result_gen;
+END_RCPP
+}
