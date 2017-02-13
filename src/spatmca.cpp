@@ -423,7 +423,6 @@ struct spatmcacv_p2: public RcppParallel::Worker {
         }
       }
       if(tau1u == 0&& tau1v == 0){
-        // printf("ok");
         matrixinv =  0.5*arma::inv_sympd(zetatemp[k]*Ip-Theta);
       }
       Rold = Gold;
@@ -477,8 +476,6 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
   arma::mat Omega1, Omega2, out, out2;
   out.zeros(tau1u.n_elem, tau1v.n_elem);
   
-  // printf("welcome");
-  
   if(max(tau1u)==0){
     Omega1.eye(p,p);
   }
@@ -518,7 +515,7 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
   Thetaest.submat(p,0,p+q-1,p-1) = S12estt/2;
   mat S1221est = S12est*S12estt, S2112est = S12estt*S12est;
   arma::cube S12train(p,q,M), S12traint(q,p,M), S12valid(p,q,M), S1221(p,p,M), S2112(q,q,M), Ucv(p,K,M), Vcv(q,K,M), Lmbd12cv(p,K,M), Lmbd22cv(q,K,M);
-  double cvtau1u, cvtau1v, cvtau2u, cvtau2v;
+  double cvtau1u, cvtau1v, cvtau2u, cvtau2v, tempout;
   arma::mat Ip;
   vec zetatemp(M);
   Ip.eye(p+q,p+q);
@@ -562,11 +559,9 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
     out.zeros(1);
   }
   else{
-    //  printf("cc");
     spatmcacv_p spatmcacv_p(X, Y, K, Omega1, Omega2, tau1u, tau1v, nk, p, q,maxit, 
                             tol, cv, S12train, S12traint, S12valid, S1221, S2112,zetatemp, Ucv, Vcv,Lmbd12cv, Lmbd22cv);
     RcppParallel::parallelFor(0, M, spatmcacv_p);
-    //  printf("ddd");
     uword row1, col1;
     for(uword m = 0; m < M; m++)
       out += cv.slice(m)/M;
@@ -819,11 +814,10 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
   Thetaest.submat(0,p,p-1,p+q-1) = S12est/2;
   Thetaest.submat(p,0,p+q-1,p-1) = S12estt/2;
   mat S1221est = S12est*S12estt, S2112est = S12estt*S12est;
-  double cvtau1u, cvtau1v, cvtau2u, cvtau2v, tempout;
+  double cvtau1u, cvtau1v, cvtau2u, cvtau2v;
   arma::mat Ip;
   vec zetatemp(M);
   Ip.eye(p+q,p+q);
-  
   
   out.zeros(tau1u.n_elem*tau2u.n_elem, tau1v.n_elem*tau2v.n_elem);  
   spatmcacv_pall spatmcacv_pall(X, Y, K, Omega1, Omega2, tau1u, 
