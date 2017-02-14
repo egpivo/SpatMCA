@@ -818,24 +818,23 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
   arma::mat Ip;
   vec zetatemp(M);
   Ip.eye(p+q,p+q);
-  
+ 
   out.zeros(tau1u.n_elem*tau2u.n_elem, tau1v.n_elem*tau2v.n_elem);  
   spatmcacv_pall spatmcacv_pall(X, Y, K, Omega1, Omega2, tau1u, 
                                 tau1v, tau2u, tau2v, nk, p, q, maxit, 
                                 tol,cv, zetatemp);
   RcppParallel::parallelFor(0, M, spatmcacv_pall);
-  
+
   uword row, col;
   for(uword m = 0; m < M; m++)
     out += cv.slice(m)/M;
-  out2.min(row, col);
-  
+  out.min(row, col);
+
   cvtau1u = tau1u[floor(row/tau2u.n_elem)];
   cvtau2u = tau2u[row % tau2u.n_elem];
   cvtau1v = tau1v[floor(col/tau2v.n_elem)];
   cvtau2v = tau2v[col % tau2v.n_elem];
-  
-  
+
   Thetaest.submat(0,0,p-1,p-1) = -cvtau1u*Omega1; 
   Thetaest.submat(p,p,p+q-1,p+q-1) = -cvtau1v*Omega2;
   
@@ -849,7 +848,6 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
     spatmca_tau2(Gest, Rest, Cest, Gamma1est, Gamma2est, matrixinv, tau2u[i], 0, p, q, zeta, maxit,tol);
   for(uword  i = 0; i <= col % tau2v.n_elem; i++)
     spatmca_tau2(Gest, Rest, Cest, Gamma1est, Gamma2est, matrixinv, cvtau2u, tau2v[i], p, q, zeta, maxit,tol);    
-  
   arma::vec zeros;
   zeros.zeros(K);
   arma::vec D = max(zeros,diagvec(Gest.rows(0,p-1).t()*S12est*Gest.rows(p,p+q-1)));
