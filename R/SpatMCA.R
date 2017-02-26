@@ -181,7 +181,7 @@ spatmca <- function(x1, x2, Y1, Y2, M = 5, K = NULL, K.select = ifelse(is.null(K
   }
   Dest <- as.vector(cvtempold$Dest)
   crosscovfn <- Uestfn%*%diag(Dest, nrow = Khat, ncol = Khat)%*%t(Vestfn)
-  obj.cv <- list(Uestfn = Uestfn, Vestfn = Vestfn, crosscov = crosscovfn, Dest = Dest, cv1 = cv1, cv2 = cv2, cvall, Khat = Khat,
+  obj.cv <- list(Uestfn = Uestfn, Vestfn = Vestfn, crosscov = crosscovfn, Dest = Dest, cv1 = cv1, cv2 = cv2, cvall = cvall, Khat = Khat,
                  stau1u = cvtau1u, stau2u = cvtau2u,stau1v = cvtau1v, stau2v = cvtau2v,
                  tau1u = tau1u, tau2u = tau2u, tau1v = tau1v, tau2v = tau2v)
   return(obj.cv)
