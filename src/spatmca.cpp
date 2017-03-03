@@ -669,6 +669,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
     for(std::size_t k = begin; k < end; k++){
       arma::mat Uoldtemp, Voldtemp, Goldtemp, G(p1+p2,K), R(p1+p2,K),C(p1+p2,K), Gamma1(p1+p2,K),
       Gamma2(p1+p2,K), Gold(p1+p2,K), Rold(p1+p2,K), Cold(p1+p2,K), Gamma1old(p1+p2,K), Gamma2old(p1+p2,K),
+      Gold0(p1+p2,K), Rold0(p1+p2,K), Cold0(p1+p2,K), Gamma1old0(p1+p2,K), Gamma2old0(p1+p2,K),
       Gold2(p1+p2,K), Rold2(p1+p2,K), Cold2(p1+p2,K), Gamma1old2(p1+p2,K), Gamma2old2(p1+p2,K),
       Gold3(p1+p2,K), Rold3(p1+p2,K), Cold3(p1+p2,K), Gamma1old3(p1+p2,K), Gamma2old3(p1+p2,K),
       S12train(p1, p2), S12traint(p2, p1), S12valid(p1, p2), matrixinv(p1+p2, p1+p2), Ip;
@@ -693,27 +694,27 @@ struct spatmcacv_pall: public RcppParallel::Worker {
       S12traint = S12train.t();
       Gamma2old.rows(p1,p1+p2-1) = S12traint*Gold.rows(0,p1-1);
       
-      Gold2 = Gold3 = Gold;
-      Rold2 = Rold3 = Rold;
-      Cold2 = Cold3 = Cold;
-      Gamma2old2 = Gamma2old3 = Gamma2old;
+      Gold0 = Gold2 = Gold3 = Gold;
+      Rold0 = Rold2 = Rold3 = Rold;
+      Cold0 = Cold2 = Cold3 = Cold;
+      Gamma2old0 = Gamma2old2 = Gamma2old3 = Gamma2old;
       
       Ip.eye(p1+p2,p1+p2);
       Gamma1old.zeros(p1+p2, K);
-      Gamma1old2 = Gamma1old3 = Gamma1old;
-      Theta.submat(0,p1,p1-1,p1+p2-1) = S12train/2;
-      Theta.submat(p1,0,p1+p2-1,p1-1) = S12traint/2;
+      Gamma1old0 = Gamma1old2 = Gamma1old3 = Gamma1old;
+      Theta.submat(0, p1, p1-1, p1+p2-1) = S12train/2;
+      Theta.submat(p1, 0, p1+p2-1, p1-1) = S12traint/2;
       vec zero;
       zero.zeros(K);
       for(uword  i = 0; i < tau1u.n_elem; i++){
-        G = Gold;
-        R = Rold;
-        C = Cold;
-        Gamma1 = Gamma1old;
-        Gamma2 = Gamma2old;
-        Theta.submat(0,0,p1-1,p1-1) = -tau1u[i]*Omega1;
+        G = Gold0;
+        R = Rold0;
+        C = Cold0;
+        Gamma1 = Gamma1old0;
+        Gamma2 = Gamma2old0;
+        Theta.submat(0, 0, p1-1, p1-1) = -tau1u[i]*Omega1;
         for(uword  j = 0; j < tau1v.n_elem; j++){    
-          Theta.submat(p1,p1,p1+p2-1,p1+p2-1) = -tau1v[j]*Omega2;
+          Theta.submat(p1, p1, p1+p2-1, p1+p2-1) = -tau1v[j]*Omega2;
           if(j == 0 && i ==0){
             output(0, 0, k) = norm((S12valid-G.rows(0,p1-1)*diagmat(max(zero,svdtemp.subvec(0,K-1)))*G.rows(p1,p1+p2-1).t()),"fro");
           }
@@ -728,10 +729,10 @@ struct spatmcacv_pall: public RcppParallel::Worker {
               Gamma1 = Gamma1old3;
               Gamma2 = Gamma2old3;
               for(uword  m = 0; m < tau2v.n_elem; m++){
-                spatmca_tau2(G, R, C, Gamma1, Gamma2, matrixinv, tau2u[l], tau2v[m], p1, p2, zetatemp[k], maxit,tol);
-                D = max(zero, diagvec(G.rows(0,p1-1).t()*S12train*G.rows(p1,p1+p2-1)));
+                spatmca_tau2(G, R, C, Gamma1, Gamma2, matrixinv, tau2u[l], tau2v[m], p1, p2, zetatemp[k], maxit, tol);
+                D = max(zero, diagvec(G.rows(0, p1-1).t()*S12train*G.rows(p1, p1+p2-1)));
                 output(tau2u.n_elem*i + l, tau2v.n_elem*j + m,k) = 
-                  norm((S12valid-G.rows(0,p1-1)*diagmat(D)*G.rows(p1,p1+p2-1).t()),"fro");
+                  norm((S12valid-G.rows(0, p1-1)*diagmat(D)*G.rows(p1, p1+p2-1).t()),"fro");
                 if(l == 0 && m == 0){
                   Gold2 = G;
                   Rold2 = R;
@@ -749,13 +750,18 @@ struct spatmcacv_pall: public RcppParallel::Worker {
               }
             }
           }
-          if(j==0){ 
-            Gold = Gold2;
-            Rold = Rold2;
-            Cold = Cold2;
-            Gamma1old = Gamma1old2;
-            Gamma2old = Gamma2old2;
+          if(j == 0){ 
+            Gold0 = Gold2;
+            Rold0 = Rold2;
+            Cold0 = Cold2;
+            Gamma1old0 = Gamma1old2;
+            Gamma2old0 = Gamma2old2;
           }
+          Gold = Gold2;
+          Rold = Rold2;
+          Cold = Cold2;
+          Gamma1old = Gamma1old2;
+          Gamma2old = Gamma2old2;
         }
       }
     }
