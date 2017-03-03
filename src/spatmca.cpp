@@ -715,10 +715,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
         Theta.submat(0, 0, p1-1, p1-1) = -tau1u[i]*Omega1;
         for(uword  j = 0; j < tau1v.n_elem; j++){    
           Theta.submat(p1, p1, p1+p2-1, p1+p2-1) = -tau1v[j]*Omega2;
-          if(j == 0 && i ==0){
-            output(0, 0, k) = norm((S12valid-G.rows(0,p1-1)*diagmat(max(zero,svdtemp.subvec(0,K-1)))*G.rows(p1,p1+p2-1).t()),"fro");
-          }
-          else{
+          
             matrixinv =  0.5*arma::inv_sympd(zetatemp[k]*Ip-Theta);
             vec zero;
             zero.zeros(K);
@@ -731,7 +728,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
               for(uword  m = 0; m < tau2v.n_elem; m++){
                 spatmca_tau2(G, R, C, Gamma1, Gamma2, matrixinv, tau2u[l], tau2v[m], p1, p2, zetatemp[k], maxit, tol);
                 D = max(zero, diagvec(G.rows(0, p1-1).t()*S12train*G.rows(p1, p1+p2-1)));
-                output(tau2u.n_elem*i + l, tau2v.n_elem*j + m,k) = 
+                output(tau2u.n_elem*i + l, tau2v.n_elem*j + m, k) = 
                   norm((S12valid-G.rows(0, p1-1)*diagmat(D)*G.rows(p1, p1+p2-1).t()),"fro");
                 if(l == 0 && m == 0){
                   Gold2 = G;
@@ -749,7 +746,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
                 }
               }
             }
-          }
+          
           if(j == 0){ 
             Gold0 = Gold2;
             Rold0 = Rold2;
