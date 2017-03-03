@@ -658,11 +658,10 @@ struct spatmcacv_pall: public RcppParallel::Worker {
   const int maxit;
   const double tol;
   cube& output;
-  vec& zetatemp;
   spatmcacv_pall(const mat& X, const mat& Y, const int K, const mat& Omega1, const mat& Omega2,const vec& tau1u, 
                  const vec &tau1v,const vec& tau2u, const vec &tau2v, const vec& nk, const int p1,const int p2,const int maxit, 
-                 const double tol, cube& output, vec& zetatemp) : X(X), Y(Y), K(K), Omega1(Omega1), Omega2(Omega2), tau1u(tau1u), tau1v(tau1v),
-                 tau2u(tau2u), tau2v(tau2v), nk(nk), p1(p1), p2(p2), maxit(maxit),tol(tol), output(output),zetatemp(zetatemp){}
+                 const double tol, cube& output) : X(X), Y(Y), K(K), Omega1(Omega1), Omega2(Omega2), tau1u(tau1u), tau1v(tau1v),
+                 tau2u(tau2u), tau2v(tau2v), nk(nk), p1(p1), p2(p2), maxit(maxit),tol(tol), output(output){}
   void operator()(std::size_t begin, std::size_t end) {
     arma::mat Ip;
     Ip.eye(Y.n_cols,Y.n_cols);
@@ -683,7 +682,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
       S12train = (Xtrain.t())*Ytrain/Xtrain.n_rows;
       S12valid = Xvalid.t()*Yvalid/Xvalid.n_rows;
       svd_econ(Uoldtemp, svdtemp,Voldtemp, S12train);
-      zetatemp[k] = 10*max(svdtemp);
+      double zetatemp = 10*max(svdtemp);
       Gold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
       Rold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
       Cold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
@@ -716,7 +715,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
         for(uword  j = 0; j < tau1v.n_elem; j++){    
           Theta.submat(p1, p1, p1+p2-1, p1+p2-1) = -tau1v[j]*Omega2;
           
-            matrixinv =  0.5*arma::inv_sympd(zetatemp[k]*Ip-Theta);
+            matrixinv = 0.5*arma::inv_sympd(zetatemp*Ip-Theta);
             vec zero;
             zero.zeros(K);
             for(uword  l = 0; l < tau2u.n_elem; l++){
@@ -726,7 +725,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
               Gamma1 = Gamma1old3;
               Gamma2 = Gamma2old3;
               for(uword  m = 0; m < tau2v.n_elem; m++){
-                spatmca_tau2(G, R, C, Gamma1, Gamma2, matrixinv, tau2u[l], tau2v[m], p1, p2, zetatemp[k], maxit, tol);
+                spatmca_tau2(G, R, C, Gamma1, Gamma2, matrixinv, tau2u[l], tau2v[m], p1, p2, zetatemp, maxit, tol);
                 D = max(zero, diagvec(G.rows(0, p1-1).t()*S12train*G.rows(p1, p1+p2-1)));
                 output(tau2u.n_elem*i + l, tau2v.n_elem*j + m, k) = 
                   norm((S12valid-G.rows(0, p1-1)*diagmat(D)*G.rows(p1, p1+p2-1).t()),"fro");
@@ -819,13 +818,12 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
   mat S1221est = S12est*S12estt, S2112est = S12estt*S12est;
   double cvtau1u, cvtau1v, cvtau2u, cvtau2v;
   arma::mat Ip;
-  vec zetatemp(M);
   Ip.eye(p+q,p+q);
  
   out.zeros(tau1u.n_elem*tau2u.n_elem, tau1v.n_elem*tau2v.n_elem);  
   spatmcacv_pall spatmcacv_pall(X, Y, K, Omega1, Omega2, tau1u, 
                                 tau1v, tau2u, tau2v, nk, p, q, maxit, 
-                                tol,cv, zetatemp);
+                                tol, cv);
   RcppParallel::parallelFor(0, M, spatmcacv_pall);
 
   uword row, col;
@@ -844,7 +842,7 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
   matrixinv =  arma::inv_sympd(2*zeta*Ip-2*Thetaest);
   spatmca_tau1(Gest, Cest, Gamma2est, matrixinv, p, q, zeta, maxit, tol);
   
-  arma::mat Rest= Gest;
+  arma::mat Rest = Gest;
   arma::mat Gamma1est = 0*Gamma2est;
   
   for(uword  i = 0; i <= row % tau2u.n_elem; i++)
@@ -853,7 +851,7 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
     spatmca_tau2(Gest, Rest, Cest, Gamma1est, Gamma2est, matrixinv, cvtau2u, tau2v[i], p, q, zeta, maxit,tol);    
   arma::vec zeros;
   zeros.zeros(K);
-  arma::vec D = max(zeros,diagvec(Gest.rows(0,p-1).t()*S12est*Gest.rows(p,p+q-1)));
+  arma::vec D = max(zeros, diagvec(Gest.rows(0,p-1).t()*S12est*Gest.rows(p,p+q-1)));
   return List::create(Named("cvall") = out, Named("Uest") = Gest.rows(0,p-1), Named("Vest") = Gest.rows(p,p+q-1), Named("Dest")= D, Named("cvtau1u") = cvtau1u,Named("cvtau2u") = cvtau2u, Named("cvtau1v") = cvtau1v, Named("cvtau2v") = cvtau2v);
 }
 
