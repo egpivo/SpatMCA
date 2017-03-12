@@ -240,7 +240,7 @@ struct spatmcacv_p: public RcppParallel::Worker {
       S12train.slice(k) = (Xtrain.t())*Ytrain/Xtrain.n_rows;
       S12valid.slice(k) = Xvalid.t()*Yvalid/Xvalid.n_rows;
       svd_econ(Uoldtemp, svdtemp,Voldtemp, S12train.slice(k));
-      zetatemp[k] = 20*max(svdtemp);
+      zetatemp[k] = 10*max(svdtemp);
       Ucv.slice(k) = Uoldtemp.cols(0,K-1);
       Gold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
       Cold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
@@ -503,7 +503,7 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
   arma::mat Utempest, Vtempest;
   vec SPhiest;
   arma::svd_econ(Utempest, SPhiest, Vtempest, S12est);
-  double zeta = 20*max(SPhiest);
+  double zeta = 10*max(SPhiest);
   arma::mat Gest(p+q,K), Cest(p+q,K), Gamma2est(p+q,K), Thetaest(p+q,p+q), matrixinv(p+q,p+q);
   Gest.rows(0,p-1) = Utempest.cols(0,K-1);
   Cest.rows(0,p-1) = Utempest.cols(0,K-1);
@@ -682,7 +682,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
       S12train = (Xtrain.t())*Ytrain/Xtrain.n_rows;
       S12valid = Xvalid.t()*Yvalid/Xvalid.n_rows;
       svd_econ(Uoldtemp, svdtemp,Voldtemp, S12train);
-      double zetatemp = 20*max(svdtemp);
+      double zetatemp = 10*max(svdtemp);
       Gold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
       Rold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
       Cold.rows(0,p1-1) = Uoldtemp.cols(0,K-1);
@@ -736,7 +736,7 @@ struct spatmcacv_pall: public RcppParallel::Worker {
                   Gamma1old2 = Gamma1;
                   Gamma2old2 = Gamma2;
                 }
-                if(l == 0){
+                if(m == 0){
                   Gold3 = G;
                   Rold3 = R;
                   Cold3 = C;
@@ -805,7 +805,7 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
   arma::mat Utempest, Vtempest;
   vec SPhiest;
   arma::svd_econ(Utempest, SPhiest, Vtempest, S12est);
-  double zeta = 20*max(SPhiest);
+  double zeta = 10*max(SPhiest);
   arma::mat Gest(p+q,K), Cest(p+q,K), Gamma2est(p+q,K), Thetaest(p+q,p+q), matrixinv(p+q,p+q);
   Gest.rows(0,p-1) = Utempest.cols(0,K-1);
   Cest.rows(0,p-1) = Utempest.cols(0,K-1);
