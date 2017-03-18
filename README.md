@@ -7,7 +7,7 @@
 # SpatMCA
 
 ### Description
-***SpatMCA*** is and R package that provides regularized maximum covariance analysis, 
+***SpatMCA*** is an R package that provides regularized maximum covariance analysis, 
 
 * identifying smooth and localized ***couple*** patterns to understand how one spatial process is affected by another
 * suitable for either regularly or irregularly spaced data
