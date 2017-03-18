@@ -7,7 +7,7 @@
 # SpatMCA
 
 ### Description
-***SpatMCA*** provides regularized maximum covariance analysis with
+***SpatMCA*** is and R package that provides regularized maximum covariance analysis, 
 
 * identifying smooth and localized ***couple*** patterns to understand how one spatial process is affected by another
 * suitable for either regularly or irregularly spaced data
@@ -35,8 +35,7 @@ To compile C++ code with package `RcppArmadillo`,
    curl -O http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
    sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /
   ```
-  
-  * More details can be found [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran- and-lquadmath-error/).
+More details can be found [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran- and-lquadmath-error/).
 
 ### Author
  [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang") and [Hsin-Cheng Huang](http://www.stat.sinica.edu.tw/hchuang/ "Hsin-Cheng Huang")
