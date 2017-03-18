@@ -3,11 +3,16 @@ Type: Package
 Title: Regularized Spatial Maximum Covariance Analysis
 Version: 1.0.0.2
 Date: 2017-03-17
-Author: Wen-Ting Wang and Hsin-Cheng Huang
-Maintainer: Wen-Ting Wang <egpivo@gmail.com>
-Description: Provide regularized maximum covariance analysis incorporating smoothness, sparseness and orthogonality of couple patterns by using the alternating direction method of multipliers algorithm. The method can be applied to either regularly or irregularly spaced data.
+URL: https://github.com/egpivo/SpatMCA
+BugReports: https://github.com/egpivo/SpatMCA/issues
+Description: Provide regularized maximum covariance analysis incorporating smoothness,
+  sparseness and orthogonality of couple patterns by using the alternating direction method
+  of multipliers algorithm. The method can be applied to either regularly or irregularly
+  spaced data (Wang and Huang, 2017).
 License: GPL-2
 Imports: Rcpp, RcppParallel (>= 0.11.2), fields, MASS
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 SystemRequirements: GNU make
 NeedsCompilation: yes
+Author: Wen-Ting Wang [aut, cre], Hsin-Cheng Huang [aut]
+Maintainer: Wen-Ting Wang <egpivo@gmail.com>

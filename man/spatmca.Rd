@@ -176,5 +176,5 @@ map.text("state", regions="new york", cex = 2, add = T)}
 Wen-Ting Wang and Hsin-Cheng Huang
 }
 \references{
-Wang, W.-T. and Huang, H.-C. (2016). Regularized spatial maximum covariance analysis, to submit.
+Wang, W.-T. and Huang, H.-C. (2017). Regularized spatial maximum covariance analysis, to submit.
 }
