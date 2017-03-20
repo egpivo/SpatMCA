@@ -26,9 +26,9 @@ To get the current development version from GitHub:
 devtools::install_github("egpivo/SpatMCA")
 ```
 
-To compile C++ code with package `RcppArmadillo`,
+To compile C++ code with the package [`RcppArmadillo`](https://cran.r-project.org/web/packages/RcppArmadillo/index.html),
 
- * Windows users require Rtools
+ * Windows users require [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
  * Mac users require Xcode Command Line Tools, and install the library gfortran by typing the following lines into terminal
 
   ```
