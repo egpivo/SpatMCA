@@ -44,6 +44,9 @@ More details can be found [here](http://thecoatlessprofessor.com/programming/rcp
  
 ### Maintainer
 [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang")
+
+### Reference
+Wang, W.-T. and Huang, H.-C. (2017). Regularized spatial maximum covaraince analysis, under revised
  
 ### License
   GPL-2
