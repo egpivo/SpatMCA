@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 tpm2 <- function(z, P, Phi) {
-    .Call('SpatMCA_tpm2', PACKAGE = 'SpatMCA', z, P, Phi)
+    .Call(`_SpatMCA_tpm2`, z, P, Phi)
 }
 
 spatmcacv_rcpp <- function(sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr) {
-    .Call('SpatMCA_spatmcacv_rcpp', PACKAGE = 'SpatMCA', sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr)
+    .Call(`_SpatMCA_spatmcacv_rcpp`, sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr)
 }
 
 spatmcacvall_rcpp <- function(sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr) {
-    .Call('SpatMCA_spatmcacvall_rcpp', PACKAGE = 'SpatMCA', sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr)
+    .Call(`_SpatMCA_spatmcacvall_rcpp`, sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr)
 }
 

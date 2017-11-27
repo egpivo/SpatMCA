@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // tpm2
 arma::mat tpm2(const arma::mat z, const arma::mat P, const arma::mat Phi);
-RcppExport SEXP SpatMCA_tpm2(SEXP zSEXP, SEXP PSEXP, SEXP PhiSEXP) {
+RcppExport SEXP _SpatMCA_tpm2(SEXP zSEXP, SEXP PSEXP, SEXP PhiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,7 +21,7 @@ END_RCPP
 }
 // spatmcacv_rcpp
 List spatmcacv_rcpp(NumericMatrix sxr, NumericMatrix syr, NumericMatrix Xr, NumericMatrix Yr, int M, int K, NumericVector tau1ur, NumericVector tau2ur, NumericVector tau1vr, NumericVector tau2vr, NumericVector nkr, int maxit, double tol, NumericVector l2ur, NumericVector l2vr);
-RcppExport SEXP SpatMCA_spatmcacv_rcpp(SEXP sxrSEXP, SEXP syrSEXP, SEXP XrSEXP, SEXP YrSEXP, SEXP MSEXP, SEXP KSEXP, SEXP tau1urSEXP, SEXP tau2urSEXP, SEXP tau1vrSEXP, SEXP tau2vrSEXP, SEXP nkrSEXP, SEXP maxitSEXP, SEXP tolSEXP, SEXP l2urSEXP, SEXP l2vrSEXP) {
+RcppExport SEXP _SpatMCA_spatmcacv_rcpp(SEXP sxrSEXP, SEXP syrSEXP, SEXP XrSEXP, SEXP YrSEXP, SEXP MSEXP, SEXP KSEXP, SEXP tau1urSEXP, SEXP tau2urSEXP, SEXP tau1vrSEXP, SEXP tau2vrSEXP, SEXP nkrSEXP, SEXP maxitSEXP, SEXP tolSEXP, SEXP l2urSEXP, SEXP l2vrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -46,7 +46,7 @@ END_RCPP
 }
 // spatmcacvall_rcpp
 List spatmcacvall_rcpp(NumericMatrix sxr, NumericMatrix syr, NumericMatrix Xr, NumericMatrix Yr, int M, int K, NumericVector tau1ur, NumericVector tau2ur, NumericVector tau1vr, NumericVector tau2vr, NumericVector nkr, int maxit, double tol, NumericVector l2ur, NumericVector l2vr);
-RcppExport SEXP SpatMCA_spatmcacvall_rcpp(SEXP sxrSEXP, SEXP syrSEXP, SEXP XrSEXP, SEXP YrSEXP, SEXP MSEXP, SEXP KSEXP, SEXP tau1urSEXP, SEXP tau2urSEXP, SEXP tau1vrSEXP, SEXP tau2vrSEXP, SEXP nkrSEXP, SEXP maxitSEXP, SEXP tolSEXP, SEXP l2urSEXP, SEXP l2vrSEXP) {
+RcppExport SEXP _SpatMCA_spatmcacvall_rcpp(SEXP sxrSEXP, SEXP syrSEXP, SEXP XrSEXP, SEXP YrSEXP, SEXP MSEXP, SEXP KSEXP, SEXP tau1urSEXP, SEXP tau2urSEXP, SEXP tau1vrSEXP, SEXP tau2vrSEXP, SEXP nkrSEXP, SEXP maxitSEXP, SEXP tolSEXP, SEXP l2urSEXP, SEXP l2vrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -68,4 +68,16 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(spatmcacvall_rcpp(sxr, syr, Xr, Yr, M, K, tau1ur, tau2ur, tau1vr, tau2vr, nkr, maxit, tol, l2ur, l2vr));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_SpatMCA_tpm2", (DL_FUNC) &_SpatMCA_tpm2, 3},
+    {"_SpatMCA_spatmcacv_rcpp", (DL_FUNC) &_SpatMCA_spatmcacv_rcpp, 15},
+    {"_SpatMCA_spatmcacvall_rcpp", (DL_FUNC) &_SpatMCA_spatmcacvall_rcpp, 15},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_SpatMCA(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

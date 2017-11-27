@@ -12,7 +12,8 @@ using namespace std;
 using namespace arma;
 
 arma::mat cubicmatrix(const vec z1){
-
+  
+  //vec h = diff(z1);
   vec h(z1.n_elem-1);
   for(unsigned i = 0; i < z1.n_elem-1; i++)
     h[i] = z1[i+1]-z1[i];
@@ -46,39 +47,47 @@ struct tpm: public RcppParallel::Worker {
   void operator()(std::size_t begin, std::size_t end) {
     for(std::size_t i = begin; i < end; i++){
       for(unsigned j = 0; j < p; ++j){
-        if(j >i){
-          if(d==2){  
-            double r  = sqrt(pow(P(i,0)-P(j,0),2)+(pow(P(i,1)-P(j,1),2)));
-            L(i,j) = r*r*log(r)/(8.0*arma::datum::pi);
+        if(j > i){
+          if(d == 2){  
+            double r  = sqrt(pow(P(i, 0)-P(j, 0), 2)+(pow(P(i, 1)-P(j, 1), 2)));
+            L(i, j) = r*r*log(r)/(8.0*arma::datum::pi);
           }
-          else{
-            double r  = sqrt(pow(P(i,0)-P(j,0),2));
-            L(i,j) = sqrt(2)/(16*sqrt(arma::datum::pi))*pow(r,3);
-          }  
+          else if(d == 1){
+            double r  = sqrt(pow(P(i, 0)-P(j, 0), 2));
+            L(i, j) = pow(r, 3)/12;
+          }
+          else if(d == 3){
+            double r = sqrt(pow(P(i, 0) - P(j, 0), 2) +
+                            pow(P(i, 1) - P(j, 1), 2) +
+                            pow(P(i, 2) - P(j, 2), 2));
+            L(i, j) = -r/(8.0*arma::datum::pi);
+          }
+          
         }
       }  
       
-      L(i,p) = 1;
+      L(i, p) = 1;
       for(unsigned k = 0; k < d; ++k){
-        L(i,p+k+1) = P(i,k);
+        L(i, p+k+1) = P(i, k);
       }
     }
   }
 };
 
 arma::mat tpmatrix(const arma::mat P){
-  arma::mat L, Lp;
+  arma::mat L, Lp, Ip;
   int p = P.n_rows, d = P.n_cols;
   
   L.zeros(p+d+1, p+d+1);
+  Ip.eye(p+d+1, p+d+1);
   tpm tpm(P,L,p,d);
   parallelFor(0, p,tpm);
-  L = L + L.t();
-  Lp = inv(L);   
-  Lp.shed_cols(p,p+2);
-  Lp.shed_rows(p,p+2);
-  L.shed_cols(p,p+2);
-  L.shed_rows(p,p+2);
+  L = symmatl(L);
+  Lp = inv_sympd(L+1e-8*Ip);   
+  Lp.shed_cols(p, p+d);
+  Lp.shed_rows(p, p+d);
+  L.shed_cols(p, p+d);
+  L.shed_rows(p, p+d);
   arma::mat result = Lp.t()*(L*Lp);
   return(result);
 }
@@ -103,26 +112,36 @@ arma::mat tpm2(const arma::mat z,const arma::mat P, const arma::mat Phi){
     for(unsigned i = 0; i < K; i++){
       psum = 0;
       for(unsigned j = 0; j < p; j++){
-        if(d==2){
-          r  = sqrt(pow(z(newi,0)-P(j,0),2)+(pow(z(newi,1)-P(j,1),2)));
-          if(r!=0)
-            psum += para(j,i)* r*r*log(r)/(8.0*arma::datum::pi);
+        if(d == 2){  
+          r  = sqrt(pow(z(newi, 0)-P(j, 0), 2)+(pow(z(newi, 1)-P(j, 1), 2)));
+          if(r != 0)
+            psum += para(j, i)* r*r*log(r)/(8.0*arma::datum::pi);
+          
         }
-        else{
-          r = norm(z.row(newi)-P.row(j),'f');
-          if(r!=0)
-            psum += para(j,i)*((sqrt(2)/(16*sqrt(arma::datum::pi)))*pow(r,3));
+        else if(d == 1){
+          r  = norm(z.row(newi) - P.row(j), 'f');
+          if(r != 0)
+            psum += para(j,i)*pow(r, 3)/12;
         }
+        else if(d == 3){
+          double r = sqrt(pow(z(newi, 0) - P(j, 0), 2) +
+                          pow(z(newi, 1) - P(j, 1), 2) +
+                          pow(z(newi, 2) - P(j, 2), 2));
+          if(r != 0)
+            psum += -para(j,i)*r/(8.0*arma::datum::pi);
+        }
+        
       }
-      if(d==1)
-        eigen_fn(newi,i) = psum + para(p+1,i)*z(newi,0) + para(p,i);
-      else
-        eigen_fn(newi,i) = psum + para(p+1,i)*z(newi,0) + para(p+2,i)*z(newi,1) + para(p,i); 
+      if(d == 1)
+        eigen_fn(newi, i) = psum + para(p+1, i)*z(newi, 0) + para(p, i);
+      else if(d == 2)
+        eigen_fn(newi, i) = psum + para(p+1, i)*z(newi, 0) + para(p+2, i)*z(newi, 1) + para(p, i);
+      else if(d == 3)
+        eigen_fn(newi, i) = psum + para(p+1, i)*z(newi, 0) + para(p+2, i)*z(newi, 1)+ para(p+3, i)*z(newi, 2) + para(p, i); 
     }
   }
   return(eigen_fn);
 }
-
 
 using namespace arma; 
 using namespace Rcpp;
@@ -476,27 +495,23 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
   arma::mat Omega1, Omega2, out, out2;
   out.zeros(tau1u.n_elem, tau1v.n_elem);
   
-  if(max(tau1u)==0){
-    Omega1.eye(p,p);
+  if(max(tau1u) == 0){
+    Omega1.eye(p, p);
   }
   else{
-    if(d == 2){
-      Omega1 = tpmatrix(sx);
-    }
-    else{
+    if(d == 1)
       Omega1 = cubicmatrix(sx);
-    }
+    else
+      Omega1 = tpmatrix(sx);
   }
-  if(max(tau1v)==0){
-    Omega2.eye(q,q);
+  if(max(tau1v) == 0){
+    Omega2.eye(q, q);
   }
   else{
-    if(d == 2){
-      Omega2 = tpmatrix(sy);
-    }
-    else{
+    if(d == 1)
       Omega2 = cubicmatrix(sy);
-    }
+    else
+      Omega2 = tpmatrix(sy);
   }
   arma::mat S12est = X.t()*Y/n;
   arma::mat S12estt = S12est.t();
@@ -790,14 +805,13 @@ List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr,
   arma::mat Omega1, Omega2, out, out2;
   out.zeros(tau1u.n_elem, tau1v.n_elem);
   
-  
-  if(d == 2){
-    Omega1 = tpmatrix(sx);
-    Omega2 = tpmatrix(sy);
-  }
-  else{
+  if(d == 1){
     Omega1 = cubicmatrix(sx);
     Omega2 = cubicmatrix(sy);
+  }
+  else{
+    Omega1 = tpmatrix(sx);
+    Omega2 = tpmatrix(sy);
   }
   
   arma::mat S12est = X.t()*Y/n;
