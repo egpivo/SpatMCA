@@ -11,7 +11,7 @@
 ***SpatMCA*** is an R package that provides regularized maximum covariance analysis, 
 
 * identifying smooth and localized ***couple*** patterns to understand how one spatial process is affected by another
-* suitable for either regularly or irregularly spaced data
+* suitable for either regularly or irregularly spaced data, including 1D, 2D, and 3D
 * by the alternating direction method of multipliers (ADMM) algorithm
 
 ### Installation
@@ -46,7 +46,7 @@ More details can be found [here](http://thecoatlessprofessor.com/programming/rcp
 [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang")
 
 ### Reference
-Wang, W.-T. and Huang, H.-C. (2017). [Regularized spatial maximum covaraince analysis](https://arxiv.org/pdf/1705.02716.pdf), under revised.
+Wang, W.-T. and Huang, H.-C. (2017). [Regularized spatial maximum covaraince analysis](https://arxiv.org/pdf/1705.02716.pdf), Environmetrics, 29, https://doi.org/10.1002/env.2481
  
 ### License
   GPL-2

@@ -98,8 +98,8 @@ Sigma[1:p, 1:p] <- diag(p)
 Sigma[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
 Sigma[1:p, (p + 1):(p + q)] <- u\%*\%t(v)
 Sigma[(p + 1):(p + q), 1:p] <- t(Sigma[1:p, (p + 1):(p + q)])
-noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma= 0.001*diag(p + q))
-Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma=Sigma) + noise
+noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001*diag(p + q))
+Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[,1:p]
 Y2 <- Y[,-(1:p)]
 cv1 <- spatmca(x1, x2, Y1, Y2)
@@ -170,7 +170,42 @@ map.text("state", regions="new york", cex = 2, add = T)
 quilt.plot(xx_new, cv_new$Vestfn[,1], nx = new_p, ny = new_p,  xlab = "longitude",
 ylab = "latitude", main = "2nd spatial pattern for ozone")
 map(database="county", regions="new york", add = T)
-map.text("state", regions="new york", cex = 2, add = T)}
+map.text("state", regions="new york", cex = 2, add = T)
+
+###### 3D: regular locations
+n <- 200
+x <- y <- z <- as.matrix(seq(-7, 7, length = 8))
+d <- expand.grid(x, y, z)
+u_3D <- v_3D <- exp(-d[,1]^2 - d[,2]^2 -d[,3]^2)
+p <- q <- 8^3
+Sigma_3D <- array(0, c(p + q, p + q))
+Sigma_3D[1:p, 1:p] <- diag(p)
+Sigma_3D[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
+Sigma_3D[1:p, (p + 1):(p + q)] <- u_3D\%*\%t(v_3D)
+Sigma_3D[(p + 1):(p + q), 1:p] <- t(Sigma_3D[1:p, (p + 1):(p + q)])
+
+noise_3D <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001*diag(p + q))
+Y_3D <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma_3D) + noise_3D
+Y1_3D <- Y_3D[,1:p]
+Y2_3D <- Y_3D[,-(1:p)]
+cv_3D <- spatmca(d, d, Y1_3D, Y2_3D)
+
+library(plot3D)
+library(RColorBrewer) 
+cols <- colorRampPalette(brewer.pal(9,'Blues'))(10)
+isosurf3D(x, y, z, colvar = array(cv_3D$Uestfn[,1], c(8, 8, 8)),
+            level= seq(min(cv_3D$Uestfn[,1]), max(cv_3D$Uestfn[,1]), length=10),
+            ticktype = "detailed",
+            colkey = list(side = 1),
+            col = cols,
+            main = "1st estimated pattern for Y1")
+            
+isosurf3D(x, y, z, colvar = array(cv_3D$Vestfn[,1], c(8, 8, 8)),
+            level= seq(min(cv_3D$Vestfn[,1]), max(cv_3D$Vestfn[,1]), length=10),
+            ticktype = "detailed",
+            colkey = list(side = 1),
+            col = cols,
+            main = "1st estimated pattern for Y2")}
 }
 \author{
 Wen-Ting Wang and Hsin-Cheng Huang
