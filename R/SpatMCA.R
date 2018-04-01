@@ -35,16 +35,16 @@ spatmca <- function(x1, x2, Y1, Y2, M = 5, K = NULL, K.select = ifelse(is.null(K
     indexu <- sort(abs(tempegvl3$u[,1]), decreasing=T, index.return=T)$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
-    max.tau2u <- 2*abs(dd[nu1u,]%*%tempegvl3$v[,1])
-    min.tau2u <- abs(dd[nu2u,]%*%tempegvl3$v[,1])
+    max.tau2u <- 2*abs(dd[nu1u,]%*%tempegvl3$v[,1])[1]
+    min.tau2u <- abs(dd[nu2u,]%*%tempegvl3$v[,1])[1]
   
     tau2u <- c(0,exp(seq(log(min.tau2u), log(max.tau2u), length = (ntau2u-1)))) 
     
     indexv <- sort(abs(tempegvl3$v[,1]),decreasing=T,index.return=T)$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
-    max.tau2v <- 2*abs(t(dd)[nu1v,]%*%tempegvl3$u[,1])
-    min.tau2v <- abs(t(dd)[nu2v,]%*%tempegvl3$u[,1])
+    max.tau2v <- 2*abs(t(dd)[nu1v,]%*%tempegvl3$u[,1])[1]
+    min.tau2v <- abs(t(dd)[nu2v,]%*%tempegvl3$u[,1])[1]
     tau2v <- c(0,exp(seq(log(min.tau2v), log(max.tau2v), length = (ntau2v-1)))) 
     
   }else if (is.null(tau2u)){ 
