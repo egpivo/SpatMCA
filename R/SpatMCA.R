@@ -52,8 +52,8 @@ spatmca <- function(x1, x2, Y1, Y2, M = 5, K = NULL, K.select = ifelse(is.null(K
     indexu <- sort(abs(tempegvl3$u[,1]),decreasing=T,index.return=T)$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
-    max.tau2u <- 2*abs(dd[nu1u,]%*%tempegvl3$v[,1])
-    min.tau2u <- abs(dd[nu2u,]%*%tempegvl3$v[,1])
+    max.tau2u <- 2*abs(dd[nu1u,]%*%tempegvl3$v[,1])[1]
+    min.tau2u <- abs(dd[nu2u,]%*%tempegvl3$v[,1])[1]
     tau2u <- c(0,exp(seq(log(min.tau2u), log(max.tau2u), length = (ntau2u-1)))) 
     
     ntau2v <- length(tau2v)
@@ -62,8 +62,8 @@ spatmca <- function(x1, x2, Y1, Y2, M = 5, K = NULL, K.select = ifelse(is.null(K
     indexv <- sort(abs(tempegvl3$v[,1]),decreasing=T,index.return=T)$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
-    max.tau2v <- egvl3*abs(t(dd)[nu1v,]%*%tempegvl3$u[,1])
-    min.tau2v <- egvl3*abs(t(dd)[nu2v,]%*%tempegvl3$u[,1])
+    max.tau2v <- egvl3*abs(t(dd)[nu1v,]%*%tempegvl3$u[,1])[1]
+    min.tau2v <- egvl3*abs(t(dd)[nu2v,]%*%tempegvl3$u[,1])[1]
     tau2v <- c(0,exp(seq(log(min.tau2v), log(max.tau2v), length = (ntau2v-1)))) 
     
     ntau2u <- length(tau2u)
@@ -76,17 +76,17 @@ spatmca <- function(x1, x2, Y1, Y2, M = 5, K = NULL, K.select = ifelse(is.null(K
   if(is.null(tau1u) && is.null(tau1v)) {
     ntau1u <- 11
     ntau1v <- 11
-    max.tau1u <- egvl3/egvl1*sqrt(ncol(Y1)/nrow(Y1))
-    max.tau1v <- egvl3/egvl2*sqrt(ncol(Y2)/nrow(Y2))
+    max.tau1u <- egvl3/egvl1*sqrt(ncol(Y1)/nrow(Y1))[1]
+    max.tau1v <- egvl3/egvl2*sqrt(ncol(Y2)/nrow(Y2))[1]
     tau1u <- c(0,exp(seq(log(max.tau1u/1e3), log(max.tau1u), length = (ntau1u-1)))) 
     tau1v <- c(0,exp(seq(log(max.tau1v/1e3), log(max.tau1v), length = (ntau1v-1)))) 
   }else if (is.null(tau1u)){
     ntau1u <- 11
-    max.tau1u <- egvl3/egvl1*sqrt(ncol(Y1)/nrow(Y1))
+    max.tau1u <- egvl3/egvl1*sqrt(ncol(Y1)/nrow(Y1))[1]
     ntau1v <- length(tau1v)
   }else if (is.null(tau1v)){
     ntau1v <- 11
-    max.tau1v <- egvl3/egvl2*sqrt(ncol(Y2)/nrow(Y2))
+    max.tau1v <- egvl3/egvl2*sqrt(ncol(Y2)/nrow(Y2))[1]
     ntau1u <- length(tau1u)
   }else{
     ntau1u <- length(tau1u)

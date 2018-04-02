@@ -8,7 +8,7 @@ BugReports: https://github.com/egpivo/SpatMCA/issues
 Description: Provide regularized maximum covariance analysis incorporating smoothness,
   sparseness and orthogonality of couple patterns by using the alternating direction method
   of multipliers algorithm. The method can be applied to either regularly or irregularly
-  spaced data,  including 1D, 2D, and 3D (Wang and Huang, 2017).
+  spaced data,  including 1D, 2D, and 3D (Wang and Huang, 2017 <doi:10.1002/env.2481>).
 License: GPL-2
 Imports: Rcpp, RcppParallel (>= 0.11.2), fields, MASS
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
