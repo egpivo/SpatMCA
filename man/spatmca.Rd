@@ -4,9 +4,10 @@
 \alias{spatmca}
 \title{Regularized spatial MCA}
 \usage{
-spatmca(x1, x2, Y1, Y2, M = 5, K = NULL, K.select = ifelse(is.null(K),TRUE,FALSE),
-tau1u = NULL, tau2u = NULL, tau1v = NULL, tau2v = NULL, x1_new = NULL, x2_new = NULL,
-center = TRUE, plot.cv = FALSE, maxit = 100, thr = 1e-04, fullselect  = FALSE)
+spatmca(x1, x2, Y1, Y2, M = 5, K = NULL,
+doesSelectRank = ifelse(is.null(K), TRUE, FALSE), tau1u = NULL, tau2u = NULL,
+tau1v = NULL, tau2v = NULL, x1_new = NULL, x2_new = NULL, center = TRUE,
+plot.cv = FALSE, maxit = 100, thr = 1e-04, doesSelectAllTuningParameters = FALSE)
 }
 
 \arguments{
@@ -20,9 +21,9 @@ center = TRUE, plot.cv = FALSE, maxit = 100, thr = 1e-04, fullselect  = FALSE)
 
 \item{M}{Optional number of folds; default is 5.}
 
-\item{K}{Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or K.select is TRUE, K is selected automatically.}
+\item{K}{Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or doesSelectRank is TRUE, K is selected automatically.}
 
-\item{K.select}{If TRUE, K is selected automatically; otherwise, K.select is set to be user-supplied K. Default depends on user-supplied K.}
+\item{doesSelectRank}{If TRUE, K is selected automatically; otherwise, doesSelectRank is set to be user-supplied K. Default depends on user-supplied K.}
 
 \item{tau1u}{Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau1u values in a range are used.}
 
@@ -44,7 +45,7 @@ center = TRUE, plot.cv = FALSE, maxit = 100, thr = 1e-04, fullselect  = FALSE)
 
 \item{thr}{Threshold for convergence. Default value is \eqn{10^{-4}}.}
 
-\item{fullselect}{If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}}
+\item{doesSelectAllTuningParameters}{If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}}
 
 \value{
 \item{Uestfn}{Estimated patterns for Y1 at the new locations, x1_new.}
@@ -63,11 +64,11 @@ center = TRUE, plot.cv = FALSE, maxit = 100, thr = 1e-04, fullselect  = FALSE)
 
 \item{stau2v}{Selected tau2v.}
 
-\item{cv1}{cv socres for tau1u and tau1v when fullselect is FALSE.}
+\item{cv1}{cv socres for tau1u and tau1v when doesSelectAllTuningParameters is FALSE.}
 
-\item{cv2}{cv socres for tau2u and tau2v when fullselect is FALSE.}
+\item{cv2}{cv socres for tau2u and tau2v when doesSelectAllTuningParameters is FALSE.}
 
-\item{cvall}{cv socres for tau1u, tau2u, tau1v and tau2v when fullselect is TRUE.}
+\item{cvall}{cv socres for tau1u, tau2u, tau1v and tau2v when doesSelectAllTuningParameters is TRUE.}
 
 \item{tau1u}{Sequence of tau1u-values used in the process.}
 

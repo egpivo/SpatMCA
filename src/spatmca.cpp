@@ -13,15 +13,15 @@ using namespace arma;
 
 arma::mat cubicmatrix(const vec z1){
   
-  //vec h = diff(z1);
   vec h(z1.n_elem-1);
-  for(unsigned i = 0; i < z1.n_elem-1; i++)
-    h[i] = z1[i+1]-z1[i];
   arma::mat Q, R;
   int p = z1.n_elem;
   Q.zeros(p-2,p);
   R.zeros(p-2,p-2);
   
+  for(unsigned i = 0; i < z1.n_elem-1; i++)
+    h[i] = z1[i+1]-z1[i];
+
   for(unsigned j = 0; j < p-2; ++j){
     Q(j,j) = 1/h[j];
     Q(j,j+1) = -1/h[j]-1/h[j+1];
@@ -46,7 +46,7 @@ struct tpm: public RcppParallel::Worker {
   tpm(const mat &P, mat& L, int p, int d) : P(P), L(L), p(p), d(d){}
   void operator()(std::size_t begin, std::size_t end) {
     for(std::size_t i = begin; i < end; i++){
-      for(unsigned j = 0; j < p; ++j){
+      for(unsigned j = 0; j < p; j++){
         if(j > i){
           if(d == 2){  
             double r  = sqrt(pow(P(i, 0)-P(j, 0), 2)+(pow(P(i, 1)-P(j, 1), 2)));
@@ -62,7 +62,6 @@ struct tpm: public RcppParallel::Worker {
                             pow(P(i, 2) - P(j, 2), 2));
             L(i, j) = -r/(8.0*arma::datum::pi);
           }
-          
         }
       }  
       
@@ -152,7 +151,6 @@ void spatmca_tau1(mat& G, mat& C, mat& Lambda2, const mat matrixinv, const int p
   arma::mat temp, U1, U2, V1, V2, R = G, Cold = C,  Lambda2old = Lambda2;
   arma::vec er(2), S1, S2;
   
-  
   for (unsigned iter = 0; iter < maxit; iter++){ 
     G = matrixinv*(zeta*(R+Cold)-Lambda2old);
     R = G;
@@ -171,7 +169,6 @@ void spatmca_tau1(mat& G, mat& C, mat& Lambda2, const mat matrixinv, const int p
       break;
     Cold = C;
     Lambda2old = Lambda2;
-    
   }
 }
 
@@ -286,13 +283,13 @@ struct spatmcacv_p: public RcppParallel::Worker {
           if(j == 0 && i ==0){
             output(i,j,k) = norm((S12valid.slice(k)-G.rows(0,p1-1)*diagmat(max(zero,svdtemp.subvec(0,K-1)))*G.rows(p1,p1+p2-1).t()),"fro");
           }
-          else{//if(j !=0 && i != 0){ 
+          else{
             matrixinv =  0.5*arma::inv_sympd(zetatemp[k]*Ip-Theta);
             spatmca_tau1(G, C, Gamma2, matrixinv, p1, p2, zetatemp[k], maxit,tol);
             D = max(zero, diagvec(G.rows(0,p1-1).t()*S12train.slice(k)*G.rows(p1,p1+p2-1)));
             output(i,j,k) = norm((S12valid.slice(k)-G.rows(0,p1-1)*diagmat(D)*G.rows(p1,p1+p2-1).t()),"fro");
           }
-          if(j==0){            
+          if(j == 0){            
             Gold = G;
             Cold = C;
             Gamma2old = Gamma2;
@@ -303,7 +300,6 @@ struct spatmcacv_p: public RcppParallel::Worker {
   }
   
 };
-
 
 using namespace arma; 
 using namespace Rcpp;
@@ -778,10 +774,6 @@ struct spatmcacv_pall: public RcppParallel::Worker {
     }
   }
 };
-
-
-
-
 
 using namespace Rcpp;
 using namespace arma;

@@ -3,11 +3,6 @@
 \name{spatmcacvall_rcpp}
 \alias{spatmcacvall_rcpp}
 \title{internal_function}
-\usage{
-internal_function
-}
-
-\description{
-internal_function
-}
+\usage{spatmcacvall_rcpp}
+\description{internal_function}
 \keyword{internal}
