@@ -24,8 +24,8 @@ cv_1D <- spatmca(x1, x2, Y1, Y2)
 tol <- 1e-5
 test_that("Selected tuning parameters", {
   expect_lte(abs(cv_1D$Dest - 0.8845911), tol)
-  expect_lte(abs(1 - norm(cv_1D$Uestfn, "F") - 0.8845911), tol)
-  expect_lte(abs(1 - norm(cv_1D$Vestfn, "F") - 0.8845911), tol)
+  expect_lte(abs(1 - norm(cv_1D$Uestfn, "F") - 1), tol)
+  expect_lte(abs(1 - norm(cv_1D$Vestfn, "F") - 1), tol)
   expect_lte(abs(cv_1D$Khat - 1), tol)
   expect_null(cv_1D$cvall)
 })
