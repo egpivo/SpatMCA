@@ -8,8 +8,8 @@ A new regularization approach to estimate the leading coupled patterns via smoot
 \details{\tabular{ll}{
 Package:\tab SpatMCA\cr
 Type:\tab  Package\cr
-Version:\tab   1.0.1.1\cr
-Date:\tab   2020-12-30\cr
+Version:\tab   1.0.2.0\cr
+Date:\tab   2021-01-05\cr
 License: \tab GPL version 2 or newer\cr
 }
 }

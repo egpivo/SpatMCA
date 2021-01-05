@@ -1,8 +1,8 @@
 Package: SpatMCA
 Type: Package
 Title: Regularized Spatial Maximum Covariance Analysis
-Version: 1.0.1.1
-Date: 2020-12-30
+Version: 1.0.2.0
+Date: 2021-01-05
 URL: https://github.com/egpivo/SpatMCA
 BugReports: https://github.com/egpivo/SpatMCA/issues
 Description: Provide regularized maximum covariance analysis incorporating smoothness,
@@ -12,6 +12,7 @@ Description: Provide regularized maximum covariance analysis incorporating smoot
 License: GPL-2
 Imports: Rcpp, RcppParallel (>= 0.11.2), fields, MASS
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
+Suggests: testthat (>= 2.1.0)
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Author: Wen-Ting Wang [aut, cre], Hsin-Cheng Huang [aut]
