@@ -1,8 +1,8 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/SpatMCA)](https://cran.r-project.org/package=SpatMCA)
 [![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/SpatMCA)](https://cran.r-project.org/package=SpatMCA)
 [![Travis-CI Build Status](https://travis-ci.org/egpivo/SpatMCA.svg?branch=master)](https://travis-ci.org/egpivo/SpatMCA)
-[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
-[![Research software impact](http://depsy.org/api/package/cran/SpatMCA/badge.svg)](http://depsy.org/package/r/SpatMCA)
+[![R build status](https://github.com/egpivo/SpatPCA/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/SpatPCA/actions)
+[![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/SpatPCA/master.svg)](https://codecov.io/github/egpivo/SpatpCA?branch=master)
 
 
 # SpatMCA

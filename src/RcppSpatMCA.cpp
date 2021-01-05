@@ -99,7 +99,6 @@ arma::mat tpm2(const arma::mat z,const arma::mat P, const arma::mat Phi){
   tpm tpm(P,L,p,d);
   parallelFor(0, p,tpm);
   L = L + L.t();
-  // Lp = inv(L);  
   arma::mat Phi_star, para(p+d+1, K);
   Phi_star.zeros(p+d+1, K);
   Phi_star.rows(0,p-1) = Phi;
@@ -590,12 +589,7 @@ List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, Nu
       spatmca_tau1(Gest, Cest, Gamma2est, matrixinv, p, q, zeta, maxit, tol);  
     }
     if(cvtau1u == 0 && cvtau1v ==0){
-      //   arma::mat A = diagmat(1/(pow(zeta,2)-pow(SPhiest.subvec(0,K-1),2)));
-      //    matrixinv.submat(0,0,p-1,p-1) = 2*zeta*Gest.rows(0,p-1)*A*Gest.rows(0,p-1).t();
-      //    matrixinv.submat(0,p,p-1,p+q-1) = Gest.rows(0,p-1)*diagmat(SPhiest.subvec(0,K-1))*A*Gest.rows(p,p+q-1).t();
-      //    matrixinv.submat(p,0,p+q-1,p-1) = matrixinv.submat(0,p,p-1,p+q-1).t();
-      //    matrixinv.submat(p,p,p+q-1,p+q-1) = 2*zeta*Gest.rows(p,p+q-1)*A*Gest.rows(p,p+q-1).t();;
-      matrixinv=0.5*arma::inv_sympd(zeta*Ip-Thetaest);
+       matrixinv=0.5*arma::inv_sympd(zeta*Ip-Thetaest);
     }
     else if(cvtau1v !=0){
       if(cvtau1u == 0){
