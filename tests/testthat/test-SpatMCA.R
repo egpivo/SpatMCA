@@ -17,7 +17,7 @@ Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[,1:p]
 Y2 <- Y[,-(1:p)]
 
-cv_1D <- spatmca(x1, x2, Y1, Y2)
+cv_1D <- spatmca(x1, x2, Y1, Y2, K =1)
 
 
 # Test the result
