@@ -21,12 +21,11 @@ cv_1D <- spatmca(x1, x2, Y1, Y2)
 
 
 # Test the result
-tol <- 1e-6
+tol <- 1e-5
 test_that("Selected tuning parameters", {
-  expect_lte(abs(cv_1D$stau1u - 0.1700728), tol)
-  expect_lte(abs(cv_1D$stau2u - 1.125673), tol)
-  expect_lte(abs(cv_1D$stau1v - 0.1569319), tol)
-  expect_lte(abs(cv_1D$stau2v - 1.013889), tol)
+  expect_lte(abs(cv_1D$Dest - 0.8845911), tol)
+  expect_lte(abs(1 - norm(cv_1D$Uestfn, "F") - 0.8845911), tol)
+  expect_lte(abs(1 - norm(cv_1D$Vestfn, "F") - 0.8845911), tol)
   expect_lte(abs(cv_1D$Khat - 1), tol)
   expect_null(cv_1D$cvall)
 })
