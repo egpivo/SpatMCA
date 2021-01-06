@@ -9,13 +9,16 @@ spatmca <- function(x1,
                     tau2u = NULL,
                     tau1v = NULL,
                     tau2v = NULL,
-                    x1_new = NULL,
-                    x2_new = NULL,
+                    x1New = NULL,
+                    x2New = NULL,
                     center = TRUE,
                     plot.cv = FALSE,
                     maxit = 100,
                     thr = 1e-04,
-                    doesSelectAllTuningParameters = FALSE) {
+                    doesSelectAllTuningParameters = FALSE,
+                    numCores = NULL) {
+  set_cores(numCores)
+  
   x1 = as.matrix(x1)
   x2 = as.matrix(x2)
   
@@ -293,21 +296,21 @@ spatmca <- function(x1,
   cvall <- cvtempold$cvall
   Uest <- cvtempold$Uest
   Vest <- cvtempold$Vest
-  if (is.null(x1_new)) {
-    x1_new = x1
+  if (is.null(x1New)) {
+    x1New = x1
     Uestfn <- Uest
   }
   else{
-    x1_new = as.matrix(x1_new)
-    Uestfn <- tpm2(x1_new, x1, Uest)
+    x1New = as.matrix(x1New)
+    Uestfn <- tpm2(x1New, x1, Uest)
   }
-  if (is.null(x2_new)) {
-    x2_new = x2
+  if (is.null(x2New)) {
+    x2New = x2
     Vestfn <- Vest
   }
   else{
-    x2_new = as.matrix(x2_new)
-    Vestfn <- tpm2(x2_new, x2, Vest)
+    x2New = as.matrix(x2New)
+    Vestfn <- tpm2(x2New, x2, Vest)
   }
   if (plot.cv == TRUE && !is.null(cv1)) {
     par(mfrow = c(2, 1))

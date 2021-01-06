@@ -6,8 +6,9 @@
 \usage{
 spatmca(x1, x2, Y1, Y2, M = 5, K = NULL,
 doesSelectRank = ifelse(is.null(K), TRUE, FALSE), tau1u = NULL, tau2u = NULL,
-tau1v = NULL, tau2v = NULL, x1_new = NULL, x2_new = NULL, center = TRUE,
-plot.cv = FALSE, maxit = 100, thr = 1e-04, doesSelectAllTuningParameters = FALSE)
+tau1v = NULL, tau2v = NULL, x1New = NULL, x2New = NULL, center = TRUE,
+plot.cv = FALSE, maxit = 100, thr = 1e-04, doesSelectAllTuningParameters = FALSE,
+numCores = NULL)
 }
 
 \arguments{
@@ -33,9 +34,9 @@ plot.cv = FALSE, maxit = 100, thr = 1e-04, doesSelectAllTuningParameters = FALSE
 
 \item{tau2v}{Optional user-supplied numeric vector of a nonnegative sparseness parameter sequence correponding to Y2. If NULL, 10 tau2v values in a range are use.}
 
-\item{x1_new}{New location matrix correponding to Y1. If NULL, it is x1.}
+\item{x1New}{New location matrix correponding to Y1. If NULL, it is x1.}
 
-\item{x2_new}{New location matrix correponding to Y2. If NULL, it is x2.}
+\item{x2New}{New location matrix correponding to Y2. If NULL, it is x2.}
 
 \item{center}{If TRUE, center the columns of Y1 and Y2. Default is TRUE.}
 
@@ -45,12 +46,14 @@ plot.cv = FALSE, maxit = 100, thr = 1e-04, doesSelectAllTuningParameters = FALSE
 
 \item{thr}{Threshold for convergence. Default value is \eqn{10^{-4}}.}
 
-\item{doesSelectAllTuningParameters}{If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}}
+\item{doesSelectAllTuningParameters}{If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}
+
+\item{numCores}{Number of cores used to parallel computing. Default value is NULL (See `RcppParallel::defaultNumThreads()`)}}
 
 \value{
-\item{Uestfn}{Estimated patterns for Y1 at the new locations, x1_new.}
+\item{Uestfn}{Estimated patterns for Y1 at the new locations, x1New.}
 
-\item{Vestfn}{Estimated patterns for Y2 at the new locations, x2_new.}
+\item{Vestfn}{Estimated patterns for Y2 at the new locations, x2New.}
 
 \item{Dest}{Estimated singular values.}
 
@@ -88,7 +91,7 @@ The optimization problem is
 }
 \examples{
 ############### 1D: regular locations ################################
-p <- q <- 20
+p <- q <- 10
 n <- 100
 x1 <- matrix(seq(-7, 7, length = p), nrow = p, ncol = 1)
 x2 <- matrix(seq(-7, 7, length = q), nrow = q, ncol = 1)
@@ -103,7 +106,7 @@ noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001*diag(p + q))
 Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[,1:p]
 Y2 <- Y[,-(1:p)]
-cv1 <- spatmca(x1, x2, Y1, Y2)
+cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
 par(mfrow=c(2,1))
 plot(x1, cv1$Uestfn[,1], type='l', main="1st pattern for Y1")
 plot(x1, cv1$Vestfn[,1], type='l', main="1st pattern for Y2")
@@ -115,12 +118,12 @@ x1_rm <- x1[-rm_loc1]
 x2_rm <- x2[-rm_loc2]
 Y1_rm <- Y1[,-rm_loc1]
 Y2_rm <- Y2[,-rm_loc2]
-x1_new <- as.matrix(seq(-7, 7, length = 100))
-x2_new <- as.matrix(seq(-7, 7, length = 50))
-cv2 <- spatmca(x1 = x1_rm, x2 = x2_rm, Y1 = Y1_rm, Y2 = Y2_rm, x1_new = x1_new, x2_new = x2_new)
+x1New <- as.matrix(seq(-7, 7, length = 100))
+x2New <- as.matrix(seq(-7, 7, length = 50))
+cv2 <- spatmca(x1 = x1_rm, x2 = x2_rm, Y1 = Y1_rm, Y2 = Y2_rm, x1New = x1New, x2New = x2New)
 par(mfrow=c(2,1))
-plot(x1_new, cv2$Uestfn[,1], type='l', main="1st pattern for Y1")
-plot(x2_new, cv2$Vestfn[,1], type='l', main="1st pattern for Y2")
+plot(x1New, cv2$Uestfn[,1], type='l', main="1st pattern for Y1")
+plot(x2New, cv2$Vestfn[,1], type='l', main="1st pattern for Y2")
 
 ###############################2D real data#########################################
 # Daily 8-hour ozone averages and maximum temperature obtained from 28 monitoring 
@@ -162,7 +165,7 @@ x_lon <- seq(-80, -72, length = new_p)
 x_lat <- seq(41, 45, length = new_p)
 xx_new <- as.matrix(expand.grid(x = x_lon, y = x_lat))
 cv_new <- spatmca(x1,x1, temp, ozone, K = cv$Khat, tau1u = cv$stau1u, tau1v = 
-cv$stau1v, tau2u = cv$stau2u, tau2v = cv$stau2v, x1_new = xx_new, x2_new = xx_new)
+cv$stau1v, tau2u = cv$stau2u, tau2v = cv$stau2v, x1New = xx_new, x2New = xx_new)
 par(mfrow=c(2,1))
 quilt.plot(xx_new, cv_new$Uestfn[,1], nx = new_p, ny = new_p, xlab = "longitude", 
 ylab = "latitude", main = "1st spatial pattern for temperature")
