@@ -17,3 +17,5 @@ SystemRequirements: GNU make
 NeedsCompilation: yes
 Author: Wen-Ting Wang [aut, cre], Hsin-Cheng Huang [aut]
 Maintainer: Wen-Ting Wang <egpivo@gmail.com>
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
