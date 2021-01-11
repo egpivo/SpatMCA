@@ -46,9 +46,7 @@
 #' @author Wen-Ting Wang and Hsin-Cheng Huang
 #' @references Wang, W.-T. and Huang, H.-C. (2017). Regularized principal component analysis for spatial data. \emph{Journal of Computational and Graphical Statistics} \bold{26} 14-25.
 #' @examples
-#' ## Avoid changing the global enviroment    
 #' originalPar <- par(no.readonly = TRUE)
-#' on.exit(par(originalPar))
 #' # The following example use two cores for parallel computing.
 #' ## 1D: regular locations
 #' p <- q <- 10
@@ -71,7 +69,8 @@
 #' par(mfrow = c(2, 1))
 #' plot(x1, cv1$Uestfn[, 1], type='l', main="1st pattern for Y1")
 #' plot(x1, cv1$Vestfn[, 1], type='l', main="1st pattern for Y2")
-#' 
+#' ## Avoid changing the global enviroment 
+#' par(originalPar)
 #' \donttest{
 #' # The following examples will be executed more than 5 secs or including other libraries. 
 #' ## 1D: artificial irregular locations
@@ -489,6 +488,8 @@ spatmca <- function(x1,
     Vestfn <- tpm2(x2New, x2, Vest)
   }
   if (plot.cv == TRUE && !is.null(cv1)) {
+    originalPar <- par(no.readonly = TRUE)
+    on.exit(par(originalPar))
     par(mfrow = c(2, 1))
     image.plot(tau1u, tau1v, cv1, main = "for tau1u and tau1v selection given tau2u and tau2v")
     image.plot(tau2u, tau2v, cv2, main = "for tau2u and tau2v selection given selected tau1u and tau2v")

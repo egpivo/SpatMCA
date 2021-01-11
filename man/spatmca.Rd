@@ -63,7 +63,7 @@ spatmca(
 
 \item{doesSelectAllTuningParameters}{If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}
 
-\item{numCores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel:::defaultNumThreads()})}
+\item{numCores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel::defaultNumThreads()})}
 }
 \value{
 A list of objects including
@@ -92,9 +92,7 @@ The optimization problem is
 \eqn{\mbox{subject to $ \mathbf{U}'\mathbf{U}=\mathbf{V}'\mathbf{V}=\mathbf{I}_K$,}} where \eqn{\mathbf{Y}_1} and \eqn{\mathbf{Y}_2} are two data matrices, \eqn{{\mathbf{\Omega}}_1} and \eqn{{\mathbf{\Omega}}_2} are two smoothness matrix, \eqn{\mathbf{V}=\{v_{jk}\}}, and \eqn{\mathbf{U}=\{u_{jk}\}}.
 }
 \examples{
-## Avoid changing the global enviroment    
 originalPar <- par(no.readonly = TRUE)
-on.exit(par(originalPar))
 # The following example use two cores for parallel computing.
 ## 1D: regular locations
 p <- q <- 10
@@ -108,8 +106,8 @@ Sigma[1:p, 1:p] <- diag(p)
 Sigma[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
 Sigma[1:p, (p + 1):(p + q)] <- u \%*\% t(v)
 Sigma[(p + 1):(p + q), 1:p] <- t(Sigma[1:p, (p + 1):(p + q)])
-noise <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
-Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
+noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
+Y <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[, 1:p]
 Y2 <- Y[, -(1:p)]
 cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
@@ -117,7 +115,8 @@ cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
 par(mfrow = c(2, 1))
 plot(x1, cv1$Uestfn[, 1], type='l', main="1st pattern for Y1")
 plot(x1, cv1$Vestfn[, 1], type='l', main="1st pattern for Y2")
-
+## Avoid changing the global enviroment 
+par(originalPar)
 \donttest{
 # The following examples will be executed more than 5 secs or including other libraries. 
 ## 1D: artificial irregular locations
@@ -196,8 +195,8 @@ Sigma3D[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
 Sigma3D[1:p, (p + 1):(p + q)] <- u3D \%*\% t(v3D)
 Sigma3D[(p + 1):(p + q), 1:p] <- t(Sigma3D[1:p, (p + 1):(p + q)])
 
-noise3D <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
-Y3D <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma3D) + noise3D
+noise3D <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
+Y3D <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma3D) + noise3D
 Y13D <- Y3D[, 1:p]
 Y23D <- Y3D[, -(1:p)]
 cv3D <- spatmca(d, d, Y13D, Y23D)
