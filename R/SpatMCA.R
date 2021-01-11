@@ -20,7 +20,7 @@
 #' @param maxit Maximum number of iterations. Default value is 100.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
 #' @param doesSelectAllTuningParameters If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.
-#' @param numCores Number of cores used to parallel computing. Default value is NULL (See `RcppParallel:::defaultNumThreads()`)
+#' @param numCores Number of cores used to parallel computing. Default value is NULL (See `RcppParallel::defaultNumThreads()`)
 #'
 #' @return A list of objects including 
 #' \item{Uestfn}{Estimated patterns for Y1 at the new locations, x1New.}
@@ -62,8 +62,8 @@
 #' Sigma[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
 #' Sigma[1:p, (p + 1):(p + q)] <- u %*% t(v)
 #' Sigma[(p + 1):(p + q), 1:p] <- t(Sigma[1:p, (p + 1):(p + q)])
-#' noise <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
-#' Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
+#' noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
+#' Y <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 #' Y1 <- Y[, 1:p]
 #' Y2 <- Y[, -(1:p)]
 #' cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
@@ -151,8 +151,8 @@
 #' Sigma3D[1:p, (p + 1):(p + q)] <- u3D %*% t(v3D)
 #' Sigma3D[(p + 1):(p + q), 1:p] <- t(Sigma3D[1:p, (p + 1):(p + q)])
 #' 
-#' noise3D <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
-#' Y3D <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma3D) + noise3D
+#' noise3D <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
+#' Y3D <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma3D) + noise3D
 #' Y13D <- Y3D[, 1:p]
 #' Y23D <- Y3D[, -(1:p)]
 #' cv3D <- spatmca(d, d, Y13D, Y23D)
