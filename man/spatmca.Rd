@@ -49,6 +49,10 @@ spatmca(
 
 \item{tau2v}{Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau2v values in a range are used.}
 
+\item{x1New}{New location matrix correponding to Y1. If NULL, it is x1.}
+
+\item{x2New}{New location matrix correponding to Y2. If NULL, it is x2.}
+
 \item{center}{If TRUE, center the columns of Y. Default is FALSE.}
 
 \item{plot.cv}{If TRUE, plot the cv values. Default is FALSE.}
@@ -59,11 +63,7 @@ spatmca(
 
 \item{doesSelectAllTuningParameters}{If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}
 
-\item{numCores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel::defaultNumThreads()})}
-
-\item{x1new}{New location matrix correponding to Y1. If NULL, it is x1.}
-
-\item{x2new}{New location matrix correponding to Y2. If NULL, it is x2.}
+\item{numCores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel:::defaultNumThreads()})}
 }
 \value{
 A list of objects including
@@ -92,65 +92,132 @@ The optimization problem is
 \eqn{\mbox{subject to $ \mathbf{U}'\mathbf{U}=\mathbf{V}'\mathbf{V}=\mathbf{I}_K$,}} where \eqn{\mathbf{Y}_1} and \eqn{\mathbf{Y}_2} are two data matrices, \eqn{{\mathbf{\Omega}}_1} and \eqn{{\mathbf{\Omega}}_2} are two smoothness matrix, \eqn{\mathbf{V}=\{v_{jk}\}}, and \eqn{\mathbf{U}=\{u_{jk}\}}.
 }
 \examples{
-###### 1D: regular locations
-x_1D <- as.matrix(seq(-5, 5, length = 50))
-Phi_1D <- exp(-x_1D^2) / norm(exp(-x_1D^2), "F")
-set.seed(1234)
-Y_1D <- rnorm(n = 100, sd = 3) \%*\% t(Phi_1D) + matrix(rnorm(n = 100 * 50), 100, 50)
-cv_1D <- spatpca(x = x_1D, Y = Y_1D, numCores = 2)
-plot(x_1D, cv_1D$eigenfn[, 1], type = "l", main = "1st eigenfunction")
-lines(x_1D, svd(Y_1D)$v[, 1], col = "red")
-legend("topleft", c("SpatPCA", "PCA"), lty = 1:1, col = 1:2)
+## Avoid changing the global enviroment    
+originalPar <- par(no.readonly = TRUE)
+on.exit(par(originalPar))
+# The following example use two cores for parallel computing.
+## 1D: regular locations
+p <- q <- 10
+n <- 100
+x1 <- matrix(seq(-7, 7, length = p), nrow = p, ncol = 1)
+x2 <- matrix(seq(-7, 7, length = q), nrow = q, ncol = 1)
+u <- exp(-x1^2)/norm(exp(-x1^2), "F")
+v <- exp(-(x2 - 2)^2)/norm(exp(-(x2 - 2)^2), "F")
+Sigma <- array(0, c(p + q, p + q))
+Sigma[1:p, 1:p] <- diag(p)
+Sigma[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
+Sigma[1:p, (p + 1):(p + q)] <- u \%*\% t(v)
+Sigma[(p + 1):(p + q), 1:p] <- t(Sigma[1:p, (p + 1):(p + q)])
+noise <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
+Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
+Y1 <- Y[, 1:p]
+Y2 <- Y[, -(1:p)]
+cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
 
-\dontrun{
-  ### 1D: artificial irregular locations
-  rm_loc <- sample(1:50, 20)
-  x_1Drm <- x_1D[-rm_loc]
-  Y_1Drm <- Y_1D[,-rm_loc]
-  x_1Dnew <- as.matrix(seq(-5, 5, length = 100))
-  cv_1D <- spatpca(x = x_1Drm, Y = Y_1Drm, tau2 = 1:100, x_new = x_1Dnew)
-  plot(x_1Dnew, cv_1D$eigenfn, type = "l", main = "eigenfunction")
-  plot(cv_1D$Yhat[, 50], xlab = "n", ylab = "Yhat", type = "l", 
-       main = paste("prediction at x = ", x_1Dnew[50]))
-  ###### 2D: Daily 8-hour ozone averages for sites in the Midwest (USA)
-  library(fields)
-  library(pracma)
-  data(ozone2)
-  x <- ozone2$lon.lat
-  Y <- ozone2$y
-  date <- as.Date(ozone2$date, format = "\%y\%m\%d")
-  rmna <- !colSums(is.na(Y))
-  YY <- matrix(Y[, rmna], nrow = nrow(Y))
-  YY <- detrend(YY, "linear")
-  xx <- x[rmna, ]
-  cv <- spatpca(x = xx, Y = YY)
-  quilt.plot(xx, cv$eigenfn[,1])
-  map("state", xlim = range(xx[, 1]), ylim = range(xx[, 2]), add = T)
-  map.text("state", xlim = range(xx[, 1]), ylim = range(xx[, 2]), cex = 2, add = T)
-  plot(date, YY \%*\% cv$eigenfn[,1], type = "l", ylab = "1st Principal Component")
-  ### new loactions
-  new_p = 200
-  x_lon <- seq(min(xx[, 1]), max(xx[, 1]), length = new_p)
-  x_lat <- seq(min(xx[, 2]), max(xx[, 2]), length = new_p)
-  xx_new <- as.matrix(expand.grid(x = x_lon, y = x_lat))
-  eof <- spatpca(x = xx, Y = YY, K = cv$Khat, tau1 = cv$stau1, tau2 = cv$stau2, x_new = xx_new)
-  quilt.plot(xx_new, eof$eigenfn[,1], nx = new_p, ny = new_p, xlab = "lon.", ylab = "lat.")
-  map("state", xlim = range(x_lon), ylim = range(x_lat), add = T)
-  map.text("state", xlim = range(x_lon), ylim = range(x_lat), cex = 2, add = T)
-  ###### 3D: regular locations
-  x <- y <- z <- as.matrix(seq(-5, 5, length = 10))
-  d <- expand.grid(x, y, z)
-  Phi_3D <- exp(-d[, 1]^2 - d[, 2]^2 - d[, 3]^2) / norm(exp(-d[, 1]^2 - d[, 2]^2 - d[, 3]^2), "F")
-  Y_3D <- rnorm(n = 1000, sd = 3) \%*\% t(Phi) + matrix(rnorm(n = 100 * 10^3), 100, 10^3)
-  cv_3D <- spatpca(x = d, Y = Y_3D, tau2 = seq(0, 1000, length = 10))
-  library(plot3D)
-  library(RColorBrewer)
-  cols <- colorRampPalette(brewer.pal(9, "Blues"))(10)
-  isosurf3D(x, y, z, colvar = array(cv_3D$eigenfn[, 1], c(p, p, p)),
-            level= seq(min(cv_3D$eigenfn[, 1]), max(cv_3D$eigenfn[, 1]), length = 10),
-            ticktype = "detailed",
-            colkey = list(side = 1),
-            col = cols)
+par(mfrow = c(2, 1))
+plot(x1, cv1$Uestfn[, 1], type='l', main="1st pattern for Y1")
+plot(x1, cv1$Vestfn[, 1], type='l', main="1st pattern for Y2")
+
+\donttest{
+# The following examples will be executed more than 5 secs or including other libraries. 
+## 1D: artificial irregular locations
+rmLoc1 <- sample(1:p, 10)
+rmLoc2 <- sample(1:q, 10)
+x1Rm <- x1[-rmLoc1]
+x2Rm <- x2[-rmLoc2]
+Y1Rm <- Y1[, -rmLoc1]
+Y2Rm <- Y2[, -rmLoc2]
+x1New <- as.matrix(seq(-7, 7, length = 100))
+x2New <- as.matrix(seq(-7, 7, length = 50))
+cv2 <- spatmca(x1 = x1Rm, x2 = x2Rm, Y1 = Y1Rm, Y2 = Y2Rm, x1New = x1New, x2New = x2New)
+par(mfrow = c(2, 1))
+plot(x1New, cv2$Uestfn[,1], type='l', main="1st pattern for Y1")
+plot(x2New, cv2$Vestfn[,1], type='l', main="1st pattern for Y2")
+
+## 2D real data
+##  Daily 8-hour ozone averages and maximum temperature obtained from 28 monitoring 
+##  sites of NewYork, USA. It is of interest to see the relationship between the ozone
+##  and the temperature through the coupled patterns.
+
+library(spTimer)
+library(pracma)
+data(NYdata)
+NYsite <- unique(cbind(NYdata[, 1:3]))
+date <- as.POSIXct(seq(as.Date("2006-07-01"), as.Date("2006-08-31"), by = 1))
+cMAXTMP<- matrix(NYdata[,8], 62, 28)
+oz <- matrix(NYdata[,7], 62, 28)
+rmNa <- !colSums(is.na(oz))
+temp <- detrend(matrix(cMAXTMP[, rmNa], nrow = nrow(cMAXTMP)), "linear")
+ozone <- detrend(matrix(oz[, rmNa], nrow = nrow(oz)), "linear")
+x1 <- NYsite[rmNa, 2:3]
+cv <- spatmca(x1, x1, temp, ozone)
+par(mfrow = c(2, 1))
+quilt.plot(x1, cv$Uestfn[, 1], xlab = "longitude", ylab = "latitude", 
+           main = "1st spatial pattern for temperature")
+map(database = "state", regions = "new york", add = T)
+quilt.plot(x1, cv$Vestfn[, 1], xlab = "longitude", ylab = "latitude",
+           main = "1st spatial pattern for ozone")
+map(database = "state", regions = "new york", add = T)
+
+### Time series for the coupled patterns
+tstemp <- temp \%*\% cv$Uestfn[,1]
+tsozone <- ozone \%*\% cv$Vestfn[,1]
+corr <- cor(tstemp, tsozone)
+plot(date, tstemp / sd(tstemp), type='l', main = "Time series", ylab = "", xlab = "month")
+lines(date, tsozone/sd(tsozone),col=2)
+legend("bottomleft", c("Temperature (standardized)", "Ozone (standardized)"), col = 1:2, lty = 1:1)
+mtext(paste("Pearson's correlation = ", round(corr, 3)), 3)
+
+newP <- 50
+xLon <- seq(-80, -72, length = newP)
+xLat <- seq(41, 45, length = newP)
+xxNew <- as.matrix(expand.grid(x = xLon, y = xLat))
+cvNew <- spatmca(x1, x1, temp, ozone, K = cv$Khat, tau1u = cv$stau1u,tau1v = cv$stau1v, 
+                 tau2u = cv$stau2u, tau2v = cv$stau2v, x1New = xxNew, x2New = xxNew)
+par(mfrow = c(2, 1))
+quilt.plot(xxNew, cvNew$Uestfn[, 1], nx = newP, ny = newP, xlab = "longitude", 
+           ylab = "latitude", main = "1st spatial pattern for temperature")
+map(database="county", regions="new york", add = T)
+map.text("state", regions="new york", cex = 2, add = T)
+quilt.plot(xxNew, cvNew$Vestfn[, 1], nx = newP, ny = newP,  xlab = "longitude",
+           ylab = "latitude", main = "2nd spatial pattern for ozone")
+map(database = "county", regions = "new york", add = T)
+map.text("state", regions = "new york", cex = 2, add = T)
+
+## 3D: regular locations
+n <- 200
+x <- y <- z <- as.matrix(seq(-7, 7, length = 8))
+d <- expand.grid(x, y, z)
+u3D <- v3D <- exp(-d[, 1]^2 - d[, 2]^2 -d[, 3]^2)
+p <- q <- 8^3
+Sigma3D <- array(0, c(p + q, p + q))
+Sigma3D[1:p, 1:p] <- diag(p)
+Sigma3D[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
+Sigma3D[1:p, (p + 1):(p + q)] <- u3D \%*\% t(v3D)
+Sigma3D[(p + 1):(p + q), 1:p] <- t(Sigma3D[1:p, (p + 1):(p + q)])
+
+noise3D <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
+Y3D <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma3D) + noise3D
+Y13D <- Y3D[, 1:p]
+Y23D <- Y3D[, -(1:p)]
+cv3D <- spatmca(d, d, Y13D, Y23D)
+
+library(plot3D)
+library(RColorBrewer) 
+cols <- colorRampPalette(brewer.pal(9,'Blues'))(10)
+isosurf3D(x, y, z, colvar = array(cv3D$Uestfn[, 1], c(8, 8, 8)),
+          level= seq(min(cv3D$Uestfn[,1]), max(cv3D$Uestfn[, 1]), length = 10),
+          ticktype = "detailed",
+          colkey = list(side = 1),
+          col = cols,
+          main = "1st estimated pattern for Y1")
+
+isosurf3D(x, y, z, colvar = array(cv3D$Vestfn[,1], c(8, 8, 8)),
+          level= seq(min(cv3D$Vestfn[,1]), max(cv3D$Vestfn[,1]), length = 10),
+          ticktype = "detailed",
+          colkey = list(side = 1),
+          col = cols,
+          main = "1st estimated pattern for Y2")
 }
 }
 \references{
