@@ -13,8 +13,8 @@
 #' @param tau2u Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau2u values in a range are used.
 #' @param tau1v Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau1v values in a range are used.
 #' @param tau2v Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau2v values in a range are used.
-#' @param x1new New location matrix correponding to Y1. If NULL, it is x1.
-#' @param x2new New location matrix correponding to Y2. If NULL, it is x2.
+#' @param x1New New location matrix correponding to Y1. If NULL, it is x1.
+#' @param x2New New location matrix correponding to Y2. If NULL, it is x2.
 #' @param center If TRUE, center the columns of Y. Default is FALSE.
 #' @param plot.cv If TRUE, plot the cv values. Default is FALSE.
 #' @param maxit Maximum number of iterations. Default value is 100.
