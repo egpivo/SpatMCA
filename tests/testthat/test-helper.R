@@ -7,5 +7,5 @@ test_that("The number of cores for RcppParallel", {
   expect_error(set_cores(defaultNumber + 1),
                cat("The input number of cores is invalid - default is ", defaultNumber))
   expect_true(set_cores(defaultNumber))
-  expect_true(set_cores())
+  expect_null(set_cores())
 })
