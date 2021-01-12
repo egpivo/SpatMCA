@@ -47,7 +47,7 @@
 #' @references Wang, W.-T. and Huang, H.-C. (2017). Regularized principal component analysis for spatial data. \emph{Journal of Computational and Graphical Statistics} \bold{26} 14-25.
 #' @examples
 #' originalPar <- par(no.readonly = TRUE)
-#' # The following example use two cores for parallel computing.
+#' # The following examples use two cores for parallel computing.
 #' ## 1D: regular locations
 #' p <- q <- 10
 #' n <- 100
@@ -71,22 +71,31 @@
 #' plot(x1, cv1$Vestfn[, 1], type='l', main="1st pattern for Y2")
 #' ## Avoid changing the global enviroment 
 #' par(originalPar)
-#' \donttest{
-#' # The following examples will be executed more than 5 secs or including other libraries. 
+#' 
 #' ## 1D: artificial irregular locations
-#' rmLoc1 <- sample(1:p, 10)
-#' rmLoc2 <- sample(1:q, 10)
+#' rmLoc1 <- sample(1:p, 3)
+#' rmLoc2 <- sample(1:q, 4)
 #' x1Rm <- x1[-rmLoc1]
 #' x2Rm <- x2[-rmLoc2]
 #' Y1Rm <- Y1[, -rmLoc1]
 #' Y2Rm <- Y2[, -rmLoc2]
 #' x1New <- as.matrix(seq(-7, 7, length = 100))
 #' x2New <- as.matrix(seq(-7, 7, length = 50))
-#' cv2 <- spatmca(x1 = x1Rm, x2 = x2Rm, Y1 = Y1Rm, Y2 = Y2Rm, x1New = x1New, x2New = x2New)
+#' cv2 <- spatmca(
+#'     x1 = x1Rm,
+#'     x2 = x2Rm,
+#'     Y1 = Y1Rm,
+#'     Y2 = Y2Rm,
+#'     x1New = x1New,
+#'     x2New = x2New,
+#'     numCores = 2)
 #' par(mfrow = c(2, 1))
 #' plot(x1New, cv2$Uestfn[,1], type='l', main="1st pattern for Y1")
 #' plot(x2New, cv2$Vestfn[,1], type='l', main="1st pattern for Y2")
+#' par(originalPar)
 #' 
+#' \donttest{
+#' # The following examples will be executed more than 5 secs or including other libraries. 
 #' ## 2D real data
 #' ##  Daily 8-hour ozone averages and maximum temperature obtained from 28 monitoring 
 #' ##  sites of NewYork, USA. It is of interest to see the relationship between the ozone
@@ -111,6 +120,7 @@
 #' quilt.plot(x1, cv$Vestfn[, 1], xlab = "longitude", ylab = "latitude",
 #'            main = "1st spatial pattern for ozone")
 #' map(database = "state", regions = "new york", add = T)
+#' par(originalPar)
 #' 
 #' ### Time series for the coupled patterns
 #' tstemp <- temp %*% cv$Uestfn[,1]
@@ -137,6 +147,7 @@
 #'            ylab = "latitude", main = "2nd spatial pattern for ozone")
 #' map(database = "county", regions = "new york", add = T)
 #' map.text("state", regions = "new york", cex = 2, add = T)
+#' par(originalPar)
 #' 
 #' ## 3D: regular locations
 #' n <- 200

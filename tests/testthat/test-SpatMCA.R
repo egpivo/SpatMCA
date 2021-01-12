@@ -1,5 +1,6 @@
 # generate 1-D data with a given seed
 set.seed(1234)
+originalPar <- par(no.readonly = TRUE)
 
 p <- q <- 20
 n <- 100
@@ -17,8 +18,16 @@ Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[,1:p]
 Y2 <- Y[,-(1:p)]
 
-cv_1D <- spatmca(x1, x2, Y1, Y2, K =1)
+cv_1D <- spatmca(
+  x1,
+  x2,
+  Y1,
+  Y2,
+  K = 1,
+  plot.cv = TRUE,
+  numCores = 2)
 
+newPar <- par(no.readonly = TRUE)
 
 # Test the result
 tol <- 1e-4
@@ -27,4 +36,9 @@ test_that("Selected tuning parameters", {
   expect_lte(abs(1 - norm(cv_1D$Vestfn, "F")), tol)
   expect_lte(abs(cv_1D$Khat - 1), tol)
   expect_null(cv_1D$cvall)
+})
+
+
+test_that("Envirorment setting", {
+  expect_equal(originalPar, newPar)
 })
