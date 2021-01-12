@@ -93,14 +93,14 @@ The optimization problem is
 }
 \examples{
 originalPar <- par(no.readonly = TRUE)
-# The following examples use two cores for parallel computing.
+# The following examples only use two threads for parallel computing.
 ## 1D: regular locations
 p <- q <- 10
 n <- 100
 x1 <- matrix(seq(-7, 7, length = p), nrow = p, ncol = 1)
 x2 <- matrix(seq(-7, 7, length = q), nrow = q, ncol = 1)
-u <- exp(-x1^2)/norm(exp(-x1^2), "F")
-v <- exp(-(x2 - 2)^2)/norm(exp(-(x2 - 2)^2), "F")
+u <- exp(-x1^2) / norm(exp(-x1^2), "F")
+v <- exp(-(x2 - 2)^2) / norm(exp(-(x2 - 2)^2), "F")
 Sigma <- array(0, c(p + q, p + q))
 Sigma[1:p, 1:p] <- diag(p)
 Sigma[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
@@ -113,9 +113,9 @@ Y2 <- Y[, -(1:p)]
 cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
 
 par(mfrow = c(2, 1))
-plot(x1, cv1$Uestfn[, 1], type='l', main="1st pattern for Y1")
-plot(x1, cv1$Vestfn[, 1], type='l', main="1st pattern for Y2")
-## Avoid changing the global enviroment 
+plot(x1, cv1$Uestfn[, 1], type='l', main = "1st pattern for Y1")
+plot(x1, cv1$Vestfn[, 1], type='l', main = "1st pattern for Y2")
+## Avoid changing the global enviroment
 par(originalPar)
 
 ## 1D: artificial irregular locations
@@ -127,23 +127,22 @@ Y1Rm <- Y1[, -rmLoc1]
 Y2Rm <- Y2[, -rmLoc2]
 x1New <- as.matrix(seq(-7, 7, length = 100))
 x2New <- as.matrix(seq(-7, 7, length = 50))
-cv2 <- spatmca(
-    x1 = x1Rm,
-    x2 = x2Rm,
-    Y1 = Y1Rm,
-    Y2 = Y2Rm,
-    x1New = x1New,
-    x2New = x2New,
-    numCores = 2)
+cv2 <- spatmca(x1 = x1Rm,
+               x2 = x2Rm,
+               Y1 = Y1Rm,
+               Y2 = Y2Rm,
+               x1New = x1New,
+               x2New = x2New,
+               numCores = 2)
 par(mfrow = c(2, 1))
-plot(x1New, cv2$Uestfn[,1], type='l', main="1st pattern for Y1")
-plot(x2New, cv2$Vestfn[,1], type='l', main="1st pattern for Y2")
+plot(x1New, cv2$Uestfn[,1], type='l', main = "1st pattern for Y1")
+plot(x2New, cv2$Vestfn[,1], type='l', main = "1st pattern for Y2")
 par(originalPar)
 
 \donttest{
-# The following examples will be executed more than 5 secs or including other libraries. 
+# The following examples will be executed more than 5 secs or including other libraries.
 ## 2D real data
-##  Daily 8-hour ozone averages and maximum temperature obtained from 28 monitoring 
+##  Daily 8-hour ozone averages and maximum temperature obtained from 28 monitoring
 ##  sites of NewYork, USA. It is of interest to see the relationship between the ozone
 ##  and the temperature through the coupled patterns.
 
@@ -160,10 +159,14 @@ ozone <- detrend(matrix(oz[, rmNa], nrow = nrow(oz)), "linear")
 x1 <- NYsite[rmNa, 2:3]
 cv <- spatmca(x1, x1, temp, ozone)
 par(mfrow = c(2, 1))
-quilt.plot(x1, cv$Uestfn[, 1], xlab = "longitude", ylab = "latitude", 
+quilt.plot(x1, cv$Uestfn[, 1],
+           xlab = "longitude",
+           ylab = "latitude",
            main = "1st spatial pattern for temperature")
 map(database = "state", regions = "new york", add = T)
-quilt.plot(x1, cv$Vestfn[, 1], xlab = "longitude", ylab = "latitude",
+quilt.plot(x1, cv$Vestfn[, 1],
+           xlab = "longitude",
+           ylab = "latitude",
            main = "1st spatial pattern for ozone")
 map(database = "state", regions = "new york", add = T)
 par(originalPar)
@@ -181,15 +184,32 @@ newP <- 50
 xLon <- seq(-80, -72, length = newP)
 xLat <- seq(41, 45, length = newP)
 xxNew <- as.matrix(expand.grid(x = xLon, y = xLat))
-cvNew <- spatmca(x1, x1, temp, ozone, K = cv$Khat, tau1u = cv$stau1u,tau1v = cv$stau1v, 
-                 tau2u = cv$stau2u, tau2v = cv$stau2v, x1New = xxNew, x2New = xxNew)
+cvNew <- spatmca(x1 = x1,
+                 x2 = x1,
+                 Y1 = temp,
+                 Y2 = ozone,
+                 K = cv$Khat,
+                 tau1u = cv$stau1u,
+                 tau1v = cv$stau1v,
+                 tau2u = cv$stau2u,
+                 tau2v = cv$stau2v,
+                 x1New = xxNew,
+                 x2New = xxNew)
 par(mfrow = c(2, 1))
-quilt.plot(xxNew, cvNew$Uestfn[, 1], nx = newP, ny = newP, xlab = "longitude", 
-           ylab = "latitude", main = "1st spatial pattern for temperature")
-map(database="county", regions="new york", add = T)
-map.text("state", regions="new york", cex = 2, add = T)
-quilt.plot(xxNew, cvNew$Vestfn[, 1], nx = newP, ny = newP,  xlab = "longitude",
-           ylab = "latitude", main = "2nd spatial pattern for ozone")
+quilt.plot(xxNew, cvNew$Uestfn[, 1],
+           nx = newP,
+           ny = newP,
+           xlab = "longitude",
+           ylab = "latitude",
+           main = "1st spatial pattern for temperature")
+map(database = "county", regions = "new york", add = T)
+map.text("state", regions = "new york", cex = 2, add = T)
+quilt.plot(xxNew, cvNew$Vestfn[, 1],
+           nx = newP,
+           ny = newP,
+           xlab = "longitude",
+           ylab = "latitude",
+           main = "2nd spatial pattern for ozone")
 map(database = "county", regions = "new york", add = T)
 map.text("state", regions = "new york", cex = 2, add = T)
 par(originalPar)
@@ -213,17 +233,19 @@ Y23D <- Y3D[, -(1:p)]
 cv3D <- spatmca(d, d, Y13D, Y23D)
 
 library(plot3D)
-library(RColorBrewer) 
-cols <- colorRampPalette(brewer.pal(9,'Blues'))(10)
-isosurf3D(x, y, z, colvar = array(cv3D$Uestfn[, 1], c(8, 8, 8)),
-          level= seq(min(cv3D$Uestfn[,1]), max(cv3D$Uestfn[, 1]), length = 10),
+library(RColorBrewer)
+cols <- colorRampPalette(brewer.pal(9, 'Blues'))(10)
+isosurf3D(x, y, z,
+          colvar = array(cv3D$Uestfn[, 1], c(8, 8, 8)),
+          level = seq(min(cv3D$Uestfn[, 1]), max(cv3D$Uestfn[, 1]), length = 10),
           ticktype = "detailed",
           colkey = list(side = 1),
           col = cols,
           main = "1st estimated pattern for Y1")
 
-isosurf3D(x, y, z, colvar = array(cv3D$Vestfn[,1], c(8, 8, 8)),
-          level= seq(min(cv3D$Vestfn[,1]), max(cv3D$Vestfn[,1]), length = 10),
+isosurf3D(x, y, z,
+          colvar = array(cv3D$Vestfn[, 1], c(8, 8, 8)),
+          level = seq(min(cv3D$Vestfn[, 1]), max(cv3D$Vestfn[,1]), length = 10),
           ticktype = "detailed",
           colkey = list(side = 1),
           col = cols,

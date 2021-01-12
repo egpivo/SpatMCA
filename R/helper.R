@@ -1,6 +1,5 @@
 #' Internal function: Set the number of cores for parallel computing
 #'
-#'
 #' @keywords internal
 #' @param ncores Number of number of cores for parallel computing. Default is NULL.
 #' @return Logical
