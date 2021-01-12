@@ -91,6 +91,14 @@ arma::mat tpmatrix(const arma::mat P){
   return(result);
 }
 
+
+//' Internal function: thin-plane spline matrix
+//' @keywords internal
+//' @param z A new location matrix
+//' @param P A location matrix
+//' @param Phi An eigenvector matrix
+//' @return A thin-plane spline matrix
+//'
 // [[Rcpp::export]]
 arma::mat tpm2(const arma::mat z,const arma::mat P, const arma::mat Phi){
   arma::mat L;//, Lp;
@@ -467,10 +475,29 @@ struct spatmcacv_p2: public RcppParallel::Worker {
 };
 
 
-
 using namespace Rcpp;
 using namespace arma;
 using namespace std;
+
+
+//' Internal function: M-fold Cross-validation of SpatMCA
+//' @keywords internal
+//' @param sxr A location matrix for a variable X
+//' @param sxr A location matrix for a variable Y
+//' @param Yr A data matrix of Y
+//' @param Yr A data matrix of X
+//' @param M A number of folds
+//' @param K The number of estimated eigenfunctions
+//' @param tau1ur A range of tau1u
+//' @param tau2ur A range of tau2u
+//' @param tau1vr A range of tau1v
+//' @param tau2vr A range of tau2v
+//' @param nkr A vector of fold numbers
+//' @param maxit A maximum number of iteration
+//' @param tol A tolerance rate
+//' @param l2ur A given tau2u
+//' @param l2vr A given tau2v
+//' @return A list of selected parameters
 // [[Rcpp::export]]
 List spatmcacv_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, NumericMatrix Yr, int M, int K, 
                     NumericVector  tau1ur, NumericVector  tau2ur, NumericVector  tau1vr, NumericVector  tau2vr,  NumericVector  nkr, int maxit, double tol, NumericVector  l2ur,NumericVector  l2vr) {
@@ -772,6 +799,25 @@ struct spatmcacv_pall: public RcppParallel::Worker {
 using namespace Rcpp;
 using namespace arma;
 using namespace std;
+
+//' Internal function: Overall M-fold Cross-validation of SpatMCA
+//' @keywords internal
+//' @param sxr A location matrix for a variable X
+//' @param sxr A location matrix for a variable Y
+//' @param Yr A data matrix of Y
+//' @param Yr A data matrix of X
+//' @param M A number of folds
+//' @param K The number of estimated eigenfunctions
+//' @param tau1ur A range of tau1u
+//' @param tau2ur A range of tau2u
+//' @param tau1vr A range of tau1v
+//' @param tau2vr A range of tau2v
+//' @param nkr A vector of fold numbers
+//' @param maxit A maximum number of iteration
+//' @param tol A tolerance rate
+//' @param l2ur A given tau2u
+//' @param l2vr A given tau2v
+//' @return A list of selected parameters
 // [[Rcpp::export]]
 List spatmcacvall_rcpp(NumericMatrix  sxr, NumericMatrix  syr, NumericMatrix Xr, NumericMatrix Yr, int M, int K, 
                        NumericVector  tau1ur, NumericVector  tau2ur, NumericVector  tau1vr, NumericVector  tau2vr,  NumericVector  nkr, int maxit, double tol, NumericVector  l2ur,NumericVector  l2vr) {

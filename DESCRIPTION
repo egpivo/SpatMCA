@@ -12,8 +12,17 @@ Description: Provide regularized maximum covariance analysis incorporating smoot
 License: GPL-2
 Imports: Rcpp, RcppParallel (>= 0.11.2), fields, MASS
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
-Suggests: testthat (>= 2.1.0)
+Suggests:
+  testthat (>= 2.1.0),
+  RColorBrewer,
+  plot3D,
+  pracma,
+  spTimer,
+  maps
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Author: Wen-Ting Wang [aut, cre], Hsin-Cheng Huang [aut]
 Maintainer: Wen-Ting Wang <egpivo@gmail.com>
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
