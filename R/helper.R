@@ -1,7 +1,7 @@
 #' Internal function: Set the number of cores for parallel computing
 #'
 #' @keywords internal
-#' @param ncores Number of number of cores for parallel computing. Default is NULL.
+#' @param ncores Number of cores for parallel computing. Default is NULL.
 #' @return Logical
 #'
 set_cores <- function(ncores = NULL) {
@@ -11,8 +11,7 @@ set_cores <- function(ncores = NULL) {
     
     defaultNumber <- RcppParallel::defaultNumThreads()
     if (ncores > defaultNumber)
-      stop("The input number of cores are invalid - default is ",
-           defaultNumber)
+      stop("The input number of cores is invalid - default is ", defaultNumber)
     if (ncores < 1)
       stop("The number of cores is not greater than 1 - but got ", ncores)
     tryCatch({
