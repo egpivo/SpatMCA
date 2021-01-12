@@ -118,6 +118,8 @@ plot(x1, cv1$Vestfn[, 1], type='l', main = "1st pattern for Y2")
 ## Avoid changing the global enviroment
 par(originalPar)
 
+\donttest{
+# The following examples will be executed more than 5 secs or including other libraries.
 ## 1D: artificial irregular locations
 rmLoc1 <- sample(1:p, 3)
 rmLoc2 <- sample(1:q, 4)
@@ -132,15 +134,12 @@ cv2 <- spatmca(x1 = x1Rm,
                Y1 = Y1Rm,
                Y2 = Y2Rm,
                x1New = x1New,
-               x2New = x2New,
-               numCores = 2)
+               x2New = x2New)
 par(mfrow = c(2, 1))
 plot(x1New, cv2$Uestfn[,1], type='l', main = "1st pattern for Y1")
 plot(x2New, cv2$Vestfn[,1], type='l', main = "1st pattern for Y2")
 par(originalPar)
 
-\donttest{
-# The following examples will be executed more than 5 secs or including other libraries.
 ## 2D real data
 ##  Daily 8-hour ozone averages and maximum temperature obtained from 28 monitoring
 ##  sites of NewYork, USA. It is of interest to see the relationship between the ozone
