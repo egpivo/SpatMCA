@@ -147,6 +147,8 @@ par(originalPar)
 
 library(spTimer)
 library(pracma)
+library(fields)
+library(maps)
 data(NYdata)
 NYsite <- unique(cbind(NYdata[, 1:3]))
 date <- as.POSIXct(seq(as.Date("2006-07-01"), as.Date("2006-08-31"), by = 1))
@@ -162,12 +164,12 @@ quilt.plot(x1, cv$Uestfn[, 1],
            xlab = "longitude",
            ylab = "latitude",
            main = "1st spatial pattern for temperature")
-map(database = "state", regions = "new york", add = T)
+map(database = "state", regions = "new york", add = TRUE)
 quilt.plot(x1, cv$Vestfn[, 1],
            xlab = "longitude",
            ylab = "latitude",
            main = "1st spatial pattern for ozone")
-map(database = "state", regions = "new york", add = T)
+map(database = "state", regions = "new york", add = TRUE)
 par(originalPar)
 
 ### Time series for the coupled patterns
@@ -201,16 +203,16 @@ quilt.plot(xxNew, cvNew$Uestfn[, 1],
            xlab = "longitude",
            ylab = "latitude",
            main = "1st spatial pattern for temperature")
-map(database = "county", regions = "new york", add = T)
-map.text("state", regions = "new york", cex = 2, add = T)
+map(database = "county", regions = "new york", add = TRUE)
+map.text("state", regions = "new york", cex = 2, add = TRUE)
 quilt.plot(xxNew, cvNew$Vestfn[, 1],
            nx = newP,
            ny = newP,
            xlab = "longitude",
            ylab = "latitude",
            main = "2nd spatial pattern for ozone")
-map(database = "county", regions = "new york", add = T)
-map.text("state", regions = "new york", cex = 2, add = T)
+map(database = "county", regions = "new york", add = TRUE)
+map.text("state", regions = "new york", cex = 2, add = TRUE)
 par(originalPar)
 
 ## 3D: regular locations

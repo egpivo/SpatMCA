@@ -101,6 +101,8 @@
 #'
 #' library(spTimer)
 #' library(pracma)
+#' library(fields)
+#' library(maps)
 #' data(NYdata)
 #' NYsite <- unique(cbind(NYdata[, 1:3]))
 #' date <- as.POSIXct(seq(as.Date("2006-07-01"), as.Date("2006-08-31"), by = 1))
@@ -116,12 +118,12 @@
 #'            xlab = "longitude",
 #'            ylab = "latitude",
 #'            main = "1st spatial pattern for temperature")
-#' map(database = "state", regions = "new york", add = T)
+#' map(database = "state", regions = "new york", add = TRUE)
 #' quilt.plot(x1, cv$Vestfn[, 1],
 #'            xlab = "longitude",
 #'            ylab = "latitude",
 #'            main = "1st spatial pattern for ozone")
-#' map(database = "state", regions = "new york", add = T)
+#' map(database = "state", regions = "new york", add = TRUE)
 #' par(originalPar)
 #'
 #' ### Time series for the coupled patterns
@@ -156,16 +158,16 @@
 #'            xlab = "longitude",
 #'            ylab = "latitude",
 #'            main = "1st spatial pattern for temperature")
-#' map(database = "county", regions = "new york", add = T)
-#' map.text("state", regions = "new york", cex = 2, add = T)
+#' map(database = "county", regions = "new york", add = TRUE)
+#' map.text("state", regions = "new york", cex = 2, add = TRUE)
 #' quilt.plot(xxNew, cvNew$Vestfn[, 1],
 #'            nx = newP,
 #'            ny = newP,
 #'            xlab = "longitude",
 #'            ylab = "latitude",
 #'            main = "2nd spatial pattern for ozone")
-#' map(database = "county", regions = "new york", add = T)
-#' map.text("state", regions = "new york", cex = 2, add = T)
+#' map(database = "county", regions = "new york", add = TRUE)
+#' map.text("state", regions = "new york", cex = 2, add = TRUE)
 #' par(originalPar)
 #'
 #' ## 3D: regular locations
@@ -226,8 +228,8 @@ spatmca <- function(x1,
                     numCores = NULL) {
   set_cores(numCores)
   
-  x1 = as.matrix(x1)
-  x2 = as.matrix(x2)
+  x1 <- as.matrix(x1)
+  x2 <- as.matrix(x2)
   
   if (nrow(x1) != ncol(Y1))
     stop("The number of rows of x1 should be equal to the number of columns of Y1.")
@@ -241,8 +243,8 @@ spatmca <- function(x1,
     stop("Number of folds must be less than sample size.")
   
   if (center == TRUE) {
-    Y1 = Y1 - apply(Y1 , 2, "mean")
-    Y2 = Y2 - apply(Y2 , 2, "mean")
+    Y1 <- Y1 - apply(Y1 , 2, "mean")
+    Y2 <- Y2 - apply(Y2 , 2, "mean")
   }
   n = nrow(Y1)
   stra <- sample(rep(1:M, length.out = nrow(Y1)))
@@ -260,8 +262,8 @@ spatmca <- function(x1,
     
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-           decreasing = T,
-           index.return = T)$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
     max.tau2u <- 2 * abs(dd[nu1u,] %*% tempegvl3$v[, 1])[1]
@@ -274,8 +276,8 @@ spatmca <- function(x1,
     
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-           decreasing = T,
-           index.return = T)$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
     max.tau2v <- 2 * abs(t(dd)[nu1v,] %*% tempegvl3$u[, 1])[1]
@@ -289,8 +291,8 @@ spatmca <- function(x1,
     ntau2u <- 11
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-           decreasing = T,
-           index.return = T)$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
     max.tau2u <- 2 * abs(dd[nu1u,] %*% tempegvl3$v[, 1])[1]
@@ -305,8 +307,8 @@ spatmca <- function(x1,
     ntau2v <- 11
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-           decreasing = T,
-           index.return = T)$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
     max.tau2v <-
@@ -504,19 +506,19 @@ spatmca <- function(x1,
   Uest <- cvtempold$Uest
   Vest <- cvtempold$Vest
   if (is.null(x1New)) {
-    x1New = x1
+    x1New <- x1
     Uestfn <- Uest
   }
   else{
-    x1New = as.matrix(x1New)
+    x1New <- as.matrix(x1New)
     Uestfn <- tpm2(x1New, x1, Uest)
   }
   if (is.null(x2New)) {
-    x2New = x2
+    x2New <- x2
     Vestfn <- Vest
   }
   else{
-    x2New = as.matrix(x2New)
+    x2New <- as.matrix(x2New)
     Vestfn <- tpm2(x2New, x2, Vest)
   }
   if (plot.cv == TRUE && !is.null(cv1)) {

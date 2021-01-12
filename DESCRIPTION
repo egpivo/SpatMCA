@@ -17,7 +17,8 @@ Suggests:
   RColorBrewer,
   plot3D,
   pracma,
-  spTimer
+  spTimer,
+  maps
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Author: Wen-Ting Wang [aut, cre], Hsin-Cheng Huang [aut]
