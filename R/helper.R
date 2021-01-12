@@ -8,12 +8,16 @@ set_cores <- function(ncores = NULL) {
   if (!is.null(ncores)) {
     if (!is.numeric(ncores))
       stop("Please enter valid type - but got ", class(ncores))
-    if (ncores > 1) {
-      tryCatch({
-        RcppParallel::setThreadOptions(numThreads = ncores)
-      }, error = print)
-    } else {
+    
+    defaultNumber <- RcppParallel::defaultNumThreads()
+    if (ncores > defaultNumber)
+      stop("The input number of cores are invalid - default is ",
+           defaultNumber)
+    if (ncores < 1)
       stop("The number of cores is not greater than 1 - but got ", ncores)
-    }
+    tryCatch({
+      RcppParallel::setThreadOptions(numThreads = ncores)
+    }, error = print)
   }
 }
+

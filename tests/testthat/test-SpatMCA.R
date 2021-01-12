@@ -1,6 +1,7 @@
 # generate 1-D data with a given seed
 set.seed(1234)
 originalPar <- par(no.readonly = TRUE)
+numCores <- 2
 
 p <- q <- 20
 n <- 100
@@ -25,8 +26,8 @@ cv_1D <- spatmca(x1,
                  Y2,
                  K = 1,
                  plot.cv = TRUE,
-                 numCores = 2)
-
+                 numCores = numCores)
+usedNumberCores <- as.integer(Sys.getenv("RCPP_PARALLEL_NUM_THREADS", ""))
 newPar <- par(no.readonly = TRUE)
 
 # Test the result
@@ -38,7 +39,10 @@ test_that("Selected tuning parameters", {
   expect_null(cv_1D$cvall)
 })
 
-
 test_that("Envirorment setting", {
   expect_equal(originalPar, newPar)
+})
+
+test_that("Number of threads", {
+  expect_equal(numCores, usedNumberCores)
 })
