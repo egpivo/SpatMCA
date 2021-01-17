@@ -7,8 +7,8 @@ p <- q <- 20
 n <- 100
 x1 <- matrix(seq(-7, 7, length = p), nrow = p, ncol = 1)
 x2 <- matrix(seq(-7, 7, length = q), nrow = q, ncol = 1)
-u <- exp(-x1 ^ 2) / norm(exp(-x1 ^ 2), "F")
-v <- exp(-(x2 - 2) ^ 2) / norm(exp(-(x2 - 2) ^ 2), "F")
+u <- exp(-x1^2) / norm(exp(-x1^2), "F")
+v <- exp(-(x2 - 2)^2) / norm(exp(-(x2 - 2)^2), "F")
 Sigma <- array(0, c(p + q, p + q))
 Sigma[1:p, 1:p] <- diag(p)
 Sigma[(p + 1):(p + q), (p + 1):(p + q)] <- diag(p)
@@ -21,12 +21,13 @@ Y1 <- Y[, 1:p]
 Y2 <- Y[, -(1:p)]
 
 cv_1D <- spatmca(x1,
-                 x2,
-                 Y1,
-                 Y2,
-                 K = 1,
-                 plot.cv = TRUE,
-                 numCores = numCores)
+  x2,
+  Y1,
+  Y2,
+  K = 1,
+  plot.cv = TRUE,
+  numCores = numCores
+)
 usedNumberCores <- as.integer(Sys.getenv("RCPP_PARALLEL_NUM_THREADS", ""))
 newPar <- par(no.readonly = TRUE)
 
