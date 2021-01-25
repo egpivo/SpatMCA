@@ -1,4 +1,0 @@
-language: r
-github_packages:
-  - assertthat
-  - devtools
