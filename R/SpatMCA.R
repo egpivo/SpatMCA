@@ -230,27 +230,11 @@ spatmca <- function(x1,
   
   x1 <- as.matrix(x1)
   x2 <- as.matrix(x2)
+  checkInputData(x1, x2, Y1, Y2, M)
   
-  if (nrow(x1) != ncol(Y1)) {
-    stop("The number of rows of x1 should be equal to the number of columns of Y1.")
-  }
-  if (nrow(x1) < 3 || nrow(x2) < 3) {
-    stop("Number of locations must be larger than 2.")
-  }
-  if (ncol(x1) > 3 || ncol(x2) > 3) {
-    stop("Dimension of locations must be less 4.")
-  }
-  if (nrow(Y1) != nrow(Y2)) {
-    stop("The numbers of sample sizes of both data should be equal.")
-  }
-  if (M >= max(nrow(Y1))) {
-    stop("Number of folds must be less than sample size.")
-  }
-  
-  if (center) {
-    Y1 <- Y1 - apply(Y1, 2, "mean")
-    Y2 <- Y2 - apply(Y2, 2, "mean")
-  }
+  Y1 <- detrend(Y1, is_K_selected)
+  Y2 <- detrend(Y2, is_K_selected)
+
   n <- nrow(Y1)
   stra <- sample(rep(1:M, length.out = nrow(Y1)))
   
@@ -264,7 +248,6 @@ spatmca <- function(x1,
   
   if (is.null(tau2u) && is.null(tau2v)) {
     ntau2u <- ntau2v <- 11
-    
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
            decreasing = TRUE,
