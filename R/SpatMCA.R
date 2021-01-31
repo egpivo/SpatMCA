@@ -20,7 +20,7 @@
 #' @param maxit Maximum number of iterations. Default value is 100.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
 #' @param are_all_tunning_parameters_selected If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.
-#' @param numCores Number of cores used to parallel computing. Default value is NULL (See `RcppParallel::defaultNumThreads()`)
+#' @param num_cores Number of cores used to parallel computing. Default value is NULL (See `RcppParallel::defaultNumThreads()`)
 #'
 #' @return A list of objects including
 #' \item{Uestfn}{Estimated patterns for Y1 at the new locations, x1New.}
@@ -64,7 +64,7 @@
 #' Y <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 #' Y1 <- Y[, 1:p]
 #' Y2 <- Y[, -(1:p)]
-#' cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
+#' cv1 <- spatmca(x1, x2, Y1, Y2, num_cores = 2)
 #'
 #' par(mfrow = c(2, 1))
 #' plot(x1, cv1$Uestfn[, 1], type='l', main = "1st pattern for Y1")
@@ -225,12 +225,12 @@ spatmca <- function(x1,
                     maxit = 100,
                     thr = 1e-04,
                     are_all_tunning_parameters_selected = FALSE,
-                    numCores = NULL) {
-  setCores(numCores)
-
+                    num_cores = NULL) {
+  setCores(num_cores)
+  
   x1 <- as.matrix(x1)
   x2 <- as.matrix(x2)
-
+  
   if (nrow(x1) != ncol(Y1)) {
     stop("The number of rows of x1 should be equal to the number of columns of Y1.")
   }
@@ -246,14 +246,14 @@ spatmca <- function(x1,
   if (M >= max(nrow(Y1))) {
     stop("Number of folds must be less than sample size.")
   }
-
+  
   if (center) {
     Y1 <- Y1 - apply(Y1, 2, "mean")
     Y2 <- Y2 - apply(Y2, 2, "mean")
   }
   n <- nrow(Y1)
   stra <- sample(rep(1:M, length.out = nrow(Y1)))
-
+  
   tempegvl1 <- svd(Y1 / n)
   tempegvl2 <- svd(Y2 / n)
   dd <- t(Y1) %*% Y2 / n
@@ -261,30 +261,30 @@ spatmca <- function(x1,
   egvl1 <- tempegvl1$d[1]
   egvl2 <- tempegvl2$d[1]
   egvl3 <- tempegvl3$d[1]
-
+  
   if (is.null(tau2u) && is.null(tau2v)) {
     ntau2u <- ntau2v <- 11
-
+    
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
+           decreasing = TRUE,
+           index.return = TRUE
       )$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
     max.tau2u <- 2 * abs(dd[nu1u, ] %*% tempegvl3$v[, 1])[1]
     min.tau2u <- abs(dd[nu2u, ] %*% tempegvl3$v[, 1])[1]
-
+    
     tau2u <-
       c(0, exp(seq(
         log(min.tau2u), log(max.tau2u),
         length = (ntau2u - 1)
       )))
-
+    
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
+           decreasing = TRUE,
+           index.return = TRUE
       )$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
@@ -299,8 +299,8 @@ spatmca <- function(x1,
     ntau2u <- 11
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
+           decreasing = TRUE,
+           index.return = TRUE
       )$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
@@ -311,14 +311,14 @@ spatmca <- function(x1,
         log(min.tau2u), log(max.tau2u),
         length = (ntau2u - 1)
       )))
-
+    
     ntau2v <- length(tau2v)
   } else if (is.null(tau2v)) {
     ntau2v <- 11
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
+           decreasing = TRUE,
+           index.return = TRUE
       )$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
@@ -331,14 +331,14 @@ spatmca <- function(x1,
         log(min.tau2v), log(max.tau2v),
         length = (ntau2v - 1)
       )))
-
+    
     ntau2u <- length(tau2u)
   } else {
     ntau2u <- length(tau2u)
     ntau2v <- length(tau2v)
   }
-
-
+  
+  
   if (is.null(tau1u) && is.null(tau1v)) {
     ntau1u <- 11
     ntau1v <- 11
@@ -366,7 +366,7 @@ spatmca <- function(x1,
     ntau1u <- length(tau1u)
     ntau1v <- length(tau1v)
   }
-
+  
   if (M < 2 && (max(ntau1u, ntau2u, ntau1v, ntau2v) > 1)) {
     ntau1u <- 1
     ntau2u <- 1
@@ -374,7 +374,7 @@ spatmca <- function(x1,
     ntau2v <- 1
     warning("Only produce the result based on the largest tau1 and largest tau2.")
   }
-
+  
   if (ntau2u == 1 && tau2u > 0) {
     if (tau2u != 0) {
       l2u <-
@@ -474,9 +474,9 @@ spatmca <- function(x1,
           l2v
         )
       }
-
+      
       if (min(cvtempold$cv2) <= min(cvtemp$cv2) ||
-        abs(min(cvtempold$cv2) - min(cvtemp$cv2)) <= 1e-8) {
+          abs(min(cvtempold$cv2) - min(cvtemp$cv2)) <= 1e-8) {
         break
       }
       cvtempold <- cvtemp
@@ -524,7 +524,7 @@ spatmca <- function(x1,
     }
     Khat <- K
   }
-
+  
   cvtau1u <- cvtempold$cvtau1u
   cvtau2u <- cvtempold$cvtau2u
   cvtau1v <- cvtempold$cvtau1v

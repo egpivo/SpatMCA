@@ -23,7 +23,7 @@ spatmca(
   maxit = 100,
   thr = 1e-04,
   are_all_tunning_parameters_selected = FALSE,
-  numCores = NULL
+  num_cores = NULL
 )
 }
 \arguments{
@@ -63,7 +63,7 @@ spatmca(
 
 \item{are_all_tunning_parameters_selected}{If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}
 
-\item{numCores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel::defaultNumThreads()})}
+\item{num_cores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel::defaultNumThreads()})}
 }
 \value{
 A list of objects including
@@ -110,7 +110,7 @@ noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
 Y <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[, 1:p]
 Y2 <- Y[, -(1:p)]
-cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
+cv1 <- spatmca(x1, x2, Y1, Y2, num_cores = 2)
 
 par(mfrow = c(2, 1))
 plot(x1, cv1$Uestfn[, 1], type='l', main = "1st pattern for Y1")
