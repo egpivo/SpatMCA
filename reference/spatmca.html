@@ -120,7 +120,7 @@
   <span class='va'>Y2</span>,
   M <span class='op'>=</span> <span class='fl'>5</span>,
   K <span class='op'>=</span> <span class='cn'>NULL</span>,
-  doesSelectRank <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>K</span><span class='op'>)</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>,
+  is_K_selected <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>K</span><span class='op'>)</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>,
   tau1u <span class='op'>=</span> <span class='cn'>NULL</span>,
   tau2u <span class='op'>=</span> <span class='cn'>NULL</span>,
   tau1v <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -131,8 +131,8 @@
   plot.cv <span class='op'>=</span> <span class='cn'>FALSE</span>,
   maxit <span class='op'>=</span> <span class='fl'>100</span>,
   thr <span class='op'>=</span> <span class='fl'>1e-04</span>,
-  doesSelectAllTuningParameters <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  numCores <span class='op'>=</span> <span class='cn'>NULL</span>
+  are_all_tunning_parameters_selected <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  num_cores <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -160,11 +160,11 @@
     </tr>
     <tr>
       <th>K</th>
-      <td><p>Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or doesSelectRank is TRUE, K is selected automatically.</p></td>
+      <td><p>Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or is_K_selected is TRUE, K is selected automatically.</p></td>
     </tr>
     <tr>
-      <th>doesSelectRank</th>
-      <td><p>If TRUE, K is selected automatically; otherwise, doesSelectRank is set to be user-supplied K. Default depends on user-supplied K.</p></td>
+      <th>is_K_selected</th>
+      <td><p>If TRUE, K is selected automatically; otherwise, is_K_selected is set to be user-supplied K. Default depends on user-supplied K.</p></td>
     </tr>
     <tr>
       <th>tau1u</th>
@@ -207,11 +207,11 @@
       <td><p>Threshold for convergence. Default value is \(10^{-4}\).</p></td>
     </tr>
     <tr>
-      <th>doesSelectAllTuningParameters</th>
-      <td><p>If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.</p></td>
+      <th>are_all_tunning_parameters_selected</th>
+      <td><p>If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.</p></td>
     </tr>
     <tr>
-      <th>numCores</th>
+      <th>num_cores</th>
       <td><p>Number of cores used to parallel computing. Default value is NULL (See <code><a href='https://rdrr.io/pkg/RcppParallel/man/setThreadOptions.html'>RcppParallel::defaultNumThreads()</a></code>)</p></td>
     </tr>
     </table>
@@ -227,9 +227,9 @@
 <dt>stau2u</dt><dd><p>Selected tau2u.</p></dd>
 <dt>stau1v</dt><dd><p>Selected tau1v.</p></dd>
 <dt>stau2v</dt><dd><p>Selected tau2v.</p></dd>
-<dt>cv1</dt><dd><p>cv socres for tau1u and tau1v when doesSelectAllTuningParameters is FALSE.</p></dd>
-<dt>cv2</dt><dd><p>cv socres for tau2u and tau2v when doesSelectAllTuningParameters is FALSE.</p></dd>
-<dt>cvall</dt><dd><p>cv socres for tau1u, tau2u, tau1v and tau2v when doesSelectAllTuningParameters is TRUE.</p></dd>
+<dt>cv1</dt><dd><p>cv socres for tau1u and tau1v when are_all_tunning_parameters_selected is FALSE.</p></dd>
+<dt>cv2</dt><dd><p>cv socres for tau2u and tau2v when are_all_tunning_parameters_selected is FALSE.</p></dd>
+<dt>cvall</dt><dd><p>cv socres for tau1u, tau2u, tau1v and tau2v when are_all_tunning_parameters_selected is TRUE.</p></dd>
 <dt>tau1u</dt><dd><p>Sequence of tau1u-values used in the process.</p></dd>
 <dt>tau2u</dt><dd><p>Sequence of tau2u-values used in the process.</p></dd>
 <dt>tau1v</dt><dd><p>Sequence of tau1v-values used in the process.</p></dd>
@@ -266,7 +266,7 @@ $$\max_{\mathbf{U}, \mathbf{V}} \frac{1}{n}\mbox{tr}(\mathbf{U}'\mathbf{Y}'_1\ma
 <span class='va'>Y</span> <span class='op'>&lt;-</span> <span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>p</span> <span class='op'>+</span> <span class='va'>q</span><span class='op'>)</span>, Sigma <span class='op'>=</span> <span class='va'>Sigma</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>noise</span>
 <span class='va'>Y1</span> <span class='op'>&lt;-</span> <span class='va'>Y</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>p</span><span class='op'>]</span>
 <span class='va'>Y2</span> <span class='op'>&lt;-</span> <span class='va'>Y</span><span class='op'>[</span>, <span class='op'>-</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>p</span><span class='op'>)</span><span class='op'>]</span>
-<span class='va'>cv1</span> <span class='op'>&lt;-</span> <span class='fu'>spatmca</span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>x2</span>, <span class='va'>Y1</span>, <span class='va'>Y2</span>, numCores <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>cv1</span> <span class='op'>&lt;-</span> <span class='fu'>spatmca</span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>x2</span>, <span class='va'>Y1</span>, <span class='va'>Y2</span>, num_cores <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>cv1</span><span class='op'>$</span><span class='va'>Uestfn</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span>, type<span class='op'>=</span><span class='st'>'l'</span>, main <span class='op'>=</span> <span class='st'>"1st pattern for Y1"</span><span class='op'>)</span>
@@ -307,7 +307,9 @@ $$\max_{\mathbf{U}, \mathbf{V}} \frac{1}{n}\mbox{tr}(\mathbf{U}'\mathbf{Y}'_1\ma
 </div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘pracma’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:spTimer’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    Norm</span></div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/NCAR/Fields'>fields</a></span><span class='op'>)</span>
+#&gt; <span class='message'>    Norm</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:SpatMCA’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    detrend</span></div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/NCAR/Fields'>fields</a></span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: spam</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: dotCall64</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: grid</span></div><div class='output co'>#&gt; <span class='message'>Spam version 2.6-0 (2020-12-14) is loaded.</span>
 #&gt; <span class='message'>Type 'help( Spam)' or 'demo( spam)' for a short introduction </span>
 #&gt; <span class='message'>and overview of this package.</span>
@@ -323,8 +325,8 @@ $$\max_{\mathbf{U}, \mathbf{V}} \frac{1}{n}\mbox{tr}(\mathbf{U}'\mathbf{Y}'_1\ma
 <span class='va'>cMAXTMP</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>NYdata</span><span class='op'>[</span>,<span class='fl'>8</span><span class='op'>]</span>, <span class='fl'>62</span>, <span class='fl'>28</span><span class='op'>)</span>
 <span class='va'>oz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>NYdata</span><span class='op'>[</span>,<span class='fl'>7</span><span class='op'>]</span>, <span class='fl'>62</span>, <span class='fl'>28</span><span class='op'>)</span>
 <span class='va'>rmNa</span> <span class='op'>&lt;-</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>oz</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>temp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pracma/man/detrend.html'>detrend</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>cMAXTMP</span><span class='op'>[</span>, <span class='va'>rmNa</span><span class='op'>]</span>, nrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cMAXTMP</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"linear"</span><span class='op'>)</span>
-<span class='va'>ozone</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pracma/man/detrend.html'>detrend</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>oz</span><span class='op'>[</span>, <span class='va'>rmNa</span><span class='op'>]</span>, nrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>oz</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"linear"</span><span class='op'>)</span>
+<span class='va'>temp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='detrend.html'>detrend</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>cMAXTMP</span><span class='op'>[</span>, <span class='va'>rmNa</span><span class='op'>]</span>, nrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cMAXTMP</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"linear"</span><span class='op'>)</span>
+<span class='va'>ozone</span> <span class='op'>&lt;-</span> <span class='fu'><a href='detrend.html'>detrend</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>oz</span><span class='op'>[</span>, <span class='va'>rmNa</span><span class='op'>]</span>, nrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>oz</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"linear"</span><span class='op'>)</span>
 <span class='va'>x1</span> <span class='op'>&lt;-</span> <span class='va'>NYsite</span><span class='op'>[</span><span class='va'>rmNa</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>
 <span class='va'>cv</span> <span class='op'>&lt;-</span> <span class='fu'>spatmca</span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>x1</span>, <span class='va'>temp</span>, <span class='va'>ozone</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
