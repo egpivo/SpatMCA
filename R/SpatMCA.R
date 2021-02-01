@@ -227,17 +227,17 @@ spatmca <- function(x1,
                     are_all_tunning_parameters_selected = FALSE,
                     num_cores = NULL) {
   setCores(num_cores)
-  
+
   x1 <- as.matrix(x1)
   x2 <- as.matrix(x2)
   checkInputData(x1, x2, Y1, Y2, M)
-  
+
   Y1 <- detrend(Y1, is_K_selected)
   Y2 <- detrend(Y2, is_K_selected)
 
   n <- nrow(Y1)
   stra <- sample(rep(1:M, length.out = nrow(Y1)))
-  
+
   tempegvl1 <- svd(Y1 / n)
   tempegvl2 <- svd(Y2 / n)
   dd <- t(Y1) %*% Y2 / n
@@ -245,29 +245,29 @@ spatmca <- function(x1,
   egvl1 <- tempegvl1$d[1]
   egvl2 <- tempegvl2$d[1]
   egvl3 <- tempegvl3$d[1]
-  
+
   if (is.null(tau2u) && is.null(tau2v)) {
     ntau2u <- ntau2v <- 11
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-           decreasing = TRUE,
-           index.return = TRUE
+        decreasing = TRUE,
+        index.return = TRUE
       )$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
     max.tau2u <- 2 * abs(dd[nu1u, ] %*% tempegvl3$v[, 1])[1]
     min.tau2u <- abs(dd[nu2u, ] %*% tempegvl3$v[, 1])[1]
-    
+
     tau2u <-
       c(0, exp(seq(
         log(min.tau2u), log(max.tau2u),
         length = (ntau2u - 1)
       )))
-    
+
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-           decreasing = TRUE,
-           index.return = TRUE
+        decreasing = TRUE,
+        index.return = TRUE
       )$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
@@ -282,8 +282,8 @@ spatmca <- function(x1,
     ntau2u <- 11
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-           decreasing = TRUE,
-           index.return = TRUE
+        decreasing = TRUE,
+        index.return = TRUE
       )$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
@@ -294,14 +294,14 @@ spatmca <- function(x1,
         log(min.tau2u), log(max.tau2u),
         length = (ntau2u - 1)
       )))
-    
+
     ntau2v <- length(tau2v)
   } else if (is.null(tau2v)) {
     ntau2v <- 11
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-           decreasing = TRUE,
-           index.return = TRUE
+        decreasing = TRUE,
+        index.return = TRUE
       )$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
@@ -314,14 +314,14 @@ spatmca <- function(x1,
         log(min.tau2v), log(max.tau2v),
         length = (ntau2v - 1)
       )))
-    
+
     ntau2u <- length(tau2u)
   } else {
     ntau2u <- length(tau2u)
     ntau2v <- length(tau2v)
   }
-  
-  
+
+
   if (is.null(tau1u) && is.null(tau1v)) {
     ntau1u <- 11
     ntau1v <- 11
@@ -349,7 +349,7 @@ spatmca <- function(x1,
     ntau1u <- length(tau1u)
     ntau1v <- length(tau1v)
   }
-  
+
   if (M < 2 && (max(ntau1u, ntau2u, ntau1v, ntau2v) > 1)) {
     ntau1u <- 1
     ntau2u <- 1
@@ -357,7 +357,7 @@ spatmca <- function(x1,
     ntau2v <- 1
     warning("Only produce the result based on the largest tau1 and largest tau2.")
   }
-  
+
   if (ntau2u == 1 && tau2u > 0) {
     if (tau2u != 0) {
       l2u <-
@@ -457,9 +457,9 @@ spatmca <- function(x1,
           l2v
         )
       }
-      
+
       if (min(cvtempold$cv2) <= min(cvtemp$cv2) ||
-          abs(min(cvtempold$cv2) - min(cvtemp$cv2)) <= 1e-8) {
+        abs(min(cvtempold$cv2) - min(cvtemp$cv2)) <= 1e-8) {
         break
       }
       cvtempold <- cvtemp
@@ -507,7 +507,7 @@ spatmca <- function(x1,
     }
     Khat <- K
   }
-  
+
   cvtau1u <- cvtempold$cvtau1u
   cvtau2u <- cvtempold$cvtau2u
   cvtau1v <- cvtempold$cvtau1v
@@ -533,7 +533,7 @@ spatmca <- function(x1,
     x2New <- as.matrix(x2New)
     Vestfn <- tpm2(x2New, x2, Vest)
   }
-  if (plot.cv&& !is.null(cv1)) {
+  if (plot.cv && !is.null(cv1)) {
     originalPar <- par(no.readonly = TRUE)
     on.exit(par(originalPar))
     par(mfrow = c(2, 1))

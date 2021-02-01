@@ -50,7 +50,6 @@ test_that("check input of spatmca", {
     checkInputData(x1, x2, Y1, Y2, 101),
     cat("Number of folds must be less than sample size, but got M = 101")
   )
-  
 })
 
 # Test detrend
