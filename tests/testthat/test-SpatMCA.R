@@ -1,7 +1,7 @@
 # generate 1-D data with a given seed
 set.seed(1234)
 originalPar <- par(no.readonly = TRUE)
-numCores <- 2
+num_cores <- 2
 
 p <- q <- 20
 n <- 100
@@ -26,7 +26,7 @@ cv_1D <- spatmca(x1,
   Y2,
   K = 1,
   plot.cv = TRUE,
-  numCores = numCores
+  num_cores = num_cores
 )
 usedNumberCores <- as.integer(Sys.getenv("RCPP_PARALLEL_NUM_THREADS", ""))
 newPar <- par(no.readonly = TRUE)
@@ -45,5 +45,5 @@ test_that("Envirorment setting", {
 })
 
 test_that("Number of threads", {
-  expect_equal(numCores, usedNumberCores)
+  expect_equal(num_cores, usedNumberCores)
 })

@@ -11,7 +11,7 @@ spatmca(
   Y2,
   M = 5,
   K = NULL,
-  doesSelectRank = ifelse(is.null(K), TRUE, FALSE),
+  is_K_selected = ifelse(is.null(K), TRUE, FALSE),
   tau1u = NULL,
   tau2u = NULL,
   tau1v = NULL,
@@ -22,8 +22,8 @@ spatmca(
   plot.cv = FALSE,
   maxit = 100,
   thr = 1e-04,
-  doesSelectAllTuningParameters = FALSE,
-  numCores = NULL
+  are_all_tunning_parameters_selected = FALSE,
+  num_cores = NULL
 )
 }
 \arguments{
@@ -37,9 +37,9 @@ spatmca(
 
 \item{M}{Optional number of folds; default is 5.}
 
-\item{K}{Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or doesSelectRank is TRUE, K is selected automatically.}
+\item{K}{Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or is_K_selected is TRUE, K is selected automatically.}
 
-\item{doesSelectRank}{If TRUE, K is selected automatically; otherwise, doesSelectRank is set to be user-supplied K. Default depends on user-supplied K.}
+\item{is_K_selected}{If TRUE, K is selected automatically; otherwise, is_K_selected is set to be user-supplied K. Default depends on user-supplied K.}
 
 \item{tau1u}{Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau1u values in a range are used.}
 
@@ -61,9 +61,9 @@ spatmca(
 
 \item{thr}{Threshold for convergence. Default value is \eqn{10^{-4}}.}
 
-\item{doesSelectAllTuningParameters}{If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}
+\item{are_all_tunning_parameters_selected}{If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.}
 
-\item{numCores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel::defaultNumThreads()})}
+\item{num_cores}{Number of cores used to parallel computing. Default value is NULL (See \code{RcppParallel::defaultNumThreads()})}
 }
 \value{
 A list of objects including
@@ -75,9 +75,9 @@ A list of objects including
 \item{stau2u}{Selected tau2u.}
 \item{stau1v}{Selected tau1v.}
 \item{stau2v}{Selected tau2v.}
-\item{cv1}{cv socres for tau1u and tau1v when doesSelectAllTuningParameters is FALSE.}
-\item{cv2}{cv socres for tau2u and tau2v when doesSelectAllTuningParameters is FALSE.}
-\item{cvall}{cv socres for tau1u, tau2u, tau1v and tau2v when doesSelectAllTuningParameters is TRUE.}
+\item{cv1}{cv socres for tau1u and tau1v when are_all_tunning_parameters_selected is FALSE.}
+\item{cv2}{cv socres for tau2u and tau2v when are_all_tunning_parameters_selected is FALSE.}
+\item{cvall}{cv socres for tau1u, tau2u, tau1v and tau2v when are_all_tunning_parameters_selected is TRUE.}
 \item{tau1u}{Sequence of tau1u-values used in the process.}
 \item{tau2u}{Sequence of tau2u-values used in the process.}
 \item{tau1v}{Sequence of tau1v-values used in the process.}
@@ -110,7 +110,7 @@ noise <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = 0.001 * diag(p + q))
 Y <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[, 1:p]
 Y2 <- Y[, -(1:p)]
-cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
+cv1 <- spatmca(x1, x2, Y1, Y2, num_cores = 2)
 
 par(mfrow = c(2, 1))
 plot(x1, cv1$Uestfn[, 1], type='l', main = "1st pattern for Y1")

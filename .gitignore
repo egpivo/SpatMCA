@@ -8,3 +8,4 @@ src/*.dll
 .DS_Store
 scr/.DS_Store
 inst/doc
+*Rplots.pdf

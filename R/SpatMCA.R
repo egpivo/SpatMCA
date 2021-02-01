@@ -7,8 +7,8 @@
 #' @param Y1 Data matrix (\eqn{n \times p}) of the first variable stores the values at \eqn{p} locations with sample size \eqn{n}.
 #' @param Y2 Data matrix (\eqn{n \times q}) of the second variable stores the values at \eqn{q} locations with sample size \eqn{n}.
 #' @param M Optional number of folds; default is 5.
-#' @param K Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or doesSelectRank is TRUE, K is selected automatically.
-#' @param doesSelectRank If TRUE, K is selected automatically; otherwise, doesSelectRank is set to be user-supplied K. Default depends on user-supplied K.
+#' @param K Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or is_K_selected is TRUE, K is selected automatically.
+#' @param is_K_selected If TRUE, K is selected automatically; otherwise, is_K_selected is set to be user-supplied K. Default depends on user-supplied K.
 #' @param tau1u Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau1u values in a range are used.
 #' @param tau2u Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau2u values in a range are used.
 #' @param tau1v Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau1v values in a range are used.
@@ -19,8 +19,8 @@
 #' @param plot.cv If TRUE, plot the cv values. Default is FALSE.
 #' @param maxit Maximum number of iterations. Default value is 100.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
-#' @param doesSelectAllTuningParameters If TRUE, The K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.
-#' @param numCores Number of cores used to parallel computing. Default value is NULL (See `RcppParallel::defaultNumThreads()`)
+#' @param are_all_tunning_parameters_selected If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.
+#' @param num_cores Number of cores used to parallel computing. Default value is NULL (See `RcppParallel::defaultNumThreads()`)
 #'
 #' @return A list of objects including
 #' \item{Uestfn}{Estimated patterns for Y1 at the new locations, x1New.}
@@ -31,9 +31,9 @@
 #' \item{stau2u}{Selected tau2u.}
 #' \item{stau1v}{Selected tau1v.}
 #' \item{stau2v}{Selected tau2v.}
-#' \item{cv1}{cv socres for tau1u and tau1v when doesSelectAllTuningParameters is FALSE.}
-#' \item{cv2}{cv socres for tau2u and tau2v when doesSelectAllTuningParameters is FALSE.}
-#' \item{cvall}{cv socres for tau1u, tau2u, tau1v and tau2v when doesSelectAllTuningParameters is TRUE.}
+#' \item{cv1}{cv socres for tau1u and tau1v when are_all_tunning_parameters_selected is FALSE.}
+#' \item{cv2}{cv socres for tau2u and tau2v when are_all_tunning_parameters_selected is FALSE.}
+#' \item{cvall}{cv socres for tau1u, tau2u, tau1v and tau2v when are_all_tunning_parameters_selected is TRUE.}
 #' \item{tau1u}{Sequence of tau1u-values used in the process.}
 #' \item{tau2u}{Sequence of tau2u-values used in the process.}
 #' \item{tau1v}{Sequence of tau1v-values used in the process.}
@@ -64,7 +64,7 @@
 #' Y <- MASS::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 #' Y1 <- Y[, 1:p]
 #' Y2 <- Y[, -(1:p)]
-#' cv1 <- spatmca(x1, x2, Y1, Y2, numCores = 2)
+#' cv1 <- spatmca(x1, x2, Y1, Y2, num_cores = 2)
 #'
 #' par(mfrow = c(2, 1))
 #' plot(x1, cv1$Uestfn[, 1], type='l', main = "1st pattern for Y1")
@@ -213,7 +213,7 @@ spatmca <- function(x1,
                     Y2,
                     M = 5,
                     K = NULL,
-                    doesSelectRank = ifelse(is.null(K), TRUE, FALSE),
+                    is_K_selected = ifelse(is.null(K), TRUE, FALSE),
                     tau1u = NULL,
                     tau2u = NULL,
                     tau1v = NULL,
@@ -224,33 +224,17 @@ spatmca <- function(x1,
                     plot.cv = FALSE,
                     maxit = 100,
                     thr = 1e-04,
-                    doesSelectAllTuningParameters = FALSE,
-                    numCores = NULL) {
-  set_cores(numCores)
+                    are_all_tunning_parameters_selected = FALSE,
+                    num_cores = NULL) {
+  setCores(num_cores)
 
   x1 <- as.matrix(x1)
   x2 <- as.matrix(x2)
+  checkInputData(x1, x2, Y1, Y2, M)
 
-  if (nrow(x1) != ncol(Y1)) {
-    stop("The number of rows of x1 should be equal to the number of columns of Y1.")
-  }
-  if (nrow(x1) < 3 || nrow(x2) < 3) {
-    stop("Number of locations must be larger than 2.")
-  }
-  if (ncol(x1) > 3 || ncol(x2) > 3) {
-    stop("Dimension of locations must be less 4.")
-  }
-  if (nrow(Y1) != nrow(Y2)) {
-    stop("The numbers of sample sizes of both data should be equal.")
-  }
-  if (M >= max(nrow(Y1))) {
-    stop("Number of folds must be less than sample size.")
-  }
+  Y1 <- detrend(Y1, is_K_selected)
+  Y2 <- detrend(Y2, is_K_selected)
 
-  if (center) {
-    Y1 <- Y1 - apply(Y1, 2, "mean")
-    Y2 <- Y2 - apply(Y2, 2, "mean")
-  }
   n <- nrow(Y1)
   stra <- sample(rep(1:M, length.out = nrow(Y1)))
 
@@ -264,7 +248,6 @@ spatmca <- function(x1,
 
   if (is.null(tau2u) && is.null(tau2v)) {
     ntau2u <- ntau2v <- 11
-
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
         decreasing = TRUE,
@@ -396,8 +379,8 @@ spatmca <- function(x1,
   else {
     l2v <- 1
   }
-  if (doesSelectRank) {
-    if (doesSelectAllTuningParameters == FALSE) {
+  if (is_K_selected) {
+    if (are_all_tunning_parameters_selected == FALSE) {
       cvtempold <- spatmcacv_rcpp(
         x1,
         x2,
@@ -436,7 +419,7 @@ spatmca <- function(x1,
       )
     }
     for (k in 2:min(dim(Y1), dim(Y2))) {
-      if (doesSelectAllTuningParameters == FALSE) {
+      if (are_all_tunning_parameters_selected == FALSE) {
         cvtemp <- spatmcacv_rcpp(
           x1,
           x2,
@@ -484,7 +467,7 @@ spatmca <- function(x1,
     Khat <- k - 1
   }
   else {
-    if (doesSelectAllTuningParameters == FALSE) {
+    if (are_all_tunning_parameters_selected == FALSE) {
       cvtempold <- spatmcacv_rcpp(
         x1,
         x2,
@@ -550,7 +533,7 @@ spatmca <- function(x1,
     x2New <- as.matrix(x2New)
     Vestfn <- tpm2(x2New, x2, Vest)
   }
-  if (plot.cv&& !is.null(cv1)) {
+  if (plot.cv && !is.null(cv1)) {
     originalPar <- par(no.readonly = TRUE)
     on.exit(par(originalPar))
     par(mfrow = c(2, 1))
