@@ -30,8 +30,8 @@ setCores <- function(ncores = NULL) {
 #' Internal function: Validate input data for a spatpca object
 #'
 #' @keywords internal
-#' @param x1 Location matrix (\eqn{p \times d}) correponding to Y1.
-#' @param x2 Location matrix (\eqn{q \times d}) correponding to Y2.
+#' @param x1 Location matrix (\eqn{p \times d}) corresponding to Y1.
+#' @param x2 Location matrix (\eqn{q \times d}) corresponding to Y2.
 #' @param Y1 Data matrix (\eqn{n \times p}) of the first variable stores the values at \eqn{p} locations with sample size \eqn{n}.
 #' @param Y2 Data matrix (\eqn{n \times q}) of the second variable stores the values at \eqn{q} locations with sample size \eqn{n}.
 #' @param M Number of folds for cross-validation

@@ -2,24 +2,24 @@
 #'
 #' @description Produce spatial coupled patterns at the designated locations according to the specified tuning parameters or the tuning parameters selected by M-fold cross-validation.
 #'
-#' @param x1 Location matrix (\eqn{p \times d}) correponding to Y1. Each row is a location. \eqn{d=1,2} is the dimension of locations.
-#' @param x2 Location matrix (\eqn{q \times d}) correponding to Y2. Each row is a location.
+#' @param x1 Location matrix (\eqn{p \times d}) corresponding to Y1. Each row is a location. \eqn{d=1,2} is the dimension of locations.
+#' @param x2 Location matrix (\eqn{q \times d}) corresponding to Y2. Each row is a location.
 #' @param Y1 Data matrix (\eqn{n \times p}) of the first variable stores the values at \eqn{p} locations with sample size \eqn{n}.
 #' @param Y2 Data matrix (\eqn{n \times q}) of the second variable stores the values at \eqn{q} locations with sample size \eqn{n}.
 #' @param M Optional number of folds; default is 5.
 #' @param K Optional user-supplied number of coupled patterns; default is NULL. If K is NULL or is_K_selected is TRUE, K is selected automatically.
 #' @param is_K_selected If TRUE, K is selected automatically; otherwise, is_K_selected is set to be user-supplied K. Default depends on user-supplied K.
-#' @param tau1u Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau1u values in a range are used.
-#' @param tau2u Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau2u values in a range are used.
-#' @param tau1v Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau1v values in a range are used.
-#' @param tau2v Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau2v values in a range are used.
-#' @param x1New New location matrix correponding to Y1. If NULL, it is x1.
-#' @param x2New New location matrix correponding to Y2. If NULL, it is x2.
+#' @param tau1u Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y1. If NULL, 10 tau1u values in a range are used.
+#' @param tau2u Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y1. If NULL, 10 tau2u values in a range are used.
+#' @param tau1v Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y2. If NULL, 10 tau1v values in a range are used.
+#' @param tau2v Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y2. If NULL, 10 tau2v values in a range are used.
+#' @param x1New New location matrix corresponding to Y1. If NULL, it is x1.
+#' @param x2New New location matrix corresponding to Y2. If NULL, it is x2.
 #' @param center If TRUE, center the columns of Y. Default is FALSE.
 #' @param plot.cv If TRUE, plot the cv values. Default is FALSE.
 #' @param maxit Maximum number of iterations. Default value is 100.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
-#' @param are_all_tunning_parameters_selected If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.
+#' @param are_all_tuning_parameters_selected If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.
 #' @param num_cores Number of cores used to parallel computing. Default value is NULL (See `RcppParallel::defaultNumThreads()`)
 #'
 #' @return A list of objects including
@@ -31,9 +31,9 @@
 #' \item{stau2u}{Selected tau2u.}
 #' \item{stau1v}{Selected tau1v.}
 #' \item{stau2v}{Selected tau2v.}
-#' \item{cv1}{cv socres for tau1u and tau1v when are_all_tunning_parameters_selected is FALSE.}
-#' \item{cv2}{cv socres for tau2u and tau2v when are_all_tunning_parameters_selected is FALSE.}
-#' \item{cvall}{cv socres for tau1u, tau2u, tau1v and tau2v when are_all_tunning_parameters_selected is TRUE.}
+#' \item{cv1}{cv scores for tau1u and tau1v when are_all_tuning_parameters_selected is FALSE.}
+#' \item{cv2}{cv scores for tau2u and tau2v when are_all_tuning_parameters_selected is FALSE.}
+#' \item{cvall}{cv scores for tau1u, tau2u, tau1v and tau2v when are_all_tuning_parameters_selected is TRUE.}
 #' \item{tau1u}{Sequence of tau1u-values used in the process.}
 #' \item{tau2u}{Sequence of tau2u-values used in the process.}
 #' \item{tau1v}{Sequence of tau1v-values used in the process.}
@@ -224,7 +224,7 @@ spatmca <- function(x1,
                     plot.cv = FALSE,
                     maxit = 100,
                     thr = 1e-04,
-                    are_all_tunning_parameters_selected = FALSE,
+                    are_all_tuning_parameters_selected = FALSE,
                     num_cores = NULL) {
   setCores(num_cores)
 
@@ -380,7 +380,7 @@ spatmca <- function(x1,
     l2v <- 1
   }
   if (is_K_selected) {
-    if (are_all_tunning_parameters_selected == FALSE) {
+    if (are_all_tuning_parameters_selected == FALSE) {
       cvtempold <- spatmcacv_rcpp(
         x1,
         x2,
@@ -419,7 +419,7 @@ spatmca <- function(x1,
       )
     }
     for (k in 2:min(dim(Y1), dim(Y2))) {
-      if (are_all_tunning_parameters_selected == FALSE) {
+      if (are_all_tuning_parameters_selected == FALSE) {
         cvtemp <- spatmcacv_rcpp(
           x1,
           x2,
@@ -467,7 +467,7 @@ spatmca <- function(x1,
     Khat <- k - 1
   }
   else {
-    if (are_all_tunning_parameters_selected == FALSE) {
+    if (are_all_tuning_parameters_selected == FALSE) {
       cvtempold <- spatmcacv_rcpp(
         x1,
         x2,
