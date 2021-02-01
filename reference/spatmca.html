@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SpatMCA</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2.2</span>
       </span>
     </div>
 
@@ -131,7 +131,7 @@
   plot.cv <span class='op'>=</span> <span class='cn'>FALSE</span>,
   maxit <span class='op'>=</span> <span class='fl'>100</span>,
   thr <span class='op'>=</span> <span class='fl'>1e-04</span>,
-  are_all_tunning_parameters_selected <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  are_all_tuning_parameters_selected <span class='op'>=</span> <span class='cn'>FALSE</span>,
   num_cores <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
@@ -140,11 +140,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x1</th>
-      <td><p>Location matrix (\(p \times d\)) correponding to Y1. Each row is a location. \(d=1,2\) is the dimension of locations.</p></td>
+      <td><p>Location matrix (\(p \times d\)) corresponding to Y1. Each row is a location. \(d=1,2\) is the dimension of locations.</p></td>
     </tr>
     <tr>
       <th>x2</th>
-      <td><p>Location matrix (\(q \times d\)) correponding to Y2. Each row is a location.</p></td>
+      <td><p>Location matrix (\(q \times d\)) corresponding to Y2. Each row is a location.</p></td>
     </tr>
     <tr>
       <th>Y1</th>
@@ -168,27 +168,27 @@
     </tr>
     <tr>
       <th>tau1u</th>
-      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau1u values in a range are used.</p></td>
+      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y1. If NULL, 10 tau1u values in a range are used.</p></td>
     </tr>
     <tr>
       <th>tau2u</th>
-      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y1. If NULL, 10 tau2u values in a range are used.</p></td>
+      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y1. If NULL, 10 tau2u values in a range are used.</p></td>
     </tr>
     <tr>
       <th>tau1v</th>
-      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau1v values in a range are used.</p></td>
+      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y2. If NULL, 10 tau1v values in a range are used.</p></td>
     </tr>
     <tr>
       <th>tau2v</th>
-      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence correponding to Y2. If NULL, 10 tau2v values in a range are used.</p></td>
+      <td><p>Optional user-supplied numeric vector of a nonnegative smoothness parameter sequence corresponding to Y2. If NULL, 10 tau2v values in a range are used.</p></td>
     </tr>
     <tr>
       <th>x1New</th>
-      <td><p>New location matrix correponding to Y1. If NULL, it is x1.</p></td>
+      <td><p>New location matrix corresponding to Y1. If NULL, it is x1.</p></td>
     </tr>
     <tr>
       <th>x2New</th>
-      <td><p>New location matrix correponding to Y2. If NULL, it is x2.</p></td>
+      <td><p>New location matrix corresponding to Y2. If NULL, it is x2.</p></td>
     </tr>
     <tr>
       <th>center</th>
@@ -207,7 +207,7 @@
       <td><p>Threshold for convergence. Default value is \(10^{-4}\).</p></td>
     </tr>
     <tr>
-      <th>are_all_tunning_parameters_selected</th>
+      <th>are_all_tuning_parameters_selected</th>
       <td><p>If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.</p></td>
     </tr>
     <tr>
@@ -227,9 +227,9 @@
 <dt>stau2u</dt><dd><p>Selected tau2u.</p></dd>
 <dt>stau1v</dt><dd><p>Selected tau1v.</p></dd>
 <dt>stau2v</dt><dd><p>Selected tau2v.</p></dd>
-<dt>cv1</dt><dd><p>cv socres for tau1u and tau1v when are_all_tunning_parameters_selected is FALSE.</p></dd>
-<dt>cv2</dt><dd><p>cv socres for tau2u and tau2v when are_all_tunning_parameters_selected is FALSE.</p></dd>
-<dt>cvall</dt><dd><p>cv socres for tau1u, tau2u, tau1v and tau2v when are_all_tunning_parameters_selected is TRUE.</p></dd>
+<dt>cv1</dt><dd><p>cv scores for tau1u and tau1v when are_all_tuning_parameters_selected is FALSE.</p></dd>
+<dt>cv2</dt><dd><p>cv scores for tau2u and tau2v when are_all_tuning_parameters_selected is FALSE.</p></dd>
+<dt>cvall</dt><dd><p>cv scores for tau1u, tau2u, tau1v and tau2v when are_all_tuning_parameters_selected is TRUE.</p></dd>
 <dt>tau1u</dt><dd><p>Sequence of tau1u-values used in the process.</p></dd>
 <dt>tau2u</dt><dd><p>Sequence of tau2u-values used in the process.</p></dd>
 <dt>tau1v</dt><dd><p>Sequence of tau1v-values used in the process.</p></dd>
