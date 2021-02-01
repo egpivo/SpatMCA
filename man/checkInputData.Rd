@@ -7,9 +7,9 @@
 checkInputData(x1, x2, Y1, Y2, M)
 }
 \arguments{
-\item{x1}{Location matrix (\eqn{p \times d}) correponding to Y1.}
+\item{x1}{Location matrix (\eqn{p \times d}) corresponding to Y1.}
 
-\item{x2}{Location matrix (\eqn{q \times d}) correponding to Y2.}
+\item{x2}{Location matrix (\eqn{q \times d}) corresponding to Y2.}
 
 \item{Y1}{Data matrix (\eqn{n \times p}) of the first variable stores the values at \eqn{p} locations with sample size \eqn{n}.}
 
