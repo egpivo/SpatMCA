@@ -8,3 +8,4 @@
 ^vignettes
 ^README
 ^codecov\.yml$
+^NEWS$
