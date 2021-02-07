@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Internal function: Validate input data for a spatmca object — checkInputData • SpatMCA</title>
+<title>Internal function: Plot 2D fields for cross validation results — plot_cv_field • SpatMCA</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Internal function: Validate input data for a spatmca object — checkInputData" />
-<meta property="og:description" content="Internal function: Validate input data for a spatmca object" />
+<meta property="og:title" content="Internal function: Plot 2D fields for cross validation results — plot_cv_field" />
+<meta property="og:description" content="Internal function: Plot 2D fields for cross validation results" />
 
 
 
@@ -107,42 +107,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Internal function: Validate input data for a spatmca object</h1>
+    <h1>Internal function: Plot 2D fields for cross validation results</h1>
     <small class="dont-index">Source: <a href='https://github.com/egpivo/SpatMCA/blob/master/R/helper.R'><code>R/helper.R</code></a></small>
-    <div class="hidden name"><code>checkInputData.Rd</code></div>
+    <div class="hidden name"><code>plot_cv_field.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Internal function: Validate input data for a spatmca object</p>
+    <p>Internal function: Plot 2D fields for cross validation results</p>
     </div>
 
-    <pre class="usage"><span class='fu'>checkInputData</span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>x2</span>, <span class='va'>Y1</span>, <span class='va'>Y2</span>, <span class='va'>M</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_cv_field</span><span class='op'>(</span><span class='va'>cv_data</span>, <span class='va'>variate</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x1</th>
-      <td><p>Location matrix (\(p \times d\)) corresponding to Y1.</p></td>
+      <th>cv_data</th>
+      <td><p>A dataframe contains columns <code>u</code>, <code>v</code>, and <code>cv</code></p></td>
     </tr>
     <tr>
-      <th>x2</th>
-      <td><p>Location matrix (\(q \times d\)) corresponding to Y2.</p></td>
-    </tr>
-    <tr>
-      <th>Y1</th>
-      <td><p>Data matrix (\(n \times p\)) of the first variable stores the values at \(p\) locations with sample size \(n\).</p></td>
-    </tr>
-    <tr>
-      <th>Y2</th>
-      <td><p>Data matrix (\(n \times q\)) of the second variable stores the values at \(q\) locations with sample size \(n\).</p></td>
-    </tr>
-    <tr>
-      <th>M</th>
-      <td><p>Number of folds for cross-validation</p></td>
+      <th>variate</th>
+      <td><p>A character represent the title</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A ggplot object</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
