@@ -27,7 +27,7 @@ setCores <- function(ncores = NULL) {
 }
 
 #'
-#' Internal function: Validate input data for a spatpca object
+#' Internal function: Validate input data for a spatmca object
 #'
 #' @keywords internal
 #' @param x1 Location matrix (\eqn{p \times d}) corresponding to Y1.

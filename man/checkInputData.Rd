@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper.R
 \name{checkInputData}
 \alias{checkInputData}
-\title{Internal function: Validate input data for a spatpca object}
+\title{Internal function: Validate input data for a spatmca object}
 \usage{
 checkInputData(x1, x2, Y1, Y2, M)
 }
@@ -18,6 +18,6 @@ checkInputData(x1, x2, Y1, Y2, M)
 \item{M}{Number of folds for cross-validation}
 }
 \description{
-Internal function: Validate input data for a spatpca object
+Internal function: Validate input data for a spatmca object
 }
 \keyword{internal}
