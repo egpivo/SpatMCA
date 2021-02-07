@@ -10,7 +10,7 @@ Description: Provide regularized maximum covariance analysis incorporating smoot
   of multipliers algorithm. The method can be applied to either regularly or irregularly
   spaced data,  including 1D, 2D, and 3D (Wang and Huang, 2017 <doi:10.1002/env.2481>).
 License: GPL-2
-Imports: Rcpp, RcppParallel (>= 0.11.2), fields, MASS
+Imports: Rcpp, RcppParallel (>= 0.11.2), fields, MASS, ggplot2, scales
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 Suggests:
     testthat (>= 2.1.0),

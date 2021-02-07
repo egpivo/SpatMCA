@@ -20,16 +20,15 @@ Y <- MASS:::mvrnorm(n, mu = rep(0, p + q), Sigma = Sigma) + noise
 Y1 <- Y[, 1:p]
 Y2 <- Y[, -(1:p)]
 
-cv_1D <- spatmca(x1,
+cv_1D <- spatmca(
+  x1,
   x2,
   Y1,
   Y2,
   K = 1,
-  plot.cv = TRUE,
   num_cores = num_cores
 )
 usedNumberCores <- as.integer(Sys.getenv("RCPP_PARALLEL_NUM_THREADS", ""))
-newPar <- par(no.readonly = TRUE)
 
 # Test the result
 tol <- 1e-4
@@ -40,10 +39,15 @@ test_that("Selected tuning parameters", {
   expect_null(cv_1D$cvall)
 })
 
-test_that("Envirorment setting", {
-  expect_equal(originalPar, newPar)
-})
-
 test_that("Number of threads", {
   expect_equal(num_cores, usedNumberCores)
+})
+
+
+test_that("CV plot", {
+  expect_error(
+    plot.spatmca("test"),
+    cat("Invalid object! Please enter a `spatmca` object")
+  )
+  expect_equal(class(plot.spatmca(cv_1D)), "list")
 })
