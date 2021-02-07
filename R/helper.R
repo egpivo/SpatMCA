@@ -72,3 +72,44 @@ detrend <- function(Y, is_Y_detrended) {
     return(Y)
   }
 }
+
+#' Internal function: Plot sequentially
+#' @keywords internal
+#' @param objs Valid ggplot2 objects
+plot_sequentially <- function(objs) {
+  par(ask = TRUE)
+  for (obj in objs) {
+    suppressWarnings(print(obj))
+  }
+  par(ask = FALSE)
+}
+
+
+#' Internal function: Plot 2D fields for cross validation results 
+#' @keywords internal
+#' @param cv_data A dataframe contains columns ``u``, ``v``, and ``cv`` 
+#' @param variate A character represent the title
+#' @return A ggplot object
+plot_cv_field <- function(cv_data, variate) {
+  default_theme <- theme_classic() +
+    theme(
+      text = element_text(size = 24),
+      plot.title = element_text(hjust = 0.5)
+    )
+
+  result <- ggplot(cv_data, aes(x = u, y = v, z = cv, fill = cv)) +
+    geom_tile() +
+    scale_y_continuous(
+      trans = log_trans(),
+      breaks = trans_breaks("log", function(x) exp(x)),
+      labels = trans_format("log", math_format(e^.x))
+    ) +
+    scale_x_continuous(
+      trans = log_trans(),
+      breaks = trans_breaks("log", function(x) exp(x)),
+      labels = trans_format("log", math_format(e^.x))
+    ) +
+    ggtitle(variate) +
+    default_theme
+  return(result)
+}

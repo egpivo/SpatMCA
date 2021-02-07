@@ -16,7 +16,6 @@
 #' @param x1New New location matrix corresponding to Y1. If NULL, it is x1.
 #' @param x2New New location matrix corresponding to Y2. If NULL, it is x2.
 #' @param center If TRUE, center the columns of Y. Default is FALSE.
-#' @param plot.cv If TRUE, plot the cv values. Default is FALSE.
 #' @param maxit Maximum number of iterations. Default value is 100.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
 #' @param are_all_tuning_parameters_selected If TRUE, the K-fold CV performs to select 4 tuning parameters simultaneously. Default value is FALSE.
@@ -221,11 +220,11 @@ spatmca <- function(x1,
                     x1New = NULL,
                     x2New = NULL,
                     center = TRUE,
-                    plot.cv = FALSE,
                     maxit = 100,
                     thr = 1e-04,
                     are_all_tuning_parameters_selected = FALSE,
                     num_cores = NULL) {
+  call <- match.call()
   setCores(num_cores)
 
   x1 <- as.matrix(x1)
@@ -533,18 +532,12 @@ spatmca <- function(x1,
     x2New <- as.matrix(x2New)
     Vestfn <- tpm2(x2New, x2, Vest)
   }
-  if (plot.cv && !is.null(cv1)) {
-    originalPar <- par(no.readonly = TRUE)
-    on.exit(par(originalPar))
-    par(mfrow = c(2, 1))
-    image.plot(tau1u, tau1v, cv1, main = "for tau1u and tau1v selection given tau2u and tau2v")
-    image.plot(tau2u, tau2v, cv2, main = "for tau2u and tau2v selection given selected tau1u and tau2v")
-  }
   Dest <- as.vector(cvtempold$Dest)
   crosscovfn <-
     Uestfn %*% diag(Dest, nrow = Khat, ncol = Khat) %*% t(Vestfn)
   obj.cv <-
     list(
+      call = call,
       Uestfn = Uestfn,
       Vestfn = Vestfn,
       crosscov = crosscovfn,
@@ -562,5 +555,45 @@ spatmca <- function(x1,
       tau1v = tau1v,
       tau2v = tau2v
     )
+  class(obj.cv) <- "spatmca"
   return(obj.cv)
+}
+
+
+#'
+#' @title  Display the cross-validation results
+#'
+#' @description Display the M-fold cross-validation results
+#'
+#' @param x An spatmca class object for `plot` method
+#' @param ... Not used directly
+#' @seealso \link{spatmca}
+#'
+#' @export
+#' @method plot spatmca
+#' @examples
+#' x_1D <- as.matrix(seq(-5, 5, length = 10))
+#' Phi_1D <- exp(-x_1D^2) / norm(exp(-x_1D^2), "F")
+#' set.seed(1234)
+#' Y_1D <- rnorm(n = 100, sd = 3) %*% t(Phi_1D) + matrix(rnorm(n = 100 * 10), 100, 10)
+#' cv_1D <- spatmca(x = x_1D, Y = Y_1D, num_cores = 2)
+#' plot(cv_1D)
+#
+plot.spatmca <- function(x, ...) {
+  if (class(x) != "spatmca") {
+    stop("Invalid object! Please enter a `spatmca` object")
+  }
+
+  cv_data <- result <- list()
+  variate_names <- c("First Variate", "Second Variate")
+  
+  cv_data[[variate_names[1]]] <- expand.grid(u = x$tau1u, v = x$tau1v)
+  cv_data[[variate_names[1]]]$cv <- as.vector(x$cv1)
+  cv_data[[variate_names[2]]] <- expand.grid(u = x$tau2u, v = x$tau2v)
+  cv_data[[variate_names[2]]]$cv <- as.vector(x$cv2)
+
+  for (variate in variate_names) {
+    result[[variate]] <- plot_cv_field(cv_data[[variate]], variate)
+  }
+  plot_sequentially(result)
 }

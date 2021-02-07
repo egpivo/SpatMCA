@@ -19,7 +19,6 @@ spatmca(
   x1New = NULL,
   x2New = NULL,
   center = TRUE,
-  plot.cv = FALSE,
   maxit = 100,
   thr = 1e-04,
   are_all_tuning_parameters_selected = FALSE,
@@ -54,8 +53,6 @@ spatmca(
 \item{x2New}{New location matrix corresponding to Y2. If NULL, it is x2.}
 
 \item{center}{If TRUE, center the columns of Y. Default is FALSE.}
-
-\item{plot.cv}{If TRUE, plot the cv values. Default is FALSE.}
 
 \item{maxit}{Maximum number of iterations. Default value is 100.}
 

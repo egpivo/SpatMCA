@@ -19,7 +19,9 @@ Suggests:
     pracma,
     spTimer,
     maps,
-    covr
+    covr,
+    ggplot2,
+    scales
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Author: Wen-Ting Wang [aut, cre], Hsin-Cheng Huang [aut]
