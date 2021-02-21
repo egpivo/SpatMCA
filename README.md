@@ -1,5 +1,3 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/SpatMCA)](https://cran.r-project.org/package=SpatMCA)
-[![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/SpatMCA)](https://cran.r-project.org/package=SpatMCA)
 [![Travis-CI Build Status](https://travis-ci.org/egpivo/SpatMCA.svg?branch=master)](https://travis-ci.org/egpivo/SpatMCA)
 [![R build status](https://github.com/egpivo/SpatMCA/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/SpatMCA/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/SpatMCA/master.svg)](https://codecov.io/github/egpivo/SpatMCA?branch=master)
@@ -15,12 +13,6 @@
 * by the alternating direction method of multipliers (ADMM) algorithm
 
 ### Installation
-To get the current released version from CRAN:
-
-```r
-install.packages("SpatMCA")
-```
-
 To get the current development version from GitHub:
 
 ```r
