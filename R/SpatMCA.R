@@ -591,7 +591,7 @@ spatmca <- function(x1,
 #' plot(cv_1D)
 #
 plot.spatmca <- function(x, ...) {
-  if (class(x) != "spatmca") {
+  if (! inherits(x, "spatmca")) {
     stop("Invalid object! Please enter a `spatmca` object")
   }
 
