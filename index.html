@@ -93,11 +93,8 @@
 <ul>
 <li>Windows users require <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a>
 </li>
-<li>Mac users require Xcode Command Line Tools, and install the library gfortran by typing the following lines into terminal</li>
+<li>Mac users require Xcode Command Line Tools, and install the library gfortran by typing the following lines into terminal <code>brew update     brew install gcc</code> The detailed solution is describd <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/" class="external-link">here</a>, or download and install the library <a href="https://github.com/fxcoudert/gfortran-for-macOS/releases" class="external-link"><code>gfortran</code></a> to solve the error <code>ld: library not found for -lgfortran</code>.</li>
 </ul>
-<pre class="shell"><code>brew update
-brew install gcc</code></pre>
-<p>More details can be found <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/" class="external-link">here</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a>
@@ -158,7 +155,6 @@ brew install gcc</code></pre>
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/egpivo/SpatMCA" class="external-link"><img src="https://travis-ci.org/egpivo/SpatMCA.svg?branch=master" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://github.com/egpivo/SpatMCA/actions" class="external-link"><img src="https://github.com/egpivo/SpatMCA/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://codecov.io/github/egpivo/SpatMCA?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/egpivo/SpatMCA/master.svg" alt="Coverage Status"></a></li>
 </ul>
