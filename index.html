@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">SpatMCA</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2.4</span>
       </span>
     </div>
 
@@ -51,7 +51,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/egpivo/SpatMCA/">
+  <a href="https://github.com/egpivo/SpatMCA/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -70,12 +70,12 @@
   <div class="contents col-md-9">
 
 
-<div id="spatmca" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#spatmca" class="anchor"></a>SpatMCA</h1></div>
-<div id="description" class="section level3">
-<h3 class="hasAnchor">
-<a href="#description" class="anchor"></a>Description</h3>
+<div class="section level1">
+<div class="page-header"><h1 id="spatmca">SpatMCA<a class="anchor" aria-label="anchor" href="#spatmca"></a>
+</h1></div>
+<div class="section level3">
+<h3 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
+</h3>
 <p><strong><em>SpatMCA</em></strong> is an R package that provides regularized maximum covariance analysis,</p>
 <ul>
 <li>identifying smooth and localized <strong><em>couple</em></strong> patterns to understand how one spatial process is affected by another</li>
@@ -83,12 +83,12 @@
 <li>by the alternating direction method of multipliers (ADMM) algorithm</li>
 </ul>
 </div>
-<div id="installation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h3>
+<div class="section level3">
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h3>
 <p>To get the current development version from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"egpivo/SpatMCA"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"egpivo/SpatMCA"</span><span class="op">)</span></span></code></pre></div>
 <p>To compile C++ code with the package <a href="https://cran.r-project.org/web/packages/RcppArmadillo/index.html" class="external-link"><code>RcppArmadillo</code></a>,</p>
 <ul>
 <li>Windows users require <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a>
@@ -99,24 +99,24 @@
 brew install gcc</code></pre>
 <p>More details can be found <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/" class="external-link">here</a>.</p>
 </div>
-<div id="author" class="section level3">
-<h3 class="hasAnchor">
-<a href="#author" class="anchor"></a>Author</h3>
+<div class="section level3">
+<h3 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a>
+</h3>
 <p><a href="https://www.linkedin.com/in/wen-ting-wang-6083a17b" title="Wen-Ting Wang" class="external-link">Wen-Ting Wang</a> and <a href="http://www.stat.sinica.edu.tw/hchuang/" title="Hsin-Cheng Huang" class="external-link">Hsin-Cheng Huang</a></p>
 </div>
-<div id="maintainer" class="section level3">
-<h3 class="hasAnchor">
-<a href="#maintainer" class="anchor"></a>Maintainer</h3>
+<div class="section level3">
+<h3 id="maintainer">Maintainer<a class="anchor" aria-label="anchor" href="#maintainer"></a>
+</h3>
 <p><a href="https://www.linkedin.com/in/wen-ting-wang-6083a17b" title="Wen-Ting Wang" class="external-link">Wen-Ting Wang</a></p>
 </div>
-<div id="reference" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reference" class="anchor"></a>Reference</h3>
-<p>Wang, W.-T. and Huang, H.-C. (2017). <a href="https://arxiv.org/pdf/1705.02716.pdf" class="external-link">Regularized spatial maximum covariance analysis</a>, Environmetrics, 29, https://doi.org/10.1002/env.2481</p>
+<div class="section level3">
+<h3 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h3>
+<p>Wang, W.-T. and Huang, H.-C. (2017). <a href="https://arxiv.org/pdf/1705.02716.pdf" class="external-link">Regularized spatial maximum covariance analysis</a>, Environmetrics, 29, <a href="https://doi.org/10.1002/env.2481" class="external-link uri">https://doi.org/10.1002/env.2481</a></p>
 </div>
-<div id="license" class="section level3">
-<h3 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h3>
+<div class="section level3">
+<h3 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h3>
 <p>GPL-2</p>
 </div>
 </div>
@@ -127,22 +127,26 @@ brew install gcc</code></pre>
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=SpatMCA">https://​cloud.r-project.org/​package=SpatMCA</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/egpivo/SpatMCA/">https://​github.com/​egpivo/​SpatMCA/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/egpivo/SpatMCA/issues">https://​github.com/​egpivo/​SpatMCA/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=SpatMCA" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/egpivo/SpatMCA/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/egpivo/SpatMCA/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a></li>
 </ul>
 </div>
 
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing SpatMCA</a></li>
+</ul>
+</div>
 
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
@@ -171,7 +175,7 @@ brew install gcc</code></pre>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
