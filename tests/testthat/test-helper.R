@@ -22,7 +22,7 @@ test_that("The number of cores for RcppParallel", {
 x1 <- matrix(seq(-7, 7, length = 4), nrow = 4, ncol = 1)
 x2 <- matrix(seq(-7, 7, length = 5), nrow = 5, ncol = 1)
 Y1 <- matrix(rnorm(n = 100 * 4), 100, 4)
-Y2 <- matrix(rnorm(n = 100 * 4), 100, 5)
+Y2 <- matrix(rnorm(n = 100 * 5), 100, 5)
 M <- 5
 test_that("check input of spatmca", {
   expect_null(checkInputData(x1, x2, Y1, Y2, M))
