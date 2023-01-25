@@ -1,4 +1,3 @@
-[![Travis-CI Build Status](https://travis-ci.org/egpivo/SpatMCA.svg?branch=master)](https://travis-ci.org/egpivo/SpatMCA)
 [![R build status](https://github.com/egpivo/SpatMCA/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/SpatMCA/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/SpatMCA/master.svg)](https://codecov.io/github/egpivo/SpatMCA?branch=master)
 
@@ -23,13 +22,11 @@ To compile C++ code with the package [`RcppArmadillo`](https://cran.r-project.or
 
  * Windows users require [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
  * Mac users require Xcode Command Line Tools, and install the library gfortran by typing the following lines into terminal
-
-  ```shell
-  brew update
-  brew install gcc
-  ```
-  
-More details can be found [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/).
+    ```
+    brew update
+    brew install gcc
+    ```
+    The detailed solution is describd [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to solve the error `ld: library not found for -lgfortran`.
 
 ### Author
  [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang") and [Hsin-Cheng Huang](http://www.stat.sinica.edu.tw/hchuang/ "Hsin-Cheng Huang")
