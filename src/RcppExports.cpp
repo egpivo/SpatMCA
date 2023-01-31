@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // tpm2
 arma::mat tpm2(const arma::mat z, const arma::mat P, const arma::mat Phi);
 RcppExport SEXP _SpatMCA_tpm2(SEXP zSEXP, SEXP PSEXP, SEXP PhiSEXP) {
