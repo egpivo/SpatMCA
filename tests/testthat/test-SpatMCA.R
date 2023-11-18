@@ -83,19 +83,36 @@ test_that("Setting tau2u when it is NULL", {
   expected_tau2v <- c(0, exp(seq(log(min.tau2v), log(max.tau2v), length = (ntau2v - 1))))
 
   expect_lte(mean(abs(tau2v - expected_tau2v)), tol)
-  expect_equal(ntau2v, 3)  # Replace with the expected value
+  expect_equal(ntau2v, 3)
 })
 
 test_that("Setting tau2u and tau2v when both are provided", {
-  tau2u <- c(0.1, 0.5, 1.0)  # Replace with actual values
-  tau2v <- c(0.1, 0.5, 1.0)  # Replace with actual values
+  tau2u <- c(0.1, 0.5, 1.0)
+  tau2v <- c(0.1, 0.5, 1.0)
   
   ntau2u <- length(tau2u)
   ntau2v <- length(tau2v)
   
-  # Call the function or perform the comparison as needed
-  expect_equal(ntau2u, 3)  # Replace with the expected value
-  expect_equal(ntau2v, 3)  # Replace with the expected value
+  expect_equal(ntau2u, 3)
+  expect_equal(ntau2v, 3)
+})
+
+test_that("Setting tau1u when it is NULL", {
+  result <- spatmca(x1, x2, Y1, Y2, tau1u = NULL, M = 3)
+  expect_equal(length(result$tau1u), 11)
+})
+
+test_that("Setting tau1v when it is NULL", {
+  result <- spatmca(x1, x2, Y1, Y2, tau1v = NULL, M = 3)
+  expect_equal(length(result$tau1v), 11)
 })
 
 
+test_that("Handling M less than 2 with multiple tau options", {
+  withCallingHandlers( {
+    result <- spatmca(x1, x2, Y1, Y2, M = 1)
+    expect_equal(length(result$tau1u), 3)
+  }, warning = function(w) {
+    expect_match(w$message, "Only produce the result based on the largest tau1 and largest tau2.")
+  })
+})

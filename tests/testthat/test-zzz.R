@@ -29,9 +29,6 @@ test_that("Setting RCPP_PARALLEL_BACKEND in non-CRAN environment", {
   on.exit(Sys.setenv(NOT_CRAN = old_env), add = TRUE)
   Sys.setenv(NOT_CRAN = mock_not_cran)
   
-  # Call the code from zzz.R that sets RCPP_PARALLEL_BACKEND
-  source("../../R/zzz.R", local = TRUE)
-  
   # Print the current value of RCPP_PARALLEL_BACKEND for debugging
   print(Sys.getenv("RCPP_PARALLEL_BACKEND"))
   
