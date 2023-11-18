@@ -1,5 +1,3 @@
-# test.R
-
 library(testthat)
 library(SpatMCA)
 

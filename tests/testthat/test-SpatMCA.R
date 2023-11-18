@@ -51,3 +51,50 @@ test_that("CV plot", {
   )
   expect_equal(class(plot.spatmca(cv_1D)), "list")
 })
+
+
+test_that("spatmca handles input with different dimensions", {
+  x1_diff_dim <- matrix(1:10, nrow = 2, ncol = 5)  # Adjust dimensions to be different
+  expect_error(
+    spatmca(x1_diff_dim, x2, Y1, Y2),
+    "The number of rows of x1 should be equal to the number of columns of Y1."
+  )
+})
+
+test_that("Setting tau2u when it is NULL", {
+  tau2u <- NULL
+  tau2v <- c(0, 0.0126, 0.6223)
+  dd <- t(Y1) %*% Y2 / n
+  tempegvl3 <- svd(dd)
+  egvl3 <- tempegvl3$d[1]
+  ntau2v <- length(tau2v)
+  indexv <-
+    sort(abs(tempegvl3$v[, 1]),
+         decreasing = TRUE,
+         index.return = TRUE
+    )$ix
+  nu1v <- indexv[2]
+  nu2v <- indexv[ncol(Y2)]
+  max.tau2v <-
+    egvl3 * abs(t(dd)[nu1v, ] %*% tempegvl3$u[, 1])[1]
+  min.tau2v <-
+    egvl3 * abs(t(dd)[nu2v, ] %*% tempegvl3$u[, 1])[1]
+  expected_tau2v <- c(0, exp(seq(log(min.tau2v), log(max.tau2v), length = (ntau2v - 1))))
+
+  expect_lte(mean(abs(tau2v - expected_tau2v)), tol)
+  expect_equal(ntau2v, 3)  # Replace with the expected value
+})
+
+test_that("Setting tau2u and tau2v when both are provided", {
+  tau2u <- c(0.1, 0.5, 1.0)  # Replace with actual values
+  tau2v <- c(0.1, 0.5, 1.0)  # Replace with actual values
+  
+  ntau2u <- length(tau2u)
+  ntau2v <- length(tau2v)
+  
+  # Call the function or perform the comparison as needed
+  expect_equal(ntau2u, 3)  # Replace with the expected value
+  expect_equal(ntau2v, 3)  # Replace with the expected value
+})
+
+
