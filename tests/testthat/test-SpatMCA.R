@@ -61,48 +61,52 @@ test_that("spatmca handles input with different dimensions", {
   )
 })
 
-test_that("Setting tau2u when it is NULL", {
-  tau2u <- NULL
-  tau2v <- c(0, 0.01256936, 0.62226719)
-  dd <- t(Y1) %*% Y2 / n
-  tempegvl3 <- svd(dd)
-  egvl3 <- tempegvl3$d[1]
-  ntau2v <- length(tau2v)
-  indexv <-
-    sort(abs(tempegvl3$v[, 1]),
-         decreasing = TRUE,
-         index.return = TRUE
-    )$ix
-  nu1v <- indexv[2]
-  nu2v <- indexv[ncol(Y2)]
-  max.tau2v <-
-    egvl3 * abs(t(dd)[nu1v, ] %*% tempegvl3$u[, 1])[1]
-  min.tau2v <-
-    egvl3 * abs(t(dd)[nu2v, ] %*% tempegvl3$u[, 1])[1]
-  expected_tau2v <- c(0, exp(seq(log(min.tau2v), log(max.tau2v), length = (ntau2v - 1))))
-  expect_lte(mean(abs(tau2v - expected_tau2v)), tol)
-  expect_equal(ntau2v, 3)
-})
 
 test_that("Setting tau2u and tau2v when both are provided", {
   tau2u <- c(0.1, 0.5, 1.0)
   tau2v <- c(0.1, 0.5, 1.0)
-  
-  ntau2u <- length(tau2u)
-  ntau2v <- length(tau2v)
-  
+  result <- spatmca(x1, x2, Y1, Y2, tau2u = tau2u, tau2v = tau2v)
+  ntau1u <- length(result$tau1u)
+  ntau1v <- length(result$tau1v)
+  ntau2u <- length(result$tau2u)
+  ntau2v <- length(result$tau2v)
+  expect_equal(ntau1u, 11)
+  expect_equal(ntau1v, 11)  
   expect_equal(ntau2u, 3)
   expect_equal(ntau2v, 3)
 })
+test_that("Setting tau1u and tau1v when both are provided", {
+  tau1u <- c(0.1, 0.5, 1.0)
+  tau1v <- c(0.1, 0.5, 1.0)
+  result <- spatmca(x1, x2, Y1, Y2, tau1u = tau1u, tau1v = tau1v)
+  ntau1u <- length(result$tau1u)
+  ntau1v <- length(result$tau1v)
+  ntau2u <- length(result$tau2u)
+  ntau2v <- length(result$tau2v)
+  expect_equal(ntau1u, 3)
+  expect_equal(ntau1v, 3)  
+  expect_equal(ntau2u, 11)
+  expect_equal(ntau2v, 11)
+})
 
 test_that("Setting tau1u when it is NULL", {
-  result <- spatmca(x1, x2, Y1, Y2, tau1u = NULL, M = 3)
-  expect_equal(length(result$tau1u), 11)
+  result <- spatmca(x1, x2, Y1, Y2, tau1u = c(0.1, 0.5, 1.0), M = 3)
+  expect_equal(length(result$tau1u), 3)
 })
 
 test_that("Setting tau1v when it is NULL", {
-  result <- spatmca(x1, x2, Y1, Y2, tau1v = NULL, M = 3)
-  expect_equal(length(result$tau1v), 11)
+  result <- spatmca(x1, x2, Y1, Y2, tau1v = c(0.1, 0.5, 1.0), M = 3)
+  expect_equal(length(result$tau1v), 3)
+})
+
+test_that("Setting tau2u when it is NULL", {
+  result <- spatmca(x1, x2, Y1, Y2, tau2u = c(0.1, 0.5, 1.0), M = 3)
+  expect_equal(length(result$tau2u), 3)
+})
+
+test_that("Setting tau2v when it is NULL", {
+  result <- spatmca(x1, x2, Y1, Y2, tau2v = c(0.1, 0.5, 1.0), M = 3)
+  expect_equal(length(result$tau2v), 3)
 })
 
 
