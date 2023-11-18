@@ -70,7 +70,7 @@
 #' plot(x1, cv1$Vestfn[, 1], type='l', main = "1st pattern for Y2")
 #' ## Avoid changing the global enviroment
 #' par(originalPar)
-#' 
+#'
 #' \donttest{
 #' # The following examples will be executed more than 5 secs or including other libraries.
 #' ## 1D: artificial irregular locations
@@ -226,17 +226,17 @@ spatmca <- function(x1,
                     num_cores = NULL) {
   call <- match.call()
   setCores(num_cores)
-
+  
   x1 <- as.matrix(x1)
   x2 <- as.matrix(x2)
   checkInputData(x1, x2, Y1, Y2, M)
-
+  
   Y1 <- detrend(Y1, is_K_selected)
   Y2 <- detrend(Y2, is_K_selected)
-
+  
   n <- nrow(Y1)
   stra <- sample(rep(1:M, length.out = nrow(Y1)))
-
+  
   tempegvl1 <- svd(Y1 / n)
   tempegvl2 <- svd(Y2 / n)
   dd <- t(Y1) %*% Y2 / n
@@ -244,30 +244,28 @@ spatmca <- function(x1,
   egvl1 <- tempegvl1$d[1]
   egvl2 <- tempegvl2$d[1]
   egvl3 <- tempegvl3$d[1]
-
+  
   if (is.null(tau2u) && is.null(tau2v)) {
     ntau2u <- ntau2v <- 11
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
-      )$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
     max.tau2u <- 2 * abs(dd[nu1u, ] %*% tempegvl3$v[, 1])[1]
     min.tau2u <- abs(dd[nu2u, ] %*% tempegvl3$v[, 1])[1]
-
+    
     tau2u <-
       c(0, exp(seq(
         log(min.tau2u), log(max.tau2u),
         length = (ntau2u - 1)
       )))
-
+    
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
-      )$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
     max.tau2v <- 2 * abs(t(dd)[nu1v, ] %*% tempegvl3$u[, 1])[1]
@@ -281,9 +279,8 @@ spatmca <- function(x1,
     ntau2u <- 11
     indexu <-
       sort(abs(tempegvl3$u[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
-      )$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1u <- indexu[2]
     nu2u <- indexu[ncol(Y1)]
     max.tau2u <- 2 * abs(dd[nu1u, ] %*% tempegvl3$v[, 1])[1]
@@ -293,15 +290,14 @@ spatmca <- function(x1,
         log(min.tau2u), log(max.tau2u),
         length = (ntau2u - 1)
       )))
-
+    
     ntau2v <- length(tau2v)
   } else if (is.null(tau2v)) {
     ntau2v <- 11
     indexv <-
       sort(abs(tempegvl3$v[, 1]),
-        decreasing = TRUE,
-        index.return = TRUE
-      )$ix
+           decreasing = TRUE,
+           index.return = TRUE)$ix
     nu1v <- indexv[2]
     nu2v <- indexv[ncol(Y2)]
     max.tau2v <-
@@ -313,14 +309,14 @@ spatmca <- function(x1,
         log(min.tau2v), log(max.tau2v),
         length = (ntau2v - 1)
       )))
-
+    
     ntau2u <- length(tau2u)
   } else {
     ntau2u <- length(tau2u)
     ntau2v <- length(tau2v)
   }
-
-
+  
+  
   if (is.null(tau1u) && is.null(tau1v)) {
     ntau1u <- 11
     ntau1v <- 11
@@ -340,15 +336,25 @@ spatmca <- function(x1,
     ntau1u <- 11
     max.tau1u <- egvl3 / egvl1 * sqrt(ncol(Y1) / nrow(Y1))[1]
     ntau1v <- length(tau1v)
+    tau1u <-
+      c(0, exp(seq(
+        log(max.tau1u / 1e3), log(max.tau1u),
+        length = (ntau1u - 1)
+      )))
   } else if (is.null(tau1v)) {
     ntau1v <- 11
     max.tau1v <- egvl3 / egvl2 * sqrt(ncol(Y2) / nrow(Y2))[1]
     ntau1u <- length(tau1u)
+    tau1v <-
+      c(0, exp(seq(
+        log(max.tau1v / 1e3), log(max.tau1v),
+        length = (ntau1v - 1)
+      )))
   } else {
     ntau1u <- length(tau1u)
     ntau1v <- length(tau1v)
   }
-
+  
   if (M < 2 && (max(ntau1u, ntau2u, ntau1v, ntau2v) > 1)) {
     ntau1u <- 1
     ntau2u <- 1
@@ -356,109 +362,104 @@ spatmca <- function(x1,
     ntau2v <- 1
     warning("Only produce the result based on the largest tau1 and largest tau2.")
   }
-
-  if (ntau2u == 1 && tau2u > 0) {
+  
+  if (ntau2u == 1 && length(tau2u) == 1) {
     if (tau2u != 0) {
       l2u <-
-        c(0, exp(seq(log(tau2u / 1e3), log(tau2u), length = 10)))
+        c(0, exp(seq(
+          log(tau2u / 1e3), log(tau2u), length = 10
+        )))
     } else {
       l2u <- tau2u
     }
   } else {
     l2u <- 1
   }
-  if (ntau2v == 1 && tau2v > 0) {
+  if (ntau2v == 1 && length(tau2v) == 1) {
     if (tau2v != 0) {
       l2v <-
-        c(0, exp(seq(log(tau2v / 1e3), log(tau2v), length = 10)))
-    } else {
+        c(0, exp(seq(
+          log(tau2v / 1e3), log(tau2v), length = 10
+        )))
+    } else{
       l2v <- tau2u
     }
-  }
-  else {
+  } else {
     l2v <- 1
   }
   if (is_K_selected) {
     if (are_all_tuning_parameters_selected == FALSE) {
-      cvtempold <- spatmcacv_rcpp(
-        x1,
-        x2,
-        Y1,
-        Y2,
-        M,
-        1,
-        tau1u,
-        tau2u,
-        tau1v,
-        tau2v,
-        stra,
-        maxit,
-        thr,
-        l2u,
-        l2v
-      )
+      cvtempold <- spatmcacv_rcpp(x1,
+                                  x2,
+                                  Y1,
+                                  Y2,
+                                  M,
+                                  1,
+                                  tau1u,
+                                  tau2u,
+                                  tau1v,
+                                  tau2v,
+                                  stra,
+                                  maxit,
+                                  thr,
+                                  l2u,
+                                  l2v)
     } else {
       warning("Computing time may be quite long")
-      cvtempold <- spatmcacvall_rcpp(
-        x1,
-        x2,
-        Y1,
-        Y2,
-        M,
-        1,
-        tau1u,
-        tau2u,
-        tau1v,
-        tau2v,
-        stra,
-        maxit,
-        thr,
-        l2u,
-        l2v
-      )
+      cvtempold <- spatmcacvall_rcpp(x1,
+                                     x2,
+                                     Y1,
+                                     Y2,
+                                     M,
+                                     1,
+                                     tau1u,
+                                     tau2u,
+                                     tau1v,
+                                     tau2v,
+                                     stra,
+                                     maxit,
+                                     thr,
+                                     l2u,
+                                     l2v)
     }
     for (k in 2:min(dim(Y1), dim(Y2))) {
       if (are_all_tuning_parameters_selected == FALSE) {
-        cvtemp <- spatmcacv_rcpp(
-          x1,
-          x2,
-          Y1,
-          Y2,
-          M,
-          k,
-          tau1u,
-          tau2u,
-          tau1v,
-          tau2v,
-          stra,
-          maxit,
-          thr,
-          l2u,
-          l2v
-        )
+        cvtemp <- spatmcacv_rcpp(x1,
+                                 x2,
+                                 Y1,
+                                 Y2,
+                                 M,
+                                 k,
+                                 tau1u,
+                                 tau2u,
+                                 tau1v,
+                                 tau2v,
+                                 stra,
+                                 maxit,
+                                 thr,
+                                 l2u,
+                                 l2v)
       } else {
         warning("Computing time may be quite long")
-        cvtemp <- spatmcacvall_rcpp(
-          x1,
-          x2,
-          Y1,
-          Y2,
-          M,
-          k,
-          tau1u,
-          tau2u,
-          tau1v,
-          tau2v,
-          stra,
-          maxit,
-          thr,
-          l2u,
-          l2v
-        )
+        cvtemp <- spatmcacvall_rcpp(x1,
+                                    x2,
+                                    Y1,
+                                    Y2,
+                                    M,
+                                    k,
+                                    tau1u,
+                                    tau2u,
+                                    tau1v,
+                                    tau2v,
+                                    stra,
+                                    maxit,
+                                    thr,
+                                    l2u,
+                                    l2v)
       }
-
+      
       if (min(cvtempold$cv2) <= min(cvtemp$cv2) ||
-        abs(min(cvtempold$cv2) - min(cvtemp$cv2)) <= 1e-8) {
+          abs(min(cvtempold$cv2) - min(cvtemp$cv2)) <= 1e-8) {
         break
       }
       cvtempold <- cvtemp
@@ -467,46 +468,42 @@ spatmca <- function(x1,
   }
   else {
     if (are_all_tuning_parameters_selected == FALSE) {
-      cvtempold <- spatmcacv_rcpp(
-        x1,
-        x2,
-        Y1,
-        Y2,
-        M,
-        K,
-        tau1u,
-        tau2u,
-        tau1v,
-        tau2v,
-        stra,
-        maxit,
-        thr,
-        l2u,
-        l2v
-      )
+      cvtempold <- spatmcacv_rcpp(x1,
+                                  x2,
+                                  Y1,
+                                  Y2,
+                                  M,
+                                  K,
+                                  tau1u,
+                                  tau2u,
+                                  tau1v,
+                                  tau2v,
+                                  stra,
+                                  maxit,
+                                  thr,
+                                  l2u,
+                                  l2v)
     } else {
       warning("Computing time may be quite long")
-      cvtempold <- spatmcacvall_rcpp(
-        x1,
-        x2,
-        Y1,
-        Y2,
-        M,
-        K,
-        tau1u,
-        tau2u,
-        tau1v,
-        tau2v,
-        stra,
-        maxit,
-        thr,
-        l2u,
-        l2v
-      )
+      cvtempold <- spatmcacvall_rcpp(x1,
+                                     x2,
+                                     Y1,
+                                     Y2,
+                                     M,
+                                     K,
+                                     tau1u,
+                                     tau2u,
+                                     tau1v,
+                                     tau2v,
+                                     stra,
+                                     maxit,
+                                     thr,
+                                     l2u,
+                                     l2v)
     }
     Khat <- K
   }
-
+  
   cvtau1u <- cvtempold$cvtau1u
   cvtau2u <- cvtempold$cvtau2u
   cvtau1v <- cvtempold$cvtau1v
@@ -591,18 +588,20 @@ spatmca <- function(x1,
 #' plot(cv_1D)
 #
 plot.spatmca <- function(x, ...) {
-  if (! inherits(x, "spatmca")) {
+  if (!inherits(x, "spatmca")) {
     stop("Invalid object! Please enter a `spatmca` object")
   }
-
+  
   cv_data <- result <- list()
   variate_names <- c("First Variate", "Second Variate")
   
-  cv_data[[variate_names[1]]] <- expand.grid(u = x$tau1u, v = x$tau1v)
+  cv_data[[variate_names[1]]] <-
+    expand.grid(u = x$tau1u, v = x$tau1v)
   cv_data[[variate_names[1]]]$cv <- as.vector(x$cv1)
-  cv_data[[variate_names[2]]] <- expand.grid(u = x$tau2u, v = x$tau2v)
+  cv_data[[variate_names[2]]] <-
+    expand.grid(u = x$tau2u, v = x$tau2v)
   cv_data[[variate_names[2]]]$cv <- as.vector(x$cv2)
-
+  
   for (variate in variate_names) {
     result[[variate]] <- plot_cv_field(cv_data[[variate]], variate)
   }
