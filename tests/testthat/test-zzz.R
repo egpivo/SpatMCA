@@ -22,18 +22,40 @@ test_that("onAttach sets RCPP_PARALLEL_BACKEND to tinythread on CRAN", {
   Sys.setenv(RCPP_PARALLEL_BACKEND = old_backend)
 })
 
-test_that("Setting RCPP_PARALLEL_BACKEND in non-CRAN environment", {
-  # Mock NOT_CRAN environment variable
-  mock_not_cran <- "false"
-  old_env <- Sys.getenv("NOT_CRAN")
-  on.exit(Sys.setenv(NOT_CRAN = old_env), add = TRUE)
-  Sys.setenv(NOT_CRAN = mock_not_cran)
+
+test_that(".onAttach works without interfering with CRAN submission", {
+  # Simulate CRAN submission by setting NOT_CRAN to true
+  Sys.setenv(NOT_CRAN = "true")
   
-  # Print the current value of RCPP_PARALLEL_BACKEND for debugging
-  print(Sys.getenv("RCPP_PARALLEL_BACKEND"))
+  # Save the current value of RCPP_PARALLEL_BACKEND
+  original_backend <- Sys.getenv("RCPP_PARALLEL_BACKEND")
   
-  # Check if RCPP_PARALLEL_BACKEND is set to "tinythread"
-  expect_equal(Sys.getenv("RCPP_PARALLEL_BACKEND"), "tinythread")
+  # Call the .onAttach function
+  .onAttach("SpatMCA", "SpatMCA")
+  
+  # Check if RCPP_PARALLEL_BACKEND is not set when NOT_CRAN is true
+  expect_equal(Sys.getenv("RCPP_PARALLEL_BACKEND"), original_backend)
+  
+  # Reset NOT_CRAN to avoid interference with other tests
+  Sys.unsetenv("NOT_CRAN")
 })
 
-
+test_that(".onAttach sets RCPP_PARALLEL_BACKEND for parallel processing", {
+  # Save the current value of RCPP_PARALLEL_BACKEND
+  original_backend <- Sys.getenv("RCPP_PARALLEL_BACKEND")
+  
+  # Simulate parallel processing by setting NOT_CRAN to false
+  Sys.setenv(NOT_CRAN = "false")
+  
+  # Call the .onAttach function
+  .onAttach("SpatMCA", "SpatMCA")
+  
+  # Check if RCPP_PARALLEL_BACKEND is set to "tinythread" for parallel processing
+  expect_equal(Sys.getenv("RCPP_PARALLEL_BACKEND"), "tinythread")
+  
+  # Restore the original value of RCPP_PARALLEL_BACKEND
+  Sys.setenv(RCPP_PARALLEL_BACKEND = original_backend)
+  
+  # Reset NOT_CRAN to avoid interference with other tests
+  Sys.unsetenv("NOT_CRAN")
+})

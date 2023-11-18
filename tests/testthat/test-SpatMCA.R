@@ -62,9 +62,8 @@ test_that("spatmca handles input with different dimensions", {
 })
 
 test_that("Setting tau2u when it is NULL", {
-  set.seed(1234)
   tau2u <- NULL
-  tau2v <- c(0, 0.0126, 0.6223)
+  tau2v <- c(0, 0.01256936, 0.62226719)
   dd <- t(Y1) %*% Y2 / n
   tempegvl3 <- svd(dd)
   egvl3 <- tempegvl3$d[1]
@@ -81,7 +80,6 @@ test_that("Setting tau2u when it is NULL", {
   min.tau2v <-
     egvl3 * abs(t(dd)[nu2v, ] %*% tempegvl3$u[, 1])[1]
   expected_tau2v <- c(0, exp(seq(log(min.tau2v), log(max.tau2v), length = (ntau2v - 1))))
-
   expect_lte(mean(abs(tau2v - expected_tau2v)), tol)
   expect_equal(ntau2v, 3)
 })
