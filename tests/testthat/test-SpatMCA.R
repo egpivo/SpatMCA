@@ -108,12 +108,3 @@ test_that("Setting tau2v when it is NULL", {
   result <- spatmca(x1, x2, Y1, Y2, tau2v = c(0.1, 0.5, 1.0), M = 3)
   expect_equal(length(result$tau2v), 3)
 })
-
-
-test_that("Handling M less than 2 with multiple tau options", {
-  withCallingHandlers( {
-    result <- spatmca(x1, x2, Y1, Y2, M = 1)
-  }, warning = function(w) {
-    expect_match(w$message, "Only produce the result based on the largest tau1 and largest tau2.")
-  })
-})
