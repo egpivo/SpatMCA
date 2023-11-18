@@ -1,11 +1,12 @@
-// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
-
-// we only include RcppArmadillo.h which pulls Rcpp.h in for us
+// includes from the plugin
+// [[Rcpp::depends(RcppParallel)]]
+// [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppParallel.h>
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include <iostream>
 // [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::plugins(cpp17)]] 
 
 using namespace Rcpp;
 using namespace std;

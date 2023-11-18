@@ -62,6 +62,7 @@ test_that("spatmca handles input with different dimensions", {
 })
 
 test_that("Setting tau2u when it is NULL", {
+  set.seed(1234)
   tau2u <- NULL
   tau2v <- c(0, 0.0126, 0.6223)
   dd <- t(Y1) %*% Y2 / n
