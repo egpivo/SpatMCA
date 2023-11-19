@@ -1,4 +1,4 @@
-## SpatMCA 1.0.3 (Release date: 2023-11-19)
+## SpatMCA 1.0.4 (Release date: 2023-11-20)
 #### Overview 
 - Enhance the code coverage from 47% to 58%.
 - Fix bugs of setting default parameters in `spatmca`.
