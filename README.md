@@ -1,7 +1,7 @@
+# SpatMCA Package
+
 [![R build status](https://github.com/egpivo/SpatMCA/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/SpatMCA/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/SpatMCA/master.svg)](https://codecov.io/github/egpivo/SpatMCA?branch=master)
-
-# SpatMCA
 
 ### Description
 
@@ -28,6 +28,14 @@ brew install gcc
 ```
 For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
 
+### Usage
+```r
+library(SpatMCA)
+spatmca(x1, x2, Y1, Y2, K = 1, num_cores = 1)
+```
+- Input: `x1`, `x2` (location matrices), `Y1`, `Y2` (data matrices), `K` (number of patterns), `num_cores` (number of CPU cores).
+- Output: Provides information about the identified patterns.
+
 
 ### Author
  - [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang")
@@ -40,4 +48,4 @@ For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/p
 Wang, W.-T. and Huang, H.-C. (2017). [Regularized spatial maximum covariance analysis](https://arxiv.org/pdf/1705.02716.pdf), Environmetrics, 29, https://doi.org/10.1002/env.2481
  
 ### License
-  GPL-3
+GPL-3

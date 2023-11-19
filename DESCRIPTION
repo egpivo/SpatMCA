@@ -8,7 +8,9 @@ Description: Provide regularized maximum covariance analysis incorporating smoot
   sparseness and orthogonality of couple patterns by using the alternating direction method
   of multipliers algorithm. The method can be applied to either regularly or irregularly
   spaced data,  including 1D, 2D, and 3D (Wang and Huang, 2017 <doi:10.1002/env.2481>).
-License: GPL-2
+License: GPL-3
+Depends: 
+    R (>= 3.4.0)
 Imports: Rcpp, RcppParallel (>= 0.11.2), MASS, ggplot2, scales
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 Suggests:
@@ -28,3 +30,4 @@ Maintainer: Wen-Ting Wang <egpivo@gmail.com>
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3
