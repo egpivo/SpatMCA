@@ -35,7 +35,7 @@ setCores <- function(ncores = NULL) {
 #' @param Y1 Data matrix (\eqn{n \times p}) of the first variable stores the values at \eqn{p} locations with sample size \eqn{n}.
 #' @param Y2 Data matrix (\eqn{n \times q}) of the second variable stores the values at \eqn{q} locations with sample size \eqn{n}.
 #' @param M Number of folds for cross-validation
-#' @return NULL
+#' @return `NULL`
 #'
 checkInputData <- function(x1, x2, Y1, Y2, M) {
   if (nrow(x1) != ncol(Y1)) {
