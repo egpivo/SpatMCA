@@ -39,3 +39,15 @@ test_that("spatmcacvall_rcpp returns the correct result", {
   # ...
   
 })
+
+test_that("tpm2 function produces correct output", {
+  # Set up test data (replace this with your actual test data)
+  z <- matrix(rnorm(100), nrow = 10, ncol = 10)
+  P <- matrix(rnorm(100), nrow = 10, ncol = 10)
+  Phi <- matrix(rnorm(100), nrow = 10, ncol = 10)
+  
+  # Call the tpm2 function
+  result <- tpm2(z, P, Phi)
+  
+  expect_equal(dim(result), c(nrow(z), ncol(Phi)))
+})
