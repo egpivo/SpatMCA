@@ -592,7 +592,7 @@ plot.spatmca <- function(x, ...) {
   if (!inherits(x, "spatmca")) {
     stop("Invalid object! Please enter a `spatmca` object")
   }
-  
+  originalPar <- par(no.readonly = TRUE)
   cv_data <- result <- list()
   variate_names <- c("First Variate", "Second Variate")
   
@@ -607,4 +607,5 @@ plot.spatmca <- function(x, ...) {
     result[[variate]] <- plot_cv_field(cv_data[[variate]], variate)
   }
   plot_sequentially(result)
+  par(originalPar)
 }
