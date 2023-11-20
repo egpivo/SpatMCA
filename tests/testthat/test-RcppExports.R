@@ -1,7 +1,3 @@
-library(testthat)
-library(Rcpp)
-library(RcppArmadillo)
-
 # Create a unit test
 test_that("spatmcacvall_rcpp returns the correct result", {
   # Set up test data (replace this with your actual test data)
