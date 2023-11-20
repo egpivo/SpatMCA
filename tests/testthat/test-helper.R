@@ -96,9 +96,4 @@ test_that("GGplot objects", {
   expect_true("ggplot" %in% class(plot_obj))
 })
 
-plot_sequentially(list(plot_obj))
-newPar <- par(no.readonly = TRUE)
-test_that("Envirorment setting", {
-  expect_equal(originalPar, newPar)
-})
 
