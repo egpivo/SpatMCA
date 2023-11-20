@@ -9,6 +9,9 @@ plot_sequentially(objs)
 \arguments{
 \item{objs}{Valid ggplot2 objects}
 }
+\value{
+\code{NULL}
+}
 \description{
 Internal function: Plot sequentially
 }

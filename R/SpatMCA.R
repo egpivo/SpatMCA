@@ -564,6 +564,7 @@ spatmca <- function(x1,
 #'
 #' @param x An spatmca class object for `plot` method
 #' @param ... Not used directly
+#' @return `NULL`
 #' @seealso \link{spatmca}
 #'
 #' @export

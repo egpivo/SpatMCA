@@ -76,12 +76,18 @@ detrend <- function(Y, is_Y_detrended) {
 #' Internal function: Plot sequentially
 #' @keywords internal
 #' @param objs Valid ggplot2 objects
+#' @return `NULL`
+#' 
 plot_sequentially <- function(objs) {
+  originalPar <- par(no.readonly = TRUE)
+  
   par(ask = TRUE)
   for (obj in objs) {
     suppressWarnings(print(obj))
   }
   par(ask = FALSE)
+
+  par(originalPar)
 }
 
 
