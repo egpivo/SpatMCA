@@ -13,20 +13,26 @@
 - Implementing the alternating direction method of multipliers (ADMM) algorithm.
 
 ### Installation
+There are two ways to install the package:
 
-To install the current development version from GitHub:
+  1. Install from CRAN:
+  ```r
+  install.packages("SpatMCA")
+  ```
+  2. Install the current development version from GitHub:
+  ```r
+  remotes::install_github("egpivo/SpatMCA")
+  ```
 
-```r
-devtools::install_github("egpivo/SpatMCA")
-```
-Please note:
-- Windows users require [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
+**Please Note:**
+- **Windows Users:** Ensure that you have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed before proceeding with the installation.
 
-- Mac users need Xcode Command Line Tools and should install the library gfortran. You can do this by running the following commands in the terminal:
-```bash
-brew update
-brew install gcc
-```
+- **Mac Users:** You need Xcode Command Line Tools and should install the library `gfortran`. Follow these steps in the terminal:
+    ```bash
+    brew update
+    brew install gcc
+    ```
+    For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
 For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
 
 ### Usage
