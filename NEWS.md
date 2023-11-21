@@ -1,6 +1,6 @@
 ## SpatMCA 1.0.4 (Release date: 2023-11-20)
 #### Overview 
-- Enhance the code coverage from 47% to 58%.
+- Enhance the code coverage from 47% to 80%.
 - Fix bugs of setting default parameters in `spatmca`.
 - Resolve C++ compiler issues from `RcppParallel` and latest R version (> 4)
 - Update the dependencies
