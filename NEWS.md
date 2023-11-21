@@ -1,3 +1,13 @@
+## SpatMCA 1.0.4 (Release date: 2023-11-20)
+#### Overview 
+- Enhance the code coverage from 47% to 80%.
+- Fix bugs of setting default parameters in `spatmca`.
+- Resolve C++ compiler issues from `RcppParallel` and latest R version (> 4)
+- Update the dependencies
+
+---
+
+
 ## SpatMCA 1.0.2.2 (Release date: 2021-02-01)
 #### Overview 
 - Fix singular matrix issues by modifying a setting of an ADMM step parameter.

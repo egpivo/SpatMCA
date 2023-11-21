@@ -1,16 +1,31 @@
 Package: SpatMCA
-Type: Package
 Title: Regularized Spatial Maximum Covariance Analysis
-Version: 1.0.2.6
-Date: 2023-01-31
+Version: 1.0.4
+Authors@R: c(person(
+                given = "Wen-Ting",
+                family = "Wang",
+                email = "egpivo@gmail.com",
+                role = c("aut", "cre"),
+                comment = c(ORCID = "0000-0003-3051-7302")
+              ),
+              person(
+                given = "Hsin-Cheng",
+                family = "Huang",
+                email = "hchuang@stat.sinica.edu.tw",
+                role = "aut",
+                comment = c(ORCID = "0000-0002-5613-349X")
+              )
+            )
 URL: https://github.com/egpivo/SpatMCA
 BugReports: https://github.com/egpivo/SpatMCA/issues
 Description: Provide regularized maximum covariance analysis incorporating smoothness,
   sparseness and orthogonality of couple patterns by using the alternating direction method
   of multipliers algorithm. The method can be applied to either regularly or irregularly
-  spaced data,  including 1D, 2D, and 3D (Wang and Huang, 2017 <doi:10.1002/env.2481>).
+  spaced data,  including 1D, 2D, and 3D (Wang and Huang, 2018 <doi:10.1002/env.2481>).
 License: GPL-3
-Imports: Rcpp (>= 1.0.10), RcppParallel (>= 5.1.7), MASS, ggplot2, scales
+Depends: 
+    R (>= 3.4.0)
+Imports: Rcpp, RcppParallel (>= 0.11.2), MASS, ggplot2, scales
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 Suggests:
     testthat (>= 2.1.0),
@@ -20,11 +35,12 @@ Suggests:
     spTimer,
     fields,
     maps,
-    covr
+    covr,
+    V8
 SystemRequirements: GNU make
 NeedsCompilation: yes
-Author: Wen-Ting Wang [aut, cre], Hsin-Cheng Huang [aut]
 Maintainer: Wen-Ting Wang <egpivo@gmail.com>
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3
