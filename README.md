@@ -27,32 +27,35 @@ There are two ways to install the package:
 **Please Note:**
 - **Windows Users:** Ensure that you have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed before proceeding with the installation.
 
-- **Mac Users:** You need Xcode Command Line Tools and should install the library `gfortran`. Follow these steps in the terminal:
+- **Mac Users:** You need Xcode Command Line Tools and should install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases). Follow these steps in the terminal:
     ```bash
     brew update
     brew install gcc
     ```
     For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
-For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
+
 
 ### Usage
 ```r
 library(SpatMCA)
 spatmca(x1, x2, Y1, Y2, K = 1, num_cores = 1)
 ```
-- Input: `x1`, `x2` (location matrices), `Y1`, `Y2` (data matrices), `K` (number of patterns), `num_cores` (number of CPU cores).
-- Output: Provides information about the identified patterns.
-
+- Parameters:
+  - `x1`, `x2`: Location matrices.
+  - `Y1`, `Y2`: Data matrices.
+  - `K`: Number of patterns.
+  - `num_cores`: Number of CPU cores.
+- Output: Provides information about the identified patterns
 
 ### Author
- - [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang")
+ - [Wen-Ting Wang](https://www.linkedin.com/in/wtwang)
  - [Hsin-Cheng Huang](https://sites.stat.sinica.edu.tw/hchuang/)
  
 ### Maintainer
-[Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b "Wen-Ting Wang")
+[Wen-Ting Wang](https://www.linkedin.com/in/wtwang)
 
 ### Reference
-Wang, W.-T. and Huang, H.-C. (2017). [Regularized spatial maximum covariance analysis](https://arxiv.org/pdf/1705.02716.pdf), Environmetrics, 29, https://doi.org/10.1002/env.2481
+Wang, W.-T. and Huang, H.-C. (2018). [Regularized spatial maximum covariance analysis](https://arxiv.org/pdf/1705.02716.pdf), Environmetrics, 29, https://doi.org/10.1002/env.2481
  
 ### License
 GPL-3
