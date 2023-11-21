@@ -1,5 +1,6 @@
 # SpatMCA Package
-
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/SpatMCA)](https://CRAN.R-project.org/package=SpatMCA)
+[![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/SpatMCA)](https://CRAN.R-project.org/package=SpatMCA)
 [![R build status](https://github.com/egpivo/SpatMCA/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/SpatMCA/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/SpatMCA/master.svg)](https://codecov.io/github/egpivo/SpatMCA?branch=master)
 
