@@ -59,3 +59,20 @@ Wang, W.-T. and Huang, H.-C. (2018). [Regularized spatial maximum covariance ana
  
 ### License
 GPL-3
+
+### Citation
+1. To cite package ‘SpatMCA’ in publications use:
+```
+  Wang W, Huang H (2023). _SpatMCA: Regularized Spatial Maximum Covariance Analysis_.
+  R package version 1.0.2.6, <https://github.com/egpivo/SpatMCA>.
+```
+2. A BibTeX entry for LaTeX users is
+```
+  @Manual{,
+    title = {SpatMCA: Regularized Spatial Maximum Covariance Analysis},
+    author = {Wen-Ting Wang and Hsin-Cheng Huang},
+    year = {2023},
+    note = {R package version 1.0.2.6},
+    url = {https://github.com/egpivo/SpatMCA},
+  }
+```
