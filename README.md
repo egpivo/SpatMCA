@@ -15,14 +15,15 @@
 ### Installation
 There are two ways to install the package:
 
-  1. Install from CRAN:
-  ```r
-  install.packages("SpatMCA")
-  ```
-  2. Install the current development version from GitHub:
-  ```r
-  remotes::install_github("egpivo/SpatMCA")
-  ```
+1. Install from CRAN:
+   ```r
+   install.packages("SpatMCA")
+   ```
+
+2. Install the current development version from GitHub:
+   ```r
+   remotes::install_github("egpivo/SpatMCA")
+   ```
 
 **Please Note:**
 - **Windows Users:** Ensure that you have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed before proceeding with the installation.
