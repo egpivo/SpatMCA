@@ -1,3 +1,17 @@
+## SpatMCA 1.0.5 (Release Date: 2024-01-12)
+
+#### Overview
+This release addresses the following key points:
+
+1. **Rcpp Package Warnings:** Resolved warnings from the earlier Rcpp package to enhance code stability.
+
+2. **License Information:** Added the LICENSE file to ensure clarity on the project's licensing.
+
+3. **README Refinement:** Improved the README documentation for better clarity and user understanding.
+
+---
+
+
 ## SpatMCA 1.0.4 (Release date: 2023-11-20)
 #### Overview 
 - Enhance the code coverage from 47% to 80%.

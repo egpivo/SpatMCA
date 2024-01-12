@@ -9,3 +9,5 @@
 ^README
 ^codecov\.yml$
 ^NEWS$
+LICENSE
+\.github

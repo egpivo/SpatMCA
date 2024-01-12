@@ -1,6 +1,6 @@
 Package: SpatMCA
 Title: Regularized Spatial Maximum Covariance Analysis
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: c(person(
                 given = "Wen-Ting",
                 family = "Wang",
@@ -22,10 +22,15 @@ Description: Provide regularized maximum covariance analysis incorporating smoot
   sparseness and orthogonality of couple patterns by using the alternating direction method
   of multipliers algorithm. The method can be applied to either regularly or irregularly
   spaced data,  including 1D, 2D, and 3D (Wang and Huang, 2018 <doi:10.1002/env.2481>).
-License: GPL-3
+License: GPL (>= 2)
 Depends: 
     R (>= 3.4.0)
-Imports: Rcpp, RcppParallel (>= 0.11.2), MASS, ggplot2, scales
+Imports:
+    Rcpp (>= 1.0.12),
+    RcppParallel (>= 5.1.7),
+    MASS,
+    ggplot2,
+    scales
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 Suggests:
     testthat (>= 2.1.0),
@@ -44,3 +49,4 @@ Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
+
