@@ -16,7 +16,7 @@ Authors@R: c(person(
                 comment = c(ORCID = "0000-0002-5613-349X")
               )
             )
-URL: https://github.com/egpivo/SpatMCA
+URL: https://egpivo.github.io/SpatMCA/, https://github.com/egpivo/SpatMCA
 BugReports: https://github.com/egpivo/SpatMCA/issues
 Description: Provide regularized maximum covariance analysis incorporating smoothness,
   sparseness and orthogonality of couple patterns by using the alternating direction method
