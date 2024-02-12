@@ -1,6 +1,6 @@
 Package: SpatMCA
 Title: Regularized Spatial Maximum Covariance Analysis
-Version: 1.0.5
+Version: 1.0.6
 Authors@R: c(person(
                 given = "Wen-Ting",
                 family = "Wang",
