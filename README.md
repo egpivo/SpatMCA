@@ -1,7 +1,7 @@
 # SpatMCA: Regularized Spatial Maximum Covariance Analysis
 
 [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/SpatMCA)](https://CRAN.R-project.org/package=SpatMCA)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/SpatMCA?color=green)](https://cran.r-project.org/package=SpatMCA)
 [![R build status](https://github.com/egpivo/SpatMCA/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/SpatMCA/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/SpatMCA/master.svg)](https://codecov.io/github/egpivo/SpatMCA?branch=master)
 [![Downloads (monthly)](https://cranlogs.r-pkg.org/badges/SpatMCA?color=brightgreen)](https://www.r-pkg.org/pkg/SpatMCA)
