@@ -9,3 +9,5 @@ src/*.dll
 scr/.DS_Store
 inst/doc
 *Rplots.pdf
+*.tar.gz
+tools
