@@ -70,16 +70,16 @@ GPL (>= 2)
 ## Citation
 1. To cite package ‘SpatMCA’ in publications use:
 ```
-  Wang W, Huang H (2023). _SpatMCA: Regularized Spatial Maximum Covariance Analysis_.
-  R package version 1.0.2.6, <https://github.com/egpivo/SpatMCA>.
+  Wang W, Huang H (2025). _SpatMCA: Regularized Spatial Maximum Covariance Analysis_.
+  R package version 1.0.7, <https://github.com/egpivo/SpatMCA>.
 ```
 2. A BibTeX entry for LaTeX users is
 ```
   @Manual{,
     title = {SpatMCA: Regularized Spatial Maximum Covariance Analysis},
     author = {Wen-Ting Wang and Hsin-Cheng Huang},
-    year = {2023},
-    note = {R package version 1.0.2.6},
+    year = {2025},
+    note = {R package version 1.0.7},
     url = {https://github.com/egpivo/SpatMCA},
   }
 ```
