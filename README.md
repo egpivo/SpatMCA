@@ -1,6 +1,5 @@
 # SpatMCA: Regularized Spatial Maximum Covariance Analysis
 
-[![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/SpatMCA?color=green)](https://cran.r-project.org/package=SpatMCA)
 [![R build status](https://github.com/egpivo/SpatMCA/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/SpatMCA/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/SpatMCA/master.svg)](https://codecov.io/github/egpivo/SpatMCA?branch=master)
@@ -37,7 +36,7 @@ remotes::install_github("egpivo/SpatMCA")
     brew update
     brew install gcc
     ```
-    For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
+    For a detailed solution, refer to this [link](https://blog.thecoatlessprofessor.com/programming/cpp/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/index.html), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
 
 
 ### Usage
@@ -71,16 +70,16 @@ GPL (>= 2)
 ## Citation
 1. To cite package ‘SpatMCA’ in publications use:
 ```
-  Wang W, Huang H (2023). _SpatMCA: Regularized Spatial Maximum Covariance Analysis_.
-  R package version 1.0.2.6, <https://github.com/egpivo/SpatMCA>.
+  Wang W, Huang H (2025). _SpatMCA: Regularized Spatial Maximum Covariance Analysis_.
+  R package version 1.0.7, <https://github.com/egpivo/SpatMCA>.
 ```
 2. A BibTeX entry for LaTeX users is
 ```
   @Manual{,
     title = {SpatMCA: Regularized Spatial Maximum Covariance Analysis},
     author = {Wen-Ting Wang and Hsin-Cheng Huang},
-    year = {2023},
-    note = {R package version 1.0.2.6},
+    year = {2025},
+    note = {R package version 1.0.7},
     url = {https://github.com/egpivo/SpatMCA},
   }
 ```

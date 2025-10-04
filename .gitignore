@@ -5,7 +5,11 @@
 src/*.o
 src/*.so
 src/*.dll
+src/*.rds
 .DS_Store
 scr/.DS_Store
 inst/doc
 *Rplots.pdf
+*.tar.gz
+tools
+SpatMCA.Rproj

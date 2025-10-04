@@ -97,77 +97,81 @@
 #' ##  Daily 8-hour ozone averages and maximum temperature obtained from 28 monitoring
 #' ##  sites of NewYork, USA. It is of interest to see the relationship between the ozone
 #' ##  and the temperature through the coupled patterns.
+#' 
+#' if (requireNamespace("spTimer", quietly = TRUE) &&
+#'     requireNamespace("pracma", quietly = TRUE) &&
+#'     requireNamespace("fields", quietly = TRUE) &&
+#'     requireNamespace("maps", quietly = TRUE)) {
+#'   data("NYdata", package = "spTimer")
+#'   NYsite <- unique(cbind(NYdata[, 1:3]))
+#'   date <- as.POSIXct(seq(as.Date("2006-07-01"), as.Date("2006-08-31"), by = 1))
+#'   cMAXTMP<- matrix(NYdata[,8], 62, 28)
+#'   oz <- matrix(NYdata[,7], 62, 28)
+#'   rmNa <- !colSums(is.na(oz))
+#'   temp <- pracma::detrend(matrix(cMAXTMP[, rmNa], nrow = nrow(cMAXTMP)), "linear")
+#'   ozone <- pracma::detrend(matrix(oz[, rmNa], nrow = nrow(oz)), "linear")
+#'   x1 <- NYsite[rmNa, 2:3]
+#'   cv <- spatmca(x1, x1, temp, ozone)
+#'   par(mfrow = c(2, 1))
+#'   fields::quilt.plot(x1, cv$Uestfn[, 1],
+#'                      xlab = "longitude",
+#'                      ylab = "latitude",
+#'                      main = "1st spatial pattern for temperature")
+#'   maps::map(database = "state", regions = "new york", add = TRUE)
+#'   fields::quilt.plot(x1, cv$Vestfn[, 1],
+#'                      xlab = "longitude",
+#'                      ylab = "latitude",
+#'                      main = "1st spatial pattern for ozone")
+#'   maps::map(database = "state", regions = "new york", add = TRUE)
+#'   par(originalPar)
 #'
-#' library(spTimer)
-#' library(pracma)
-#' library(fields)
-#' library(maps)
-#' data(NYdata)
-#' NYsite <- unique(cbind(NYdata[, 1:3]))
-#' date <- as.POSIXct(seq(as.Date("2006-07-01"), as.Date("2006-08-31"), by = 1))
-#' cMAXTMP<- matrix(NYdata[,8], 62, 28)
-#' oz <- matrix(NYdata[,7], 62, 28)
-#' rmNa <- !colSums(is.na(oz))
-#' temp <- detrend(matrix(cMAXTMP[, rmNa], nrow = nrow(cMAXTMP)), "linear")
-#' ozone <- detrend(matrix(oz[, rmNa], nrow = nrow(oz)), "linear")
-#' x1 <- NYsite[rmNa, 2:3]
-#' cv <- spatmca(x1, x1, temp, ozone)
-#' par(mfrow = c(2, 1))
-#' quilt.plot(x1, cv$Uestfn[, 1],
-#'            xlab = "longitude",
-#'            ylab = "latitude",
-#'            main = "1st spatial pattern for temperature")
-#' map(database = "state", regions = "new york", add = TRUE)
-#' quilt.plot(x1, cv$Vestfn[, 1],
-#'            xlab = "longitude",
-#'            ylab = "latitude",
-#'            main = "1st spatial pattern for ozone")
-#' map(database = "state", regions = "new york", add = TRUE)
-#' par(originalPar)
+#'   ### Time series for the coupled patterns
+#'   tstemp <- temp %*% cv$Uestfn[,1]
+#'   tsozone <- ozone %*% cv$Vestfn[,1]
+#'   corr <- cor(tstemp, tsozone)
+#'   plot(date, tstemp / sd(tstemp), type='l', main = "Time series", ylab = "", xlab = "month")
+#'   lines(date, tsozone / sd(tsozone), col = 2)
+#'   legend_position <- "bottomleft"
+#'   legend_labels <- c("Temperature (standardized)", "Ozone (standardized)")
+#'   legend_colors <- 1:2
+#'   legend(legend_position, legend_labels, col = legend_colors, lty = c(1, 1))
+#'   mtext(paste("Pearson's correlation = ", round(corr, 3)), 3)
 #'
-#' ### Time series for the coupled patterns
-#' tstemp <- temp %*% cv$Uestfn[,1]
-#' tsozone <- ozone %*% cv$Vestfn[,1]
-#' corr <- cor(tstemp, tsozone)
-#' plot(date, tstemp / sd(tstemp), type='l', main = "Time series", ylab = "", xlab = "month")
-#' lines(date, tsozone/sd(tsozone),col=2)
-#' legend("bottomleft", c("Temperature (standardized)", "Ozone (standardized)"), col = 1:2, lty = 1:1)
-#' mtext(paste("Pearson's correlation = ", round(corr, 3)), 3)
-#'
-#  ### New locations
-#' newP <- 50
-#' xLon <- seq(-80, -72, length = newP)
-#' xLat <- seq(41, 45, length = newP)
-#' xxNew <- as.matrix(expand.grid(x = xLon, y = xLat))
-#' cvNew <- spatmca(x1 = x1,
-#'                  x2 = x1,
-#'                  Y1 = temp,
-#'                  Y2 = ozone,
-#'                  K = cv$Khat,
-#'                  tau1u = cv$stau1u,
-#'                  tau1v = cv$stau1v,
-#'                  tau2u = cv$stau2u,
-#'                  tau2v = cv$stau2v,
-#'                  x1New = xxNew,
-#'                  x2New = xxNew)
-#' par(mfrow = c(2, 1))
-#' quilt.plot(xxNew, cvNew$Uestfn[, 1],
-#'            nx = newP,
-#'            ny = newP,
-#'            xlab = "longitude",
-#'            ylab = "latitude",
-#'            main = "1st spatial pattern for temperature")
-#' map(database = "county", regions = "new york", add = TRUE)
-#' map.text("state", regions = "new york", cex = 2, add = TRUE)
-#' quilt.plot(xxNew, cvNew$Vestfn[, 1],
-#'            nx = newP,
-#'            ny = newP,
-#'            xlab = "longitude",
-#'            ylab = "latitude",
-#'            main = "2nd spatial pattern for ozone")
-#' map(database = "county", regions = "new york", add = TRUE)
-#' map.text("state", regions = "new york", cex = 2, add = TRUE)
-#' par(originalPar)
+#'   ### New locations
+#'   newP <- 50
+#'   xLon <- seq(-80, -72, length = newP)
+#'   xLat <- seq(41, 45, length = newP)
+#'   xxNew <- as.matrix(expand.grid(x = xLon, y = xLat))
+#'   cvNew <- spatmca(x1 = x1,
+#'                    x2 = x1,
+#'                    Y1 = temp,
+#'                    Y2 = ozone,
+#'                    K = cv$Khat,
+#'                    tau1u = cv$stau1u,
+#'                    tau1v = cv$stau1v,
+#'                    tau2u = cv$stau2u,
+#'                    tau2v = cv$stau2v,
+#'                    x1New = xxNew,
+#'                    x2New = xxNew)
+#'   par(mfrow = c(2, 1))
+#'   fields::quilt.plot(xxNew, cvNew$Uestfn[, 1],
+#'                      nx = newP,
+#'                      ny = newP,
+#'                      xlab = "longitude",
+#'                      ylab = "latitude",
+#'                      main = "1st spatial pattern for temperature")
+#'   maps::map(database = "county", regions = "new york", add = TRUE)
+#'   maps::map.text("state", regions = "new york", cex = 2, add = TRUE)
+#'   fields::quilt.plot(xxNew, cvNew$Vestfn[, 1],
+#'                      nx = newP,
+#'                      ny = newP,
+#'                      xlab = "longitude",
+#'                      ylab = "latitude",
+#'                      main = "2nd spatial pattern for ozone")
+#'   maps::map(database = "county", regions = "new york", add = TRUE)
+#'   maps::map.text("state", regions = "new york", cex = 2, add = TRUE)
+#'   par(originalPar)
+#' }
 #'
 #' ## 3D: regular locations
 #' n <- 200
@@ -187,24 +191,25 @@
 #' Y23D <- Y3D[, -(1:p)]
 #' cv3D <- spatmca(d, d, Y13D, Y23D)
 #'
-#' library(plot3D)
-#' library(RColorBrewer)
-#' cols <- colorRampPalette(brewer.pal(9, 'Blues'))(10)
-#' isosurf3D(x, y, z,
-#'           colvar = array(cv3D$Uestfn[, 1], c(8, 8, 8)),
-#'           level = seq(min(cv3D$Uestfn[, 1]), max(cv3D$Uestfn[, 1]), length = 10),
-#'           ticktype = "detailed",
-#'           colkey = list(side = 1),
-#'           col = cols,
-#'           main = "1st estimated pattern for Y1")
+#' if (requireNamespace("plot3D", quietly = TRUE) &&
+#'     requireNamespace("RColorBrewer", quietly = TRUE)) {
+#'   cols <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(9, "Blues"))(10)
+#'   plot3D::isosurf3D(x, y, z,
+#'                     colvar = array(cv3D$Uestfn[, 1], c(8, 8, 8)),
+#'                     level = seq(min(cv3D$Uestfn[, 1]), max(cv3D$Uestfn[, 1]), length = 10),
+#'                     ticktype = "detailed",
+#'                     colkey = list(side = 1),
+#'                     col = cols,
+#'                     main = "1st estimated pattern for Y1")
 #'
-#' isosurf3D(x, y, z,
-#'           colvar = array(cv3D$Vestfn[, 1], c(8, 8, 8)),
-#'           level = seq(min(cv3D$Vestfn[, 1]), max(cv3D$Vestfn[,1]), length = 10),
-#'           ticktype = "detailed",
-#'           colkey = list(side = 1),
-#'           col = cols,
-#'           main = "1st estimated pattern for Y2")
+#'   plot3D::isosurf3D(x, y, z,
+#'                     colvar = array(cv3D$Vestfn[, 1], c(8, 8, 8)),
+#'                     level = seq(min(cv3D$Vestfn[, 1]), max(cv3D$Vestfn[,1]), length = 10),
+#'                     ticktype = "detailed",
+#'                     colkey = list(side = 1),
+#'                     col = cols,
+#'                     main = "1st estimated pattern for Y2")
+#' }
 #' }
 spatmca <- function(x1,
                     x2,

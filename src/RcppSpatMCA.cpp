@@ -638,7 +638,10 @@ List spatmcacv_rcpp(NumericMatrix sxr, NumericMatrix syr, NumericMatrix Xr, Nume
     uword row1, col1;
     for (uword m = 0; m < M; m++)
       out += cv.slice(m) / M;
-    tempout = out.min(row1, col1);
+    uword minIndex1 = out.index_min();
+    row1 = minIndex1 % out.n_rows;
+    col1 = minIndex1 / out.n_rows;
+    tempout = out(row1, col1);
     cvtau1u = tau1u[row1];
     cvtau1v = tau1v[col1];
     Thetaest.submat(0, 0, p - 1, p - 1) = -cvtau1u * Omega1;
@@ -699,7 +702,9 @@ List spatmcacv_rcpp(NumericMatrix sxr, NumericMatrix syr, NumericMatrix Xr, Nume
     uword row2, col2;
     for (uword m = 0; m < M; m++)
       out2 += cv2.slice(m) / M;
-    out2.min(row2, col2);
+    uword minIndex2 = out2.index_min();
+    row2 = minIndex2 % out2.n_rows;
+    col2 = minIndex2 / out2.n_rows;
     cvtau2u = tau2u[row2];
     cvtau2v = tau2v[col2];
     
@@ -927,7 +932,9 @@ List spatmcacvall_rcpp(NumericMatrix sxr, NumericMatrix syr, NumericMatrix Xr, N
   uword row, col;
   for (uword m = 0; m < M; m++)
     out += cv.slice(m) / M;
-  out.min(row, col);
+  uword minIndex = out.index_min();
+  row = minIndex % out.n_rows;
+  col = minIndex / out.n_rows;
   
   cvtau1u = tau1u[floor(row / tau2u.n_elem)];
   cvtau2u = tau2u[row % tau2u.n_elem];
